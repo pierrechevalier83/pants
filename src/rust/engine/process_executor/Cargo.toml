@@ -12,3 +12,4 @@ hashing = { path = "../hashing" }
 process_execution = { path = "../process_execution" }
 store = { path = "../fs/store" }
 tokio = "0.1"
+workunit_store = { path = "../workunit_store"}

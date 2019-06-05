@@ -21,6 +21,7 @@ use tokio_process::CommandExt;
 use super::{ExecuteProcessRequest, FallibleExecuteProcessResult};
 
 use bytes::{Bytes, BytesMut};
+use workunit_store::WorkUnitStore;
 
 pub struct CommandRunner {
   store: Store,
@@ -205,7 +206,7 @@ impl super::CommandRunner for CommandRunner {
   ///
   /// Runs a command on this machine in the passed working directory.
   ///
-  fn run(&self, req: ExecuteProcessRequest) -> BoxFuture<FallibleExecuteProcessResult, String> {
+  fn run(&self, req: ExecuteProcessRequest, _workunit_store: Arc<WorkUnitStore>) -> BoxFuture<FallibleExecuteProcessResult, String> {
     let workdir = try_future!(tempfile::Builder::new()
       .prefix("process-execution")
       .tempdir_in(&self.work_dir)
@@ -340,6 +341,7 @@ mod tests {
   use testutil::data::{TestData, TestDirectory};
   use testutil::path::find_bash;
   use testutil::{as_bytes, owned_string_vec};
+  use workunit_store::SafeWorkUnitStore;
 
   #[test]
   #[cfg(unix)]
@@ -897,6 +899,6 @@ mod tests {
     };
     tokio::runtime::Runtime::new()
       .unwrap()
-      .block_on(runner.run(req))
+      .block_on(runner.run(req, Arc::new(SafeWorkUnitStore::new())))
   }
 }

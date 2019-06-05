@@ -35,8 +35,29 @@ pub struct WorkUnit {
   pub span_id: String,
 }
 
-pub trait WorkUnitStore {
-  fn should_record_zipkin_spans(&self) -> bool;
+pub trait WorkUnitStore: Send + Sync {
   fn get_workunits(&self) -> &Mutex<Vec<WorkUnit>>;
   fn add_workunit(&self, workunit: WorkUnit);
+}
+
+pub struct SafeWorkUnitStore {
+  pub workunits: Mutex<Vec<WorkUnit>>,
+}
+
+impl SafeWorkUnitStore {
+  pub fn new() -> SafeWorkUnitStore {
+    SafeWorkUnitStore {
+      workunits: Mutex::new(Vec::new()),
+    }
+  }
+}
+
+impl WorkUnitStore for SafeWorkUnitStore {
+  fn get_workunits(&self) -> &Mutex<Vec<WorkUnit>> {
+    &self.workunits
+  }
+
+  fn add_workunit(&self, workunit: WorkUnit) {
+    self.workunits.lock().push(workunit);
+  }
 }

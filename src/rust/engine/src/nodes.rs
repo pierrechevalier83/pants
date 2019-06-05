@@ -415,11 +415,11 @@ impl WrappedNode for ExecuteProcess {
 
   fn run(self, context: Context) -> NodeFuture<ProcessResult> {
     let request = self.0;
-
+    let workunit_store = context.session.workunit_store();
     context
       .core
       .command_runner
-      .run(request)
+      .run(request, workunit_store)
       .map(ProcessResult)
       .map_err(|e| throw(&format!("Failed to execute process: {}", e)))
       .to_boxed()
@@ -1139,7 +1139,7 @@ impl Node for NodeKey {
           end_timestamp: end_timestamp,
           span_id: generate_random_64bit_string(),
         };
-        context2.session.add_workunit(workunit)
+        context2.session.workunit_store().add_workunit(workunit)
       };
     })
     .to_boxed()

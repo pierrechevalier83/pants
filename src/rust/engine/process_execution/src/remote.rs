@@ -23,6 +23,7 @@ use super::{ExecuteProcessRequest, ExecutionStats, FallibleExecuteProcessResult}
 use std;
 use std::cmp::min;
 use std::collections::btree_map::BTreeMap;
+use workunit_store::WorkUnitStore;
 
 // Environment variable which is exclusively used for cache key invalidation.
 // This may be not specified in an ExecuteProcessRequest, and may be populated only by the
@@ -126,7 +127,7 @@ impl super::CommandRunner for CommandRunner {
   ///
   /// TODO: Request jdk_home be created if set.
   ///
-  fn run(&self, req: ExecuteProcessRequest) -> BoxFuture<FallibleExecuteProcessResult, String> {
+  fn run(&self, req: ExecuteProcessRequest, _workunit_store: Arc<WorkUnitStore>) -> BoxFuture<FallibleExecuteProcessResult, String> {
     let operations_client = self.operations_client.clone();
 
     let store = self.store.clone();
@@ -926,6 +927,7 @@ mod tests {
   use std::ops::Sub;
   use std::path::PathBuf;
   use std::time::Duration;
+  use workunit_store::SafeWorkUnitStore;
 
   #[derive(Debug, PartialEq)]
   enum StdoutType {
@@ -1480,7 +1482,7 @@ mod tests {
       store,
     );
     let result = runtime
-      .block_on(cmd_runner.run(echo_roland_request()))
+      .block_on(cmd_runner.run(echo_roland_request(), Arc::new(SafeWorkUnitStore::new())))
       .unwrap();
     assert_eq!(
       result.without_execution_attempts(),
@@ -1852,7 +1854,7 @@ mod tests {
     );
 
     let result = runtime
-      .block_on(command_runner.run(cat_roland_request()))
+      .block_on(command_runner.run(cat_roland_request(), Arc::new(SafeWorkUnitStore::new())))
       .unwrap();
     assert_eq!(
       result.without_execution_attempts(),
@@ -1943,7 +1945,7 @@ mod tests {
       BTreeMap::new(),
       store,
     )
-    .run(cat_roland_request())
+    .run(cat_roland_request(), Arc::new(SafeWorkUnitStore::new()))
     .wait();
     assert_eq!(
       result,
@@ -2010,7 +2012,7 @@ mod tests {
     );
 
     let error = runtime
-      .block_on(runner.run(cat_roland_request()))
+      .block_on(runner.run(cat_roland_request(), Arc::new(SafeWorkUnitStore::new())))
       .expect_err("Want error");
     assert_contains(&error, &format!("{}", missing_digest.0));
   }
@@ -2605,7 +2607,7 @@ mod tests {
       .build();
     let command_runner = create_command_runner(address, &cas);
     let mut runtime = tokio::runtime::Runtime::new().unwrap();
-    runtime.block_on(command_runner.run(request))
+    runtime.block_on(command_runner.run(request, Arc::new(SafeWorkUnitStore::new())))
   }
 
   fn create_command_runner(address: String, cas: &mock::StubCAS) -> CommandRunner {

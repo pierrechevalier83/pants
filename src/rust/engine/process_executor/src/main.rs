@@ -40,6 +40,7 @@ use std::process::exit;
 use std::time::Duration;
 use store::{BackoffConfig, Store};
 use tokio::runtime::Runtime;
+use workunit_store::SafeWorkUnitStore;
 
 /// A binary which takes args of format:
 ///  process_executor --env=FOO=bar --env=SOME=value --input-digest=abc123 --input-digest-length=80
@@ -317,7 +318,7 @@ fn main() {
   let mut runtime = Runtime::new().unwrap();
 
   let result = runtime
-    .block_on(runner.run(request))
+    .block_on(runner.run(request, Arc::new(SafeWorkUnitStore::new())))
     .expect("Error executing");
 
   if let Some(output) = args.value_of("materialize-output-to").map(PathBuf::from) {

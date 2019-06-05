@@ -350,7 +350,7 @@ pub extern "C" fn scheduler_metrics(
         .flat_map(|(metric, value)| vec![externs::store_utf8(metric), externs::store_i64(value)])
         .collect::<Vec<_>>();
       if session.should_record_zipkin_spans() {
-        let workunits = session
+        let workunits = session.workunit_store()
           .get_workunits()
           .lock()
           .iter()
