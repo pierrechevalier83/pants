@@ -30,10 +30,8 @@ use process_execution::{self, CommandRunner};
 use rule_graph;
 
 use graph::{Entry, Node, NodeError, NodeTracer, NodeVisualizer};
-use rand::thread_rng;
-use rand::Rng;
 use store::{self, StoreFileByDigest};
-use workunit_store::{WorkUnit, WorkUnitStore};
+use workunit_store::{WorkUnit, WorkUnitStore, generate_random_64bit_string, set_parent_id};
 
 pub type NodeFuture<T> = BoxFuture<T, Failure>;
 
@@ -1106,38 +1104,43 @@ impl Node for NodeKey {
   type Error = Failure;
 
   fn run(self, context: Context) -> NodeFuture<NodeResult> {
-    let node_name_and_start_timestamp = if context.session.should_record_zipkin_spans() {
+    let span_id = generate_random_64bit_string();
+    let node_workunit_params = if context.session.should_record_zipkin_spans() {
       let node_name = format!("{}", self);
       let start_timestamp_duration = std::time::SystemTime::now()
         .duration_since(std::time::SystemTime::UNIX_EPOCH)
         .unwrap();
       let start_timestamp = duration_as_float_secs(&start_timestamp_duration);
-      Some((node_name, start_timestamp))
+      Some((node_name, start_timestamp, span_id.clone()))
     } else {
       None
     };
     let context2 = context.clone();
-    match self {
-      NodeKey::DigestFile(n) => n.run(context).map(NodeResult::from).to_boxed(),
-      NodeKey::DownloadedFile(n) => n.run(context).map(NodeResult::from).to_boxed(),
-      NodeKey::ExecuteProcess(n) => n.run(context).map(NodeResult::from).to_boxed(),
-      NodeKey::ReadLink(n) => n.run(context).map(NodeResult::from).to_boxed(),
-      NodeKey::Scandir(n) => n.run(context).map(NodeResult::from).to_boxed(),
-      NodeKey::Select(n) => n.run(context).map(NodeResult::from).to_boxed(),
-      NodeKey::Snapshot(n) => n.run(context).map(NodeResult::from).to_boxed(),
-      NodeKey::Task(n) => n.run(context).map(NodeResult::from).to_boxed(),
-    }
+    futures::future::ok(()).and_then(|()| {
+      set_parent_id(span_id);
+      match self {
+        NodeKey::DigestFile(n) => n.run(context).map(NodeResult::from).to_boxed(),
+        NodeKey::DownloadedFile(n) => n.run(context).map(NodeResult::from).to_boxed(),
+        NodeKey::ExecuteProcess(n) => n.run(context).map(NodeResult::from).to_boxed(),
+        NodeKey::ReadLink(n) => n.run(context).map(NodeResult::from).to_boxed(),
+        NodeKey::Scandir(n) => n.run(context).map(NodeResult::from).to_boxed(),
+        NodeKey::Select(n) => n.run(context).map(NodeResult::from).to_boxed(),
+        NodeKey::Snapshot(n) => n.run(context).map(NodeResult::from).to_boxed(),
+        NodeKey::Task(n) => n.run(context).map(NodeResult::from).to_boxed(),
+      }
+    })
     .inspect(move |_: &NodeResult| {
-      if let Some((node_name, start_timestamp)) = node_name_and_start_timestamp {
+      if let Some((node_name, start_timestamp, span_id)) = node_workunit_params {
         let end_timestamp_duration = std::time::SystemTime::now()
           .duration_since(std::time::SystemTime::UNIX_EPOCH)
           .unwrap();
         let end_timestamp = duration_as_float_secs(&end_timestamp_duration);
         let workunit = WorkUnit {
           name: node_name,
-          start_timestamp: start_timestamp,
-          end_timestamp: end_timestamp,
-          span_id: generate_random_64bit_string(),
+          start_timestamp,
+          end_timestamp,
+          span_id,
+          parent_id: None,
         };
         context2.session.workunit_store().add_workunit(workunit)
       };
@@ -1173,12 +1176,6 @@ fn duration_as_float_secs(duration: &Duration) -> f64 {
   let whole_secs_in_duration = duration.as_secs() as f64;
   let fract_part_of_duration_in_micros = f64::from(duration.subsec_micros());
   whole_secs_in_duration + fract_part_of_duration_in_micros / 1_000_000.0
-}
-
-fn generate_random_64bit_string() -> String {
-  let mut rng = thread_rng();
-  let random_u64: u64 = rng.gen();
-  format!("{:16.x}", random_u64)
 }
 
 impl Display for NodeKey {

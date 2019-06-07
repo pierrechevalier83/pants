@@ -355,7 +355,7 @@ pub extern "C" fn scheduler_metrics(
           .lock()
           .iter()
           .map(|workunit| {
-            let workunit_zipkin_trace_info = vec![
+            let mut workunit_zipkin_trace_info = vec![
               externs::store_utf8("name"),
               externs::store_utf8(&workunit.name),
               externs::store_utf8("start_timestamp"),
@@ -365,6 +365,10 @@ pub extern "C" fn scheduler_metrics(
               externs::store_utf8("span_id"),
               externs::store_utf8(&workunit.span_id),
             ];
+            if let Some(parent_id) = &workunit.parent_id {
+              workunit_zipkin_trace_info.push(externs::store_utf8("parent_id"));
+              workunit_zipkin_trace_info.push(externs::store_utf8(parent_id));
+            }
             externs::store_dict(&workunit_zipkin_trace_info)
           })
           .collect::<Vec<_>>();

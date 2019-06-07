@@ -27,12 +27,16 @@
 #![allow(clippy::mutex_atomic)]
 
 use parking_lot::Mutex;
+use rand::thread_rng;
+use rand::Rng;
+use futures::task_local;
 
 pub struct WorkUnit {
   pub name: String,
   pub start_timestamp: f64,
   pub end_timestamp: f64,
   pub span_id: String,
+  pub parent_id: Option<String>,
 }
 
 pub trait WorkUnitStore: Send + Sync {
@@ -60,4 +64,27 @@ impl WorkUnitStore for SafeWorkUnitStore {
   fn add_workunit(&self, workunit: WorkUnit) {
     self.workunits.lock().push(workunit);
   }
+}
+
+pub fn generate_random_64bit_string() -> String {
+    let mut rng = thread_rng();
+    let random_u64: u64 = rng.gen();
+    format!("{:16.x}", random_u64)
+}
+
+task_local! {
+  static TASK_PARENT_ID: Mutex<Option<String>> = Mutex::new(None)
+}
+
+pub fn set_parent_id(parent_id: String) {
+  TASK_PARENT_ID.with(|task_parent_id| {
+    *task_parent_id.lock() = Some(parent_id);
+  })
+}
+
+pub fn get_parent_id() -> Option<String> {
+  TASK_PARENT_ID.with(|task_parent_id| {
+    let task_parent_id = task_parent_id.lock();
+    (*task_parent_id).clone()
+  })
 }

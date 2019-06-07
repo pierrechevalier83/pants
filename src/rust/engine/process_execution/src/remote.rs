@@ -24,6 +24,9 @@ use std;
 use std::cmp::min;
 use std::collections::btree_map::BTreeMap;
 use workunit_store::WorkUnitStore;
+use workunit_store::{WorkUnit, generate_random_64bit_string};
+use time::Timespec;
+use workunit_store::get_parent_id;
 
 // Environment variable which is exclusively used for cache key invalidation.
 // This may be not specified in an ExecuteProcessRequest, and may be populated only by the
@@ -127,7 +130,7 @@ impl super::CommandRunner for CommandRunner {
   ///
   /// TODO: Request jdk_home be created if set.
   ///
-  fn run(&self, req: ExecuteProcessRequest, _workunit_store: Arc<WorkUnitStore>) -> BoxFuture<FallibleExecuteProcessResult, String> {
+  fn run(&self, req: ExecuteProcessRequest, workunit_store: Arc<WorkUnitStore>) -> BoxFuture<FallibleExecuteProcessResult, String> {
     let operations_client = self.operations_client.clone();
 
     let store = self.store.clone();
@@ -188,7 +191,7 @@ impl super::CommandRunner for CommandRunner {
                 let operations_client = operations_client.clone();
                 let command_runner2 = command_runner2.clone();
                 let command_runner3 = command_runner3.clone();
-                let f = command_runner2.extract_execute_response(operation, &mut history);
+                let f = command_runner2.extract_execute_response(operation, &mut history, workunit_store.clone());
                 f.map(future::Loop::Break).or_else(move |value| {
                   match value {
                     ExecutionError::Fatal(err) => future::err(err).to_boxed(),
@@ -373,6 +376,7 @@ impl CommandRunner {
     &self,
     operation_or_status: OperationOrStatus,
     attempts: &mut ExecutionHistory,
+    workunit_store: Arc<WorkUnitStore>,
   ) -> BoxFuture<FallibleExecuteProcessResult, ExecutionError> {
     trace!("Got operation response: {:?}", operation_or_status);
 
@@ -409,21 +413,34 @@ impl CommandRunner {
           let output_upload_start = timespec_from(metadata.get_output_upload_start_timestamp());
           let output_upload_completed =
             timespec_from(metadata.get_output_upload_completed_timestamp());
-
+          let parent_id = get_parent_id();
+          let result_cached = execute_response.get_cached_result();
           match (worker_start - enqueued).to_std() {
-            Ok(duration) => attempts.current_attempt.remote_queue = Some(duration),
+            Ok(duration) => {
+              attempts.current_attempt.remote_queue = Some(duration);
+              maybe_add_workunit(&result_cached, "scheduling", &enqueued, &worker_start, parent_id.clone(), &workunit_store);
+            },
             Err(err) => warn!("Got negative remote queue time: {}", err),
           }
           match (input_fetch_completed - input_fetch_start).to_std() {
-            Ok(duration) => attempts.current_attempt.remote_input_fetch = Some(duration),
+            Ok(duration) => {
+              attempts.current_attempt.remote_input_fetch = Some(duration);
+              maybe_add_workunit(&result_cached, "fetching", &input_fetch_start, &input_fetch_completed, parent_id.clone(), &workunit_store);
+            },
             Err(err) => warn!("Got negative remote input fetch time: {}", err),
           }
           match (execution_completed - execution_start).to_std() {
-            Ok(duration) => attempts.current_attempt.remote_execution = Some(duration),
+            Ok(duration) => {
+              attempts.current_attempt.remote_execution = Some(duration);
+              maybe_add_workunit(&result_cached, "executing", &execution_start, &execution_completed, parent_id.clone(), &workunit_store);
+            },
             Err(err) => warn!("Got negative remote execution time: {}", err),
           }
           match (output_upload_completed - output_upload_start).to_std() {
-            Ok(duration) => attempts.current_attempt.remote_output_store = Some(duration),
+            Ok(duration) => {
+              attempts.current_attempt.remote_output_store = Some(duration);
+              maybe_add_workunit(&result_cached, "uploading", &output_upload_start, &output_upload_completed, parent_id, &workunit_store);
+            },
             Err(err) => warn!("Got negative remote output store time: {}", err),
           }
           attempts.current_attempt.was_cache_hit = execute_response.cached_result;
@@ -731,6 +748,30 @@ impl CommandRunner {
     })
     .to_boxed()
   }
+}
+
+fn maybe_add_workunit(result_cached: &bool, name: &str, start_time: &Timespec, end_time: &Timespec, parent_id: Option<String>, workunit_store: &Arc<WorkUnitStore>) {
+//  TODO: workunits for scheduling, fetching, executing and uploading should be recorded
+//   only if '--reporting-zipkin-trace-v2' is set
+  if !result_cached {
+    let workunit = WorkUnit {
+      name: String::from(name),
+      start_timestamp: timespec_as_float_secs(start_time),
+      end_timestamp: timespec_as_float_secs(end_time),
+      span_id: generate_random_64bit_string(),
+      parent_id,
+    };
+    workunit_store.add_workunit(workunit);
+  }
+}
+
+fn timespec_as_float_secs(timespec: &Timespec) -> f64 {
+  //  Returning value is formed by representing duration as a hole number of seconds (u64) plus
+  //  a hole number of microseconds (u32) turned into a f64 type.
+  //  Reverting time from duration to f64 decrease precision.
+  let whole_secs = timespec.sec as f64;
+  let fract_part_in_nanos = timespec.nsec  as f64;
+  whole_secs + fract_part_in_nanos / 1_000_000_000.0
 }
 
 fn make_execute_request(
@@ -2643,6 +2684,7 @@ mod tests {
     runtime.block_on(command_runner.extract_execute_response(
       super::OperationOrStatus::Operation(operation),
       &mut ExecutionHistory::default(),
+      Arc::new(SafeWorkUnitStore::new()),
     ))
   }
 
