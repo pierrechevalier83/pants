@@ -342,6 +342,7 @@ mod tests {
   use testutil::path::find_bash;
   use testutil::{as_bytes, owned_string_vec};
   use workunit_store::SafeWorkUnitStore;
+  use std::sync::Arc;
 
   #[test]
   #[cfg(unix)]

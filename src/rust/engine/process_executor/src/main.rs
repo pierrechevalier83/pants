@@ -41,6 +41,7 @@ use std::time::Duration;
 use store::{BackoffConfig, Store};
 use tokio::runtime::Runtime;
 use workunit_store::SafeWorkUnitStore;
+use std::sync::Arc;
 
 /// A binary which takes args of format:
 ///  process_executor --env=FOO=bar --env=SOME=value --input-digest=abc123 --input-digest-length=80

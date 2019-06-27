@@ -42,6 +42,7 @@ pub struct WorkUnit {
 pub trait WorkUnitStore: Send + Sync {
   fn get_workunits(&self) -> &Mutex<Vec<WorkUnit>>;
   fn add_workunit(&self, workunit: WorkUnit);
+  fn len(&self) -> usize;
 }
 
 pub struct SafeWorkUnitStore {
@@ -63,6 +64,10 @@ impl WorkUnitStore for SafeWorkUnitStore {
 
   fn add_workunit(&self, workunit: WorkUnit) {
     self.workunits.lock().push(workunit);
+  }
+
+  fn len(&self) -> usize {
+    self.workunits.lock().len().clone()
   }
 }
 
