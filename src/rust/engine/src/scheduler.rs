@@ -18,7 +18,7 @@ use indexmap::IndexMap;
 use log::{debug, info, warn};
 use parking_lot::Mutex;
 use ui::EngineDisplay;
-use workunit_store::SafeWorkUnitStore;
+use workunit_store::WorkUnitStore;
 
 ///
 /// A Session represents a related series of requests (generally: one run of the pants CLI) on an
@@ -37,7 +37,7 @@ struct InnerSession {
   // If enabled, Zipkin spans for v2 engine will be collected.
   should_record_zipkin_spans: bool,
   // A place to store info about workunits in rust part
-  workunit_store: Arc<SafeWorkUnitStore>,
+  workunit_store: WorkUnitStore,
 }
 
 #[derive(Clone)]
@@ -55,7 +55,7 @@ impl Session {
       roots: Mutex::new(HashSet::new()),
       display: EngineDisplay::create(ui_worker_count, should_render_ui).map(Mutex::new),
       should_record_zipkin_spans: should_record_zipkin_spans,
-      workunit_store: Arc::new(SafeWorkUnitStore::new()),
+      workunit_store: WorkUnitStore::new(),
     };
     Session(Arc::new(inner_session))
   }
@@ -82,7 +82,7 @@ impl Session {
     self.0.should_record_zipkin_spans
   }
 
-  pub fn workunit_store(&self) -> Arc<SafeWorkUnitStore> {
+  pub fn workunit_store(&self) -> WorkUnitStore {
       self.0.workunit_store.clone()
   }
 }

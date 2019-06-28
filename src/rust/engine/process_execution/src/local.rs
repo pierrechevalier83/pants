@@ -206,7 +206,9 @@ impl super::CommandRunner for CommandRunner {
   ///
   /// Runs a command on this machine in the passed working directory.
   ///
-  fn run(&self, req: ExecuteProcessRequest, _workunit_store: Arc<WorkUnitStore>) -> BoxFuture<FallibleExecuteProcessResult, String> {
+  /// TODO: start to create workunits for local process execution
+  ///
+  fn run(&self, req: ExecuteProcessRequest, _workunit_store: WorkUnitStore) -> BoxFuture<FallibleExecuteProcessResult, String> {
     let workdir = try_future!(tempfile::Builder::new()
       .prefix("process-execution")
       .tempdir_in(&self.work_dir)
@@ -341,8 +343,7 @@ mod tests {
   use testutil::data::{TestData, TestDirectory};
   use testutil::path::find_bash;
   use testutil::{as_bytes, owned_string_vec};
-  use workunit_store::SafeWorkUnitStore;
-  use std::sync::Arc;
+  use workunit_store::WorkUnitStore;
 
   #[test]
   #[cfg(unix)]
@@ -900,6 +901,6 @@ mod tests {
     };
     tokio::runtime::Runtime::new()
       .unwrap()
-      .block_on(runner.run(req, Arc::new(SafeWorkUnitStore::new())))
+      .block_on(runner.run(req, WorkUnitStore::new()))
   }
 }

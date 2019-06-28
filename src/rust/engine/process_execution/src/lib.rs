@@ -134,7 +134,7 @@ impl AddAssign<UploadSummary> for ExecutionStats {
 }
 
 pub trait CommandRunner: Send + Sync {
-  fn run(&self, req: ExecuteProcessRequest, workunit_store: Arc<WorkUnitStore>) -> BoxFuture<FallibleExecuteProcessResult, String>;
+  fn run(&self, req: ExecuteProcessRequest, workunit_store: WorkUnitStore) -> BoxFuture<FallibleExecuteProcessResult, String>;
 }
 
 ///
@@ -154,7 +154,7 @@ impl BoundedCommandRunner {
 }
 
 impl CommandRunner for BoundedCommandRunner {
-  fn run(&self, req: ExecuteProcessRequest, workunit_store: Arc<WorkUnitStore>) -> BoxFuture<FallibleExecuteProcessResult, String> {
+  fn run(&self, req: ExecuteProcessRequest, workunit_store: WorkUnitStore) -> BoxFuture<FallibleExecuteProcessResult, String> {
     let inner = self.inner.clone();
     self.inner.1.with_acquired(move || inner.0.run(req, workunit_store))
   }

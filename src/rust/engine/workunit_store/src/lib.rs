@@ -30,6 +30,7 @@ use parking_lot::Mutex;
 use rand::thread_rng;
 use rand::Rng;
 use futures::task_local;
+use std::sync::Arc;
 
 pub struct WorkUnit {
   pub name: String,
@@ -39,35 +40,28 @@ pub struct WorkUnit {
   pub parent_id: Option<String>,
 }
 
-pub trait WorkUnitStore: Send + Sync {
-  fn get_workunits(&self) -> &Mutex<Vec<WorkUnit>>;
-  fn add_workunit(&self, workunit: WorkUnit);
-  fn len(&self) -> usize;
+#[derive (Clone)]
+pub struct WorkUnitStore {
+  workunits: Arc<Mutex<Vec<WorkUnit>>>,
 }
 
-pub struct SafeWorkUnitStore {
-  pub workunits: Mutex<Vec<WorkUnit>>,
-}
-
-impl SafeWorkUnitStore {
-  pub fn new() -> SafeWorkUnitStore {
-    SafeWorkUnitStore {
-      workunits: Mutex::new(Vec::new()),
+impl WorkUnitStore {
+  pub fn new() -> WorkUnitStore {
+    WorkUnitStore {
+      workunits: Arc::new(Mutex::new(Vec::new())),
     }
   }
-}
 
-impl WorkUnitStore for SafeWorkUnitStore {
-  fn get_workunits(&self) -> &Mutex<Vec<WorkUnit>> {
-    &self.workunits
+  pub fn get_workunits(&self) -> Arc<Mutex<Vec<WorkUnit>>> {
+    self.workunits.clone()
   }
 
-  fn add_workunit(&self, workunit: WorkUnit) {
+  pub fn add_workunit(&self, workunit: WorkUnit) {
     self.workunits.lock().push(workunit);
   }
 
-  fn len(&self) -> usize {
-    self.workunits.lock().len().clone()
+  pub fn len(&self) -> usize {
+    self.workunits.lock().len()
   }
 }
 

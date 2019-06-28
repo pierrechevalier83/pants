@@ -31,7 +31,7 @@ use rule_graph;
 
 use graph::{Entry, Node, NodeError, NodeTracer, NodeVisualizer};
 use store::{self, StoreFileByDigest};
-use workunit_store::{WorkUnit, WorkUnitStore, generate_random_64bit_string, set_parent_id};
+use workunit_store::{WorkUnit, generate_random_64bit_string, set_parent_id};
 
 pub type NodeFuture<T> = BoxFuture<T, Failure>;
 
@@ -1140,6 +1140,7 @@ impl Node for NodeKey {
           start_timestamp,
           end_timestamp,
           span_id,
+//          TODO: set parent_id with the proper value, issue #7969
           parent_id: None,
         };
         context2.session.workunit_store().add_workunit(workunit)

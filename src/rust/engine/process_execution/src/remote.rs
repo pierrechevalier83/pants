@@ -128,7 +128,7 @@ impl super::CommandRunner for CommandRunner {
   ///
   /// TODO: Request jdk_home be created if set.
   ///
-  fn run(&self, req: ExecuteProcessRequest, workunit_store: Arc<WorkUnitStore>) -> BoxFuture<FallibleExecuteProcessResult, String> {
+  fn run(&self, req: ExecuteProcessRequest, workunit_store: WorkUnitStore) -> BoxFuture<FallibleExecuteProcessResult, String> {
     let operations_client = self.operations_client.clone();
 
     let store = self.store.clone();
@@ -374,7 +374,7 @@ impl CommandRunner {
     &self,
     operation_or_status: OperationOrStatus,
     attempts: &mut ExecutionHistory,
-    workunit_store: Arc<WorkUnitStore>,
+    workunit_store: WorkUnitStore,
   ) -> BoxFuture<FallibleExecuteProcessResult, ExecutionError> {
     trace!("Got operation response: {:?}", operation_or_status);
 
@@ -415,28 +415,28 @@ impl CommandRunner {
           match (worker_start - enqueued).to_std() {
             Ok(duration) => {
               attempts.current_attempt.remote_queue = Some(duration);
-              maybe_add_workunit(&result_cached, "scheduling", &enqueued, &worker_start, parent_id.clone(), &workunit_store);
+              maybe_add_workunit(result_cached, "scheduling", &enqueued, &worker_start, parent_id.clone(), &workunit_store);
             },
             Err(err) => warn!("Got negative remote queue time: {}", err),
           }
           match (input_fetch_completed - input_fetch_start).to_std() {
             Ok(duration) => {
               attempts.current_attempt.remote_input_fetch = Some(duration);
-              maybe_add_workunit(&result_cached, "fetching", &input_fetch_start, &input_fetch_completed, parent_id.clone(), &workunit_store);
+              maybe_add_workunit(result_cached, "fetching", &input_fetch_start, &input_fetch_completed, parent_id.clone(), &workunit_store);
             },
             Err(err) => warn!("Got negative remote input fetch time: {}", err),
           }
           match (execution_completed - execution_start).to_std() {
             Ok(duration) => {
               attempts.current_attempt.remote_execution = Some(duration);
-              maybe_add_workunit(&result_cached, "executing", &execution_start, &execution_completed, parent_id.clone(), &workunit_store);
+              maybe_add_workunit(result_cached, "executing", &execution_start, &execution_completed, parent_id.clone(), &workunit_store);
             },
             Err(err) => warn!("Got negative remote execution time: {}", err),
           }
           match (output_upload_completed - output_upload_start).to_std() {
             Ok(duration) => {
               attempts.current_attempt.remote_output_store = Some(duration);
-              maybe_add_workunit(&result_cached, "uploading", &output_upload_start, &output_upload_completed, parent_id, &workunit_store);
+              maybe_add_workunit(result_cached, "uploading", &output_upload_start, &output_upload_completed, parent_id, &workunit_store);
             },
             Err(err) => warn!("Got negative remote output store time: {}", err),
           }
@@ -747,7 +747,7 @@ impl CommandRunner {
   }
 }
 
-fn maybe_add_workunit(result_cached: &bool, name: &str, start_time: &Timespec, end_time: &Timespec, parent_id: Option<String>, workunit_store: &Arc<WorkUnitStore>) {
+fn maybe_add_workunit(result_cached: bool, name: &str, start_time: &Timespec, end_time: &Timespec, parent_id: Option<String>, workunit_store: &WorkUnitStore) {
 //  TODO: workunits for scheduling, fetching, executing and uploading should be recorded
 //   only if '--reporting-zipkin-trace-v2' is set
   if !result_cached {
@@ -763,8 +763,6 @@ fn maybe_add_workunit(result_cached: &bool, name: &str, start_time: &Timespec, e
 }
 
 fn timespec_as_float_secs(timespec: &Timespec) -> f64 {
-  //  Returning value is formed by representing duration as a hole number of seconds (u64) plus
-  //  a hole number of microseconds (u32) turned into a f64 type.
   //  Reverting time from duration to f64 decrease precision.
   let whole_secs = timespec.sec as f64;
   let fract_part_in_nanos = timespec.nsec  as f64;
@@ -965,8 +963,7 @@ mod tests {
   use std::ops::Sub;
   use std::path::PathBuf;
   use std::time::Duration;
-  use workunit_store::{WorkUnitStore, SafeWorkUnitStore, WorkUnit};
-  use std::sync::Arc;
+  use workunit_store::{WorkUnitStore, WorkUnit};
   use bazel_protos::remote_execution::ExecutedActionMetadata;
   use protobuf::well_known_types::Timestamp;
 
@@ -1523,7 +1520,7 @@ mod tests {
       store,
     );
     let result = runtime
-      .block_on(cmd_runner.run(echo_roland_request(), Arc::new(SafeWorkUnitStore::new())))
+      .block_on(cmd_runner.run(echo_roland_request(), WorkUnitStore::new()))
       .unwrap();
     assert_eq!(
       result.without_execution_attempts(),
@@ -1895,7 +1892,7 @@ mod tests {
     );
 
     let result = runtime
-      .block_on(command_runner.run(cat_roland_request(), Arc::new(SafeWorkUnitStore::new())))
+      .block_on(command_runner.run(cat_roland_request(), WorkUnitStore::new()))
       .unwrap();
     assert_eq!(
       result.without_execution_attempts(),
@@ -1986,7 +1983,7 @@ mod tests {
       BTreeMap::new(),
       store,
     )
-    .run(cat_roland_request(), Arc::new(SafeWorkUnitStore::new()))
+    .run(cat_roland_request(), WorkUnitStore::new())
     .wait();
     assert_eq!(
       result,
@@ -2053,7 +2050,7 @@ mod tests {
     );
 
     let error = runtime
-      .block_on(runner.run(cat_roland_request(), Arc::new(SafeWorkUnitStore::new())))
+      .block_on(runner.run(cat_roland_request(), WorkUnitStore::new()))
       .expect_err("Want error");
     assert_contains(&error, &format!("{}", missing_digest.0));
   }
@@ -2529,7 +2526,7 @@ mod tests {
 
   #[test]
   fn check_that_remote_workunits_are_in_workunit_store() {
-    let workunit_store = Arc::new(SafeWorkUnitStore::new());
+    let workunit_store =WorkUnitStore::new();
     let op_name = "gimme-foo".to_string();
     let testdata = TestData::roland();
     let testdata_empty = TestData::empty();
@@ -2560,7 +2557,8 @@ mod tests {
       workunit_store.len(),
       4
     );
-    let workunits = workunit_store.get_workunits().lock();
+    let workunits_arc = workunit_store.get_workunits();
+    let workunits = workunits_arc.lock();
     let scheduling_workunit = &workunits[0];
     assert_workunit_params(scheduling_workunit, "scheduling", 0.0, 1.0, None);
     let fetching_workunit = &workunits[1];
@@ -2762,7 +2760,7 @@ mod tests {
       .build();
     let command_runner = create_command_runner(address, &cas);
     let mut runtime = tokio::runtime::Runtime::new().unwrap();
-    runtime.block_on(command_runner.run(request, Arc::new(SafeWorkUnitStore::new())))
+    runtime.block_on(command_runner.run(request, WorkUnitStore::new()))
   }
 
   fn create_command_runner(address: String, cas: &mock::StubCAS) -> CommandRunner {
@@ -2798,7 +2796,7 @@ mod tests {
     runtime.block_on(command_runner.extract_execute_response(
       super::OperationOrStatus::Operation(operation),
       &mut ExecutionHistory::default(),
-      Arc::new(SafeWorkUnitStore::new()),
+      WorkUnitStore::new(),
     ))
   }
 
