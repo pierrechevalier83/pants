@@ -26,16 +26,19 @@
 // Arc<Mutex> can be more clear than needing to grok Orderings:
 #![allow(clippy::mutex_atomic)]
 
+use futures::task_local;
 use parking_lot::Mutex;
 use rand::thread_rng;
 use rand::Rng;
-use futures::task_local;
+use std::collections::HashSet;
 use std::sync::Arc;
+use time::Timespec;
 
+#[derive (Clone, Debug, PartialEq, Eq, Hash)]
 pub struct WorkUnit {
   pub name: String,
-  pub start_timestamp: f64,
-  pub end_timestamp: f64,
+  pub start_timestamp: Timespec,
+  pub end_timestamp: Timespec,
   pub span_id: String,
   pub parent_id: Option<String>,
 }
@@ -59,16 +62,21 @@ impl WorkUnitStore {
   pub fn add_workunit(&self, workunit: WorkUnit) {
     self.workunits.lock().push(workunit);
   }
-
-  pub fn len(&self) -> usize {
-    self.workunits.lock().len()
-  }
 }
 
 pub fn generate_random_64bit_string() -> String {
     let mut rng = thread_rng();
     let random_u64: u64 = rng.gen();
     format!("{:16.x}", random_u64)
+}
+
+pub fn got_workunits(workunit_store: WorkUnitStore) -> HashSet<WorkUnit> {
+//  This function is for the test purpose.
+
+  workunit_store.get_workunits().lock().iter().cloned().map(|mut workunit| {
+    workunit.span_id = String::from("ignore");
+    workunit
+  }).collect()
 }
 
 task_local! {

@@ -1107,16 +1107,13 @@ impl Node for NodeKey {
     let span_id = generate_random_64bit_string();
     let node_workunit_params = if context.session.should_record_zipkin_spans() {
       let node_name = format!("{}", self);
-      let start_timestamp_duration = std::time::SystemTime::now()
-        .duration_since(std::time::SystemTime::UNIX_EPOCH)
-        .unwrap();
-      let start_timestamp = duration_as_float_secs(&start_timestamp_duration);
+      let start_timestamp = time::get_time();
       Some((node_name, start_timestamp, span_id.clone()))
     } else {
       None
     };
     let context2 = context.clone();
-    futures::future::ok(()).and_then(|()| {
+    futures::future::lazy(|| {
       set_parent_id(span_id);
       match self {
         NodeKey::DigestFile(n) => n.run(context).map(NodeResult::from).to_boxed(),
@@ -1131,10 +1128,7 @@ impl Node for NodeKey {
     })
     .inspect(move |_: &NodeResult| {
       if let Some((node_name, start_timestamp, span_id)) = node_workunit_params {
-        let end_timestamp_duration = std::time::SystemTime::now()
-          .duration_since(std::time::SystemTime::UNIX_EPOCH)
-          .unwrap();
-        let end_timestamp = duration_as_float_secs(&end_timestamp_duration);
+        let end_timestamp = time::get_time();
         let workunit = WorkUnit {
           name: node_name,
           start_timestamp,
@@ -1168,15 +1162,6 @@ impl Node for NodeKey {
       _ => true,
     }
   }
-}
-
-fn duration_as_float_secs(duration: &Duration) -> f64 {
-  //  Returning value is formed by representing duration as a hole number of seconds (u64) plus
-  //  a hole number of microseconds (u32) turned into a f64 type.
-  //  Reverting time from duration to f64 decrease precision.
-  let whole_secs_in_duration = duration.as_secs() as f64;
-  let fract_part_of_duration_in_micros = f64::from(duration.subsec_micros());
-  whole_secs_in_duration + fract_part_of_duration_in_micros / 1_000_000.0
 }
 
 impl Display for NodeKey {

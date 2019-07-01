@@ -104,6 +104,7 @@ smallvec = "0.6"
 store = { path = "fs/store" }
 tokio = "0.1"
 tempfile = "3"
+time = "0.1.40"
 ui = { path = "ui" }
 url = "1.7.1"
 tar_api = { path = "tar_api" }

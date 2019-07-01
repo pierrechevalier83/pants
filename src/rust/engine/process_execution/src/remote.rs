@@ -17,6 +17,7 @@ use protobuf::{self, Message, ProtobufEnum};
 use sha2::Sha256;
 use store::{Snapshot, Store, StoreFileByDigest};
 use time;
+use time::Timespec;
 use tokio_timer::Delay;
 
 use super::{ExecuteProcessRequest, ExecutionStats, FallibleExecuteProcessResult};
@@ -24,7 +25,6 @@ use std;
 use std::cmp::min;
 use std::collections::btree_map::BTreeMap;
 use workunit_store::{WorkUnit, WorkUnitStore, generate_random_64bit_string, get_parent_id};
-use time::Timespec;
 
 // Environment variable which is exclusively used for cache key invalidation.
 // This may be not specified in an ExecuteProcessRequest, and may be populated only by the
@@ -415,28 +415,28 @@ impl CommandRunner {
           match (worker_start - enqueued).to_std() {
             Ok(duration) => {
               attempts.current_attempt.remote_queue = Some(duration);
-              maybe_add_workunit(result_cached, "scheduling", &enqueued, &worker_start, parent_id.clone(), &workunit_store);
+              maybe_add_workunit(result_cached, "remote execution action scheduling", &enqueued, &worker_start, parent_id.clone(), &workunit_store);
             },
             Err(err) => warn!("Got negative remote queue time: {}", err),
           }
           match (input_fetch_completed - input_fetch_start).to_std() {
             Ok(duration) => {
               attempts.current_attempt.remote_input_fetch = Some(duration);
-              maybe_add_workunit(result_cached, "fetching", &input_fetch_start, &input_fetch_completed, parent_id.clone(), &workunit_store);
+              maybe_add_workunit(result_cached, "remote execution worker input fetching", &input_fetch_start, &input_fetch_completed, parent_id.clone(), &workunit_store);
             },
             Err(err) => warn!("Got negative remote input fetch time: {}", err),
           }
           match (execution_completed - execution_start).to_std() {
             Ok(duration) => {
               attempts.current_attempt.remote_execution = Some(duration);
-              maybe_add_workunit(result_cached, "executing", &execution_start, &execution_completed, parent_id.clone(), &workunit_store);
+              maybe_add_workunit(result_cached, "remote execution worker command executing", &execution_start, &execution_completed, parent_id.clone(), &workunit_store);
             },
             Err(err) => warn!("Got negative remote execution time: {}", err),
           }
           match (output_upload_completed - output_upload_start).to_std() {
             Ok(duration) => {
               attempts.current_attempt.remote_output_store = Some(duration);
-              maybe_add_workunit(result_cached, "uploading", &output_upload_start, &output_upload_completed, parent_id, &workunit_store);
+              maybe_add_workunit(result_cached, "remote execution worker output uploading", &output_upload_start, &output_upload_completed, parent_id, &workunit_store);
             },
             Err(err) => warn!("Got negative remote output store time: {}", err),
           }
@@ -753,20 +753,13 @@ fn maybe_add_workunit(result_cached: bool, name: &str, start_time: &Timespec, en
   if !result_cached {
     let workunit = WorkUnit {
       name: String::from(name),
-      start_timestamp: timespec_as_float_secs(start_time),
-      end_timestamp: timespec_as_float_secs(end_time),
+      start_timestamp: start_time.clone(),
+      end_timestamp: end_time.clone(),
       span_id: generate_random_64bit_string(),
       parent_id,
     };
     workunit_store.add_workunit(workunit);
   }
-}
-
-fn timespec_as_float_secs(timespec: &Timespec) -> f64 {
-  //  Reverting time from duration to f64 decrease precision.
-  let whole_secs = timespec.sec as f64;
-  let fract_part_in_nanos = timespec.nsec  as f64;
-  whole_secs + fract_part_in_nanos / 1_000_000_000.0
 }
 
 fn make_execute_request(
@@ -941,6 +934,8 @@ fn timespec_from(timestamp: &protobuf::well_known_types::Timestamp) -> time::Tim
 #[cfg(test)]
 mod tests {
   use bazel_protos;
+  use bazel_protos::operations::Operation;
+  use bazel_protos::remote_execution::ExecutedActionMetadata;
   use bytes::Bytes;
   use futures::Future;
   use grpcio;
@@ -957,15 +952,16 @@ mod tests {
     CommandRunner, ExecuteProcessRequest, ExecutionError, ExecutionHistory,
     FallibleExecuteProcessResult,
   };
+  use maplit::hashset;
   use mock::execution_server::MockOperation;
+  use protobuf::well_known_types::Timestamp;
   use std::collections::{BTreeMap, BTreeSet};
   use std::iter::{self, FromIterator};
   use std::ops::Sub;
   use std::path::PathBuf;
   use std::time::Duration;
-  use workunit_store::{WorkUnitStore, WorkUnit};
-  use bazel_protos::remote_execution::ExecutedActionMetadata;
-  use protobuf::well_known_types::Timestamp;
+  use time::Timespec;
+  use workunit_store::{WorkUnit, WorkUnitStore, got_workunits};
 
   #[derive(Debug, PartialEq)]
   enum StdoutType {
@@ -2525,7 +2521,7 @@ mod tests {
   }
 
   #[test]
-  fn check_that_remote_workunits_are_in_workunit_store() {
+  fn remote_workunits_are_stored() {
     let workunit_store =WorkUnitStore::new();
     let op_name = "gimme-foo".to_string();
     let testdata = TestData::roland();
@@ -2535,10 +2531,7 @@ mod tests {
       StdoutType::Digest(testdata.digest()),
       StderrType::Raw(testdata_empty.string()),
       0,
-    )
-        .op
-        .unwrap()
-        .unwrap();
+    );
     let cas = mock::StubCAS::builder()
         .file(&TestData::roland())
         .directory(&TestDirectory::containing_roland())
@@ -2548,44 +2541,46 @@ mod tests {
     let mut runtime = tokio::runtime::Runtime::new().unwrap();
 
     let workunit_store_2 = workunit_store.clone();
-    runtime.block_on(futures::future::ok(()).and_then(move |()| command_runner.extract_execute_response(
+    runtime.block_on(futures::future::lazy(move || command_runner.extract_execute_response(
       super::OperationOrStatus::Operation(operation),
       &mut ExecutionHistory::default(),
       workunit_store_2,
     ))).unwrap();
-    assert_eq!(
-      workunit_store.len(),
-      4
-    );
-    let workunits_arc = workunit_store.get_workunits();
-    let workunits = workunits_arc.lock();
-    let scheduling_workunit = &workunits[0];
-    assert_workunit_params(scheduling_workunit, "scheduling", 0.0, 1.0, None);
-    let fetching_workunit = &workunits[1];
-    assert_workunit_params(fetching_workunit, "fetching", 2.0, 3.0, None);
-    let executing_workunit = &workunits[2];
-    assert_workunit_params(executing_workunit, "executing", 4.0, 5.0, None);
-    let uploading_workunit = &workunits[3];
-    assert_workunit_params(uploading_workunit, "uploading", 6.0, 7.0, None);
-  }
 
-  fn assert_workunit_params(workunit: &WorkUnit, name: &str, start_timestamp: f64, end_timestamp: f64, parent_id: Option<String>) {
-    assert_eq!(
-      workunit.name,
-      String::from(name)
-    );
-    assert_eq!(
-      workunit.start_timestamp,
-      start_timestamp
-    );
-    assert_eq!(
-      workunit.end_timestamp,
-      end_timestamp
-    );
-    assert_eq!(
-      workunit.parent_id,
-      parent_id
-    );
+    let got_workunits = got_workunits(workunit_store);
+
+    let want_workunits = hashset!{
+      WorkUnit {
+        name: String::from("remote execution action scheduling"),
+        start_timestamp: Timespec::new(0, 0),
+        end_timestamp: Timespec::new(1, 0),
+        span_id: String::from("ignore"),
+        parent_id: None,
+      },
+      WorkUnit {
+        name: String::from("remote execution worker input fetching"),
+        start_timestamp: Timespec::new(2, 0),
+        end_timestamp: Timespec::new(3, 0),
+        span_id: String::from("ignore"),
+        parent_id: None,
+      },
+      WorkUnit {
+        name: String::from("remote execution worker command executing"),
+        start_timestamp: Timespec::new(4, 0),
+        end_timestamp: Timespec::new(5, 0),
+        span_id: String::from("ignore"),
+        parent_id: None,
+      },
+      WorkUnit {
+        name: String::from("remote execution worker output uploading"),
+        start_timestamp: Timespec::new(6, 0),
+        end_timestamp: Timespec::new(7, 0),
+        span_id: String::from("ignore"),
+        parent_id: None,
+      }
+    };
+
+    assert_eq!(got_workunits, want_workunits);
   }
 
   fn echo_foo_request() -> ExecuteProcessRequest {
@@ -2631,7 +2626,7 @@ mod tests {
     stderr: StderrType,
     exit_code: i32,
     metadata: Option<ExecutedActionMetadata>,
-  ) -> MockOperation {
+  ) -> Operation {
     let mut op = bazel_protos::operations::Operation::new();
     op.set_name(operation_name.to_string());
     op.set_done(true);
@@ -2671,7 +2666,7 @@ mod tests {
       response_wrapper.set_value(response_proto_bytes);
       response_wrapper
     });
-    MockOperation::new(op)
+    op
   }
 
   fn make_successful_operation(
@@ -2680,13 +2675,14 @@ mod tests {
     stderr: StderrType,
     exit_code: i32,
   ) -> MockOperation {
-    make_successful_operation_with_maybe_metadata(
+    let op = make_successful_operation_with_maybe_metadata(
       operation_name,
       stdout,
       stderr,
       exit_code,
       None
-    )
+    );
+    MockOperation::new(op)
   }
 
   fn make_successful_operation_with_metadata(
@@ -2694,17 +2690,17 @@ mod tests {
     stdout: StdoutType,
     stderr: StderrType,
     exit_code: i32,
-  ) -> MockOperation {
+  ) -> Operation {
     let mut metadata = ExecutedActionMetadata::new();
     metadata.set_queued_timestamp(timestamp_only_secs(0));
     metadata.set_worker_start_timestamp(timestamp_only_secs(1));
-    metadata.set_worker_completed_timestamp(timestamp_only_secs(8));
     metadata.set_input_fetch_start_timestamp(timestamp_only_secs(2));
     metadata.set_input_fetch_completed_timestamp(timestamp_only_secs(3));
     metadata.set_execution_start_timestamp(timestamp_only_secs(4));
     metadata.set_execution_completed_timestamp(timestamp_only_secs(5));
     metadata.set_output_upload_start_timestamp(timestamp_only_secs(6));
     metadata.set_output_upload_completed_timestamp(timestamp_only_secs(7));
+    metadata.set_worker_completed_timestamp(timestamp_only_secs(8));
 
     make_successful_operation_with_maybe_metadata(
       operation_name,

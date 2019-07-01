@@ -80,6 +80,7 @@ use log::{error, Log};
 use logging::logger::LOGGER;
 use logging::{Destination, Logger};
 use rule_graph::{GraphMaker, RuleGraph};
+use time::Timespec;
 
 // TODO: Consider renaming and making generic for collections of PyResults.
 #[repr(C)]
@@ -358,9 +359,9 @@ pub extern "C" fn scheduler_metrics(
               externs::store_utf8("name"),
               externs::store_utf8(&workunit.name),
               externs::store_utf8("start_timestamp"),
-              externs::store_f64(workunit.start_timestamp),
+              externs::store_f64(timespec_as_float_secs(&workunit.start_timestamp)),
               externs::store_utf8("end_timestamp"),
-              externs::store_f64(workunit.end_timestamp),
+              externs::store_f64(timespec_as_float_secs(&workunit.end_timestamp)),
               externs::store_utf8("span_id"),
               externs::store_utf8(&workunit.span_id),
             ];
@@ -377,6 +378,13 @@ pub extern "C" fn scheduler_metrics(
       externs::store_dict(&values).into()
     })
   })
+}
+
+fn timespec_as_float_secs(timespec: &Timespec) -> f64 {
+  //  Reverting time from Timespec to f64 decreases precision.
+  let whole_secs = timespec.sec as f64;
+  let fract_part_in_nanos = timespec.nsec  as f64;
+  whole_secs + fract_part_in_nanos / 1_000_000_000.0
 }
 
 ///
