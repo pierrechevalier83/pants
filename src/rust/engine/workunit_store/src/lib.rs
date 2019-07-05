@@ -45,22 +45,22 @@ pub struct WorkUnit {
 
 #[derive (Clone)]
 pub struct WorkUnitStore {
-  workunits: Arc<Mutex<Vec<WorkUnit>>>,
+  workunits: Arc<Mutex<HashSet<WorkUnit>>>,
 }
 
 impl WorkUnitStore {
   pub fn new() -> WorkUnitStore {
     WorkUnitStore {
-      workunits: Arc::new(Mutex::new(Vec::new())),
+      workunits: Arc::new(Mutex::new(HashSet::new())),
     }
   }
 
-  pub fn get_workunits(&self) -> Arc<Mutex<Vec<WorkUnit>>> {
+  pub fn get_workunits(&self) -> Arc<Mutex<HashSet<WorkUnit>>> {
     self.workunits.clone()
   }
 
   pub fn add_workunit(&self, workunit: WorkUnit) {
-    self.workunits.lock().push(workunit);
+    self.workunits.lock().insert(workunit);
   }
 }
 
