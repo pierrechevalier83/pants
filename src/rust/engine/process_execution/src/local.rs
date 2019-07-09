@@ -208,7 +208,11 @@ impl super::CommandRunner for CommandRunner {
   ///
   /// TODO: start to create workunits for local process execution
   ///
-  fn run(&self, req: ExecuteProcessRequest, _workunit_store: WorkUnitStore) -> BoxFuture<FallibleExecuteProcessResult, String> {
+  fn run(
+    &self,
+    req: ExecuteProcessRequest,
+    _workunit_store: WorkUnitStore,
+  ) -> BoxFuture<FallibleExecuteProcessResult, String> {
     let workdir = try_future!(tempfile::Builder::new()
       .prefix("process-execution")
       .tempdir_in(&self.work_dir)

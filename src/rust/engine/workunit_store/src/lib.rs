@@ -34,7 +34,7 @@ use std::collections::HashSet;
 use std::sync::Arc;
 use time::Timespec;
 
-#[derive (Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct WorkUnit {
   pub name: String,
   pub start_timestamp: Timespec,
@@ -43,7 +43,7 @@ pub struct WorkUnit {
   pub parent_id: Option<String>,
 }
 
-#[derive (Clone)]
+#[derive(Clone)]
 pub struct WorkUnitStore {
   workunits: Arc<Mutex<HashSet<WorkUnit>>>,
 }
@@ -65,18 +65,23 @@ impl WorkUnitStore {
 }
 
 pub fn generate_random_64bit_string() -> String {
-    let mut rng = thread_rng();
-    let random_u64: u64 = rng.gen();
-    format!("{:16.x}", random_u64)
+  let mut rng = thread_rng();
+  let random_u64: u64 = rng.gen();
+  format!("{:16.x}", random_u64)
 }
 
-pub fn got_workunits(workunit_store: WorkUnitStore) -> HashSet<WorkUnit> {
-//  This function is for the test purpose.
+pub fn workunits_with_constant_span_id(workunit_store: &WorkUnitStore) -> HashSet<WorkUnit> {
+  //  This function is for the test purpose.
 
-  workunit_store.get_workunits().lock().iter().cloned().map(|mut workunit| {
-    workunit.span_id = String::from("ignore");
-    workunit
-  }).collect()
+  workunit_store
+    .get_workunits()
+    .lock()
+    .iter()
+    .map(|workunit| WorkUnit {
+      span_id: String::from("ignore"),
+      ..workunit.clone()
+    })
+    .collect()
 }
 
 task_local! {

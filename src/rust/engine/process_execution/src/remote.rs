@@ -24,7 +24,7 @@ use super::{ExecuteProcessRequest, ExecutionStats, FallibleExecuteProcessResult}
 use std;
 use std::cmp::min;
 use std::collections::btree_map::BTreeMap;
-use workunit_store::{WorkUnit, WorkUnitStore, generate_random_64bit_string, get_parent_id};
+use workunit_store::{generate_random_64bit_string, get_parent_id, WorkUnit, WorkUnitStore};
 
 // Environment variable which is exclusively used for cache key invalidation.
 // This may be not specified in an ExecuteProcessRequest, and may be populated only by the
@@ -128,7 +128,11 @@ impl super::CommandRunner for CommandRunner {
   ///
   /// TODO: Request jdk_home be created if set.
   ///
-  fn run(&self, req: ExecuteProcessRequest, workunit_store: WorkUnitStore) -> BoxFuture<FallibleExecuteProcessResult, String> {
+  fn run(
+    &self,
+    req: ExecuteProcessRequest,
+    workunit_store: WorkUnitStore,
+  ) -> BoxFuture<FallibleExecuteProcessResult, String> {
     let operations_client = self.operations_client.clone();
 
     let store = self.store.clone();
@@ -189,7 +193,11 @@ impl super::CommandRunner for CommandRunner {
                 let operations_client = operations_client.clone();
                 let command_runner2 = command_runner2.clone();
                 let command_runner3 = command_runner3.clone();
-                let f = command_runner2.extract_execute_response(operation, &mut history, workunit_store.clone());
+                let f = command_runner2.extract_execute_response(
+                  operation,
+                  &mut history,
+                  workunit_store.clone(),
+                );
                 f.map(future::Loop::Break).or_else(move |value| {
                   match value {
                     ExecutionError::Fatal(err) => future::err(err).to_boxed(),
@@ -415,29 +423,57 @@ impl CommandRunner {
           match (worker_start - enqueued).to_std() {
             Ok(duration) => {
               attempts.current_attempt.remote_queue = Some(duration);
-              maybe_add_workunit(result_cached, "remote execution action scheduling", &enqueued, &worker_start, parent_id.clone(), &workunit_store);
-            },
+              maybe_add_workunit(
+                result_cached,
+                "remote execution action scheduling",
+                enqueued,
+                worker_start,
+                parent_id.clone(),
+                &workunit_store,
+              );
+            }
             Err(err) => warn!("Got negative remote queue time: {}", err),
           }
           match (input_fetch_completed - input_fetch_start).to_std() {
             Ok(duration) => {
               attempts.current_attempt.remote_input_fetch = Some(duration);
-              maybe_add_workunit(result_cached, "remote execution worker input fetching", &input_fetch_start, &input_fetch_completed, parent_id.clone(), &workunit_store);
-            },
+              maybe_add_workunit(
+                result_cached,
+                "remote execution worker input fetching",
+                input_fetch_start,
+                input_fetch_completed,
+                parent_id.clone(),
+                &workunit_store,
+              );
+            }
             Err(err) => warn!("Got negative remote input fetch time: {}", err),
           }
           match (execution_completed - execution_start).to_std() {
             Ok(duration) => {
               attempts.current_attempt.remote_execution = Some(duration);
-              maybe_add_workunit(result_cached, "remote execution worker command executing", &execution_start, &execution_completed, parent_id.clone(), &workunit_store);
-            },
+              maybe_add_workunit(
+                result_cached,
+                "remote execution worker command executing",
+                execution_start,
+                execution_completed,
+                parent_id.clone(),
+                &workunit_store,
+              );
+            }
             Err(err) => warn!("Got negative remote execution time: {}", err),
           }
           match (output_upload_completed - output_upload_start).to_std() {
             Ok(duration) => {
               attempts.current_attempt.remote_output_store = Some(duration);
-              maybe_add_workunit(result_cached, "remote execution worker output uploading", &output_upload_start, &output_upload_completed, parent_id, &workunit_store);
-            },
+              maybe_add_workunit(
+                result_cached,
+                "remote execution worker output uploading",
+                output_upload_start,
+                output_upload_completed,
+                parent_id,
+                &workunit_store,
+              );
+            }
             Err(err) => warn!("Got negative remote output store time: {}", err),
           }
           attempts.current_attempt.was_cache_hit = execute_response.cached_result;
@@ -747,14 +783,21 @@ impl CommandRunner {
   }
 }
 
-fn maybe_add_workunit(result_cached: bool, name: &str, start_time: &Timespec, end_time: &Timespec, parent_id: Option<String>, workunit_store: &WorkUnitStore) {
-//  TODO: workunits for scheduling, fetching, executing and uploading should be recorded
-//   only if '--reporting-zipkin-trace-v2' is set
+fn maybe_add_workunit(
+  result_cached: bool,
+  name: &str,
+  start_time: Timespec,
+  end_time: Timespec,
+  parent_id: Option<String>,
+  workunit_store: &WorkUnitStore,
+) {
+  //  TODO: workunits for scheduling, fetching, executing and uploading should be recorded
+  //   only if '--reporting-zipkin-trace-v2' is set
   if !result_cached {
     let workunit = WorkUnit {
       name: String::from(name),
-      start_timestamp: start_time.clone(),
-      end_timestamp: end_time.clone(),
+      start_timestamp: start_time,
+      end_timestamp: end_time,
       span_id: generate_random_64bit_string(),
       parent_id,
     };
@@ -961,7 +1004,7 @@ mod tests {
   use std::path::PathBuf;
   use std::time::Duration;
   use time::Timespec;
-  use workunit_store::{WorkUnit, WorkUnitStore, got_workunits};
+  use workunit_store::{workunits_with_constant_span_id, WorkUnit, WorkUnitStore};
 
   #[derive(Debug, PartialEq)]
   enum StdoutType {
@@ -2522,7 +2565,7 @@ mod tests {
 
   #[test]
   fn remote_workunits_are_stored() {
-    let workunit_store =WorkUnitStore::new();
+    let workunit_store = WorkUnitStore::new();
     let op_name = "gimme-foo".to_string();
     let testdata = TestData::roland();
     let testdata_empty = TestData::empty();
@@ -2533,23 +2576,27 @@ mod tests {
       0,
     );
     let cas = mock::StubCAS::builder()
-        .file(&TestData::roland())
-        .directory(&TestDirectory::containing_roland())
-        .build();
+      .file(&TestData::roland())
+      .directory(&TestDirectory::containing_roland())
+      .build();
     let command_runner = create_command_runner("".to_owned(), &cas);
 
     let mut runtime = tokio::runtime::Runtime::new().unwrap();
 
     let workunit_store_2 = workunit_store.clone();
-    runtime.block_on(futures::future::lazy(move || command_runner.extract_execute_response(
-      super::OperationOrStatus::Operation(operation),
-      &mut ExecutionHistory::default(),
-      workunit_store_2,
-    ))).unwrap();
+    runtime
+      .block_on(futures::future::lazy(move || {
+        command_runner.extract_execute_response(
+          super::OperationOrStatus::Operation(operation),
+          &mut ExecutionHistory::default(),
+          workunit_store_2,
+        )
+      }))
+      .unwrap();
 
-    let got_workunits = got_workunits(workunit_store);
+    let got_workunits = workunits_with_constant_span_id(&workunit_store);
 
-    let want_workunits = hashset!{
+    let want_workunits = hashset! {
       WorkUnit {
         name: String::from("remote execution action scheduling"),
         start_timestamp: Timespec::new(0, 0),
@@ -2680,7 +2727,7 @@ mod tests {
       stdout,
       stderr,
       exit_code,
-      None
+      None,
     );
     MockOperation::new(op)
   }

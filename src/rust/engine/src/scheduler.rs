@@ -83,7 +83,7 @@ impl Session {
   }
 
   pub fn workunit_store(&self) -> WorkUnitStore {
-      self.0.workunit_store.clone()
+    self.0.workunit_store.clone()
   }
 }
 

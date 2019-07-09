@@ -350,7 +350,8 @@ pub extern "C" fn scheduler_metrics(
         .flat_map(|(metric, value)| vec![externs::store_utf8(metric), externs::store_i64(value)])
         .collect::<Vec<_>>();
       if session.should_record_zipkin_spans() {
-        let workunits = session.workunit_store()
+        let workunits = session
+          .workunit_store()
           .get_workunits()
           .lock()
           .iter()
@@ -383,7 +384,7 @@ pub extern "C" fn scheduler_metrics(
 fn timespec_as_float_secs(timespec: &Timespec) -> f64 {
   //  Reverting time from Timespec to f64 decreases precision.
   let whole_secs = timespec.sec as f64;
-  let fract_part_in_nanos = timespec.nsec  as f64;
+  let fract_part_in_nanos = timespec.nsec as f64;
   whole_secs + fract_part_in_nanos / 1_000_000_000.0
 }
 
