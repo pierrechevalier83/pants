@@ -381,7 +381,7 @@ Exception: WithDeps(Inner(InnerEntry { params: {TypeCheckFailWrapper}, rule: Tas
                              File LOCATION-INFO, in nested_raise
                                fn_raises(x)
                              File LOCATION-INFO, in fn_raises
-                               raise Exception(f'An exception for {type(x).__name__}')
+                               raise Exception(f"An exception for {type(x).__name__}")
                            Exception: An exception for B"""
             ).lstrip()
             + "\n\n",  # Traces include two empty lines after.
