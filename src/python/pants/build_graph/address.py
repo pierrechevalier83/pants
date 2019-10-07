@@ -286,6 +286,9 @@ class BuildFileAddress(Address):
 
     def to_address(self):
         """Convert this BuildFileAddress to an Address."""
+        # This is weird, since BuildFileAddress is a subtype of Address, but the engine's exact
+        # type matching requires a new instance.
+        # TODO: Possibly BuildFileAddress should wrap an Address instead of subclassing it.
         return Address(spec_path=self.spec_path, target_name=self.target_name)
 
     def __repr__(self):
