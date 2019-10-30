@@ -9,6 +9,7 @@ import sys
 import sysconfig
 import traceback
 from contextlib import closing
+from textwrap import dedent
 from types import CoroutineType
 from typing import Any, NamedTuple, Tuple, Type
 
@@ -55,7 +56,7 @@ NATIVE_ENGINE_MODULE = 'native_engine'
 # both. Since `patch` is not available in all relevant environments (notably, many docker images),
 # this is accomplished using string replacement. To (re)-generate this patch, fiddle with the
 # unmodified output of `ffibuilder.emit_c_code`.
-CFFI_C_PATCH_BEFORE = '''
+CFFI_C_PATCH_BEFORE = dedent('''
 #  ifdef _MSC_VER
      PyMODINIT_FUNC
 #  if PY_MAJOR_VERSION >= 3
@@ -77,8 +78,8 @@ initnative_engine(void)
   _cffi_init("native_engine", 0x2601, &_cffi_type_context);
 }
 #endif
-'''
-CFFI_C_PATCH_AFTER = '''
+''')
+CFFI_C_PATCH_AFTER = dedent('''
 #endif
 
 PyObject* // PyMODINIT_FUNC for PY3
@@ -92,7 +93,7 @@ wrapped_initnative_engine(void)
 {
   _cffi_init("native_engine", 0x2601, &_cffi_type_context);
 }
-'''
+''')
 
 
 def get_build_cflags():
