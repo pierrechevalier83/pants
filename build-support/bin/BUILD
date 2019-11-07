@@ -72,6 +72,14 @@ python_binary(
 )
 
 python_binary(
+  name = 'fix_multiline_strings_after_black',
+  sources = 'fix_multiline_strings_after_black.py',
+  dependencies = [
+    '3rdparty/python:black',
+  ],
+)
+
+python_binary(
   name = 'generate_travis_yml',
   sources = 'generate_travis_yml.py',
   dependencies = [
