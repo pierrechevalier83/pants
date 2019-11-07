@@ -109,7 +109,8 @@ class MultiPlatformExecuteProcessRequest:
 class ExecuteProcessResult:
     """Result of successfully executing a process.
 
-  Requesting one of these will raise an exception if the exit code is non-zero."""
+    Requesting one of these will raise an exception if the exit code is non-zero.
+    """
 
     stdout: bytes
     stderr: bytes
@@ -120,7 +121,8 @@ class ExecuteProcessResult:
 class FallibleExecuteProcessResult:
     """Result of executing a process.
 
-  Requesting one of these will not raise an exception if the exit code is non-zero."""
+    Requesting one of these will not raise an exception if the exit code is non-zero.
+    """
 
     stdout: bytes
     stderr: bytes
@@ -131,15 +133,15 @@ class FallibleExecuteProcessResult:
 class ProcessExecutionFailure(Exception):
     """Used to denote that a process exited, but was unsuccessful in some way.
 
-  For example, exiting with a non-zero code.
-  """
+    For example, exiting with a non-zero code.
+    """
 
     MSG_FMT = """process '{desc}' failed with exit code {code}.
-stdout:
-{stdout}
-stderr:
-{stderr}
-"""
+              stdout:
+              {stdout}
+              stderr:
+              {stderr}
+              """
 
     def __init__(self, exit_code, stdout, stderr, process_description):
         # These are intentionally "public" members.
@@ -166,8 +168,8 @@ def upcast_execute_process_request(
     req: ExecuteProcessRequest,
 ) -> MultiPlatformExecuteProcessRequest:
     """This rule allows an ExecuteProcessRequest to be run as a
-  platform compatible MultiPlatformExecuteProcessRequest.
-  """
+    platform compatible MultiPlatformExecuteProcessRequest.
+    """
     return MultiPlatformExecuteProcessRequest(
         {(PlatformConstraint.none, PlatformConstraint.none): req}
     )

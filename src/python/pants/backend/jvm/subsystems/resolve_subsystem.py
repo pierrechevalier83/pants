@@ -12,8 +12,8 @@ logger = logging.getLogger(__name__)
 class JvmResolveSubsystem(Subsystem):
     """Used to keep track of global jvm resolver settings
 
-  :API: public
-  """
+    :API: public
+    """
 
     options_scope = "resolver"
 

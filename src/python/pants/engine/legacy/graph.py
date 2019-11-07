@@ -50,8 +50,8 @@ def target_types_from_build_file_aliases(aliases):
 class _DestWrapper:
     """A wrapper for dest field of RemoteSources target.
 
-  This is only used when instantiating RemoteSources target.
-  """
+    This is only used when instantiating RemoteSources target.
+    """
 
     target_types: Any
 
@@ -59,8 +59,8 @@ class _DestWrapper:
 class LegacyBuildGraph(BuildGraph):
     """A directed acyclic graph of Targets and dependencies. Not necessarily connected.
 
-  This implementation is backed by a Scheduler that is able to resolve TransitiveHydratedTargets.
-  """
+    This implementation is backed by a Scheduler that is able to resolve TransitiveHydratedTargets.
+    """
 
     @classmethod
     def create(cls, scheduler, build_file_aliases):
@@ -70,9 +70,9 @@ class LegacyBuildGraph(BuildGraph):
     def __init__(self, scheduler, target_types):
         """Construct a graph given a Scheduler, and set of target type aliases.
 
-    :param scheduler: A Scheduler that is configured to be able to resolve TransitiveHydratedTargets.
-    :param target_types: A dict mapping aliases to target types.
-    """
+        :param scheduler: A Scheduler that is configured to be able to resolve TransitiveHydratedTargets.
+        :param target_types: A dict mapping aliases to target types.
+        """
         self._scheduler = scheduler
         self._target_types = target_types
         super().__init__()
@@ -84,8 +84,8 @@ class LegacyBuildGraph(BuildGraph):
     def _index(self, hydrated_targets):
         """Index from the given roots into the storage provided by the base class.
 
-    This is an additive operation: any existing connections involving these nodes are preserved.
-    """
+        This is an additive operation: any existing connections involving these nodes are preserved.
+        """
         all_addresses = set()
         new_targets = list()
 
@@ -219,8 +219,8 @@ class LegacyBuildGraph(BuildGraph):
     def _inject_addresses(self, subjects):
         """Injects targets into the graph for each of the given `Address` objects, and then yields them.
 
-    TODO: See #5606 about undoing the split between `_inject_addresses` and `_inject_specs`.
-    """
+        TODO: See #5606 about undoing the split between `_inject_addresses` and `_inject_specs`.
+        """
         logger.debug("Injecting addresses to %s: %s", self, subjects)
         with self._resolve_context():
             addresses = tuple(subjects)
@@ -239,8 +239,8 @@ class LegacyBuildGraph(BuildGraph):
     def _inject_specs(self, specs):
         """Injects targets into the graph for the given `Specs` object.
 
-    Yields the resulting addresses.
-    """
+        Yields the resulting addresses.
+        """
         if not specs:
             return
 
@@ -257,20 +257,20 @@ class LegacyBuildGraph(BuildGraph):
 class _DependentGraph(object):
     """A graph for walking dependent addresses of TargetAdaptor objects.
 
-  This avoids/imitates constructing a v1 BuildGraph object, because that codepath results
-  in many references held in mutable global state (ie, memory leaks).
+    This avoids/imitates constructing a v1 BuildGraph object, because that codepath results
+    in many references held in mutable global state (ie, memory leaks).
 
-  The long term goal is to deprecate the `changed` goal in favor of sufficiently good cache
-  hit rates, such that rather than running:
+    The long term goal is to deprecate the `changed` goal in favor of sufficiently good cache
+    hit rates, such that rather than running:
 
-    ./pants --changed-parent=master test
+      ./pants --changed-parent=master test
 
-  ...you would always be able to run:
+    ...you would always be able to run:
 
-    ./pants test ::
+      ./pants test ::
 
-  ...and have it complete in a similar amount of time by hitting relevant caches.
-  """
+    ...and have it complete in a similar amount of time by hitting relevant caches.
+    """
 
     @classmethod
     def from_iterable(cls, target_types, address_mapper, adaptor_iter):
@@ -353,9 +353,9 @@ class _DependentGraph(object):
 class HydratedTarget:
     """A wrapper for a fully hydrated TargetAdaptor object.
 
-  Transitive graph walks collect ordered sets of TransitiveHydratedTargets which involve a huge amount
-  of hashing: we implement eq/hash via direct usage of an Address field to speed that up.
-  """
+    Transitive graph walks collect ordered sets of TransitiveHydratedTargets which involve a huge amount
+    of hashing: we implement eq/hash via direct usage of an Address field to speed that up.
+    """
 
     address: Any
     adaptor: Any
@@ -464,11 +464,11 @@ def transitive_hydrated_targets(
 ) -> TransitiveHydratedTargets:
     """Given BuildFileAddresses, kicks off recursion on expansion of TransitiveHydratedTargets.
 
-  The TransitiveHydratedTarget struct represents a structure-shared graph, which we walk
-  and flatten here. The engine memoizes the computation of TransitiveHydratedTarget, so
-  when multiple TransitiveHydratedTargets objects are being constructed for multiple
-  roots, their structure will be shared.
-  """
+    The TransitiveHydratedTarget struct represents a structure-shared graph, which we walk
+    and flatten here. The engine memoizes the computation of TransitiveHydratedTarget, so
+    when multiple TransitiveHydratedTargets objects are being constructed for multiple
+    roots, their structure will be shared.
+    """
 
     transitive_hydrated_targets = yield [
         Get(TransitiveHydratedTarget, Address, a) for a in build_file_addresses.addresses
@@ -543,7 +543,7 @@ def hydrate_sources(
     sources_field: SourcesField, glob_match_error_behavior: GlobMatchErrorBehavior
 ) -> HydratedField:
     """Given a SourcesField, request a Snapshot for its path_globs and create an EagerFilesetWithSpec.
-  """
+    """
     # TODO(#5864): merge the target's selection of --glob-expansion-failure (which doesn't exist yet)
     # with the global default!
     path_globs = dataclasses.replace(

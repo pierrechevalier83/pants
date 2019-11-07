@@ -24,8 +24,8 @@ class TestInterpreterCache(TestBase):
     def _make_bad_requirement(requirement):
         """Turns a requirement that passes into one we know will fail.
 
-    E.g. 'CPython==3.7.2' becomes 'CPython==99.7.2'
-    """
+        E.g. 'CPython==3.7.2' becomes 'CPython==99.7.2'
+        """
         requirement_major_version = "3"
         return str(requirement).replace("=={}".format(requirement_major_version), "==99")
 
@@ -104,11 +104,11 @@ class TestInterpreterCache(TestBase):
 
     def test_interpreter_from_relpath_purges_stale_interpreter(self):
         """
-    Simulates a stale interpreter cache and tests that _interpreter_from_relpath
-    properly detects it and removes the stale dist directory.
+        Simulates a stale interpreter cache and tests that _interpreter_from_relpath
+        properly detects it and removes the stale dist directory.
 
-    See https://github.com/pantsbuild/pants/issues/3416 for more info.
-    """
+        See https://github.com/pantsbuild/pants/issues/3416 for more info.
+        """
         with temporary_dir() as temp_dir:
             # Setup a interpreter distribution that we can safely mutate.
             test_interpreter_binary = os.path.join(temp_dir, "python")

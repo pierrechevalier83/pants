@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 class UnpackedJars(ImportJarsMixin, Target):
     """A set of sources extracted from JAR files.
 
-  :API: public
-  """
+    :API: public
+    """
 
     imported_target_kwargs_field = "libraries"
     imported_target_payload_field = "library_specs"
@@ -36,13 +36,13 @@ class UnpackedJars(ImportJarsMixin, Target):
         **kwargs
     ):
         """
-    :param list libraries: addresses of jar_library targets that specify the jars you want to unpack
-    :param list include_patterns: fileset patterns to include from the archive
-    :param list exclude_patterns: fileset patterns to exclude from the archive. Exclude patterns
-      are processed before include_patterns.
-    :param bool intransitive: Whether to unpack all resolved dependencies of the jars, or just
-      the jars themselves.
-    """
+        :param list libraries: addresses of jar_library targets that specify the jars you want to unpack
+        :param list include_patterns: fileset patterns to include from the archive
+        :param list exclude_patterns: fileset patterns to exclude from the archive. Exclude patterns
+          are processed before include_patterns.
+        :param bool intransitive: Whether to unpack all resolved dependencies of the jars, or just
+          the jars themselves.
+        """
         payload = payload or Payload()
         payload.add_fields(
             {

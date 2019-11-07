@@ -57,45 +57,45 @@ NATIVE_ENGINE_MODULE = "native_engine"
 # unmodified output of `ffibuilder.emit_c_code`.
 CFFI_C_PATCH_BEFORE = dedent(
     """
-#  ifdef _MSC_VER
-     PyMODINIT_FUNC
-#  if PY_MAJOR_VERSION >= 3
-     PyInit_native_engine(void) { return NULL; }
-#  else
-     initnative_engine(void) { }
-#  endif
-#  endif
-#elif PY_MAJOR_VERSION >= 3
-PyMODINIT_FUNC
-PyInit_native_engine(void)
-{
-  return _cffi_init("native_engine", 0x2601, &_cffi_type_context);
-}
-#else
-PyMODINIT_FUNC
-initnative_engine(void)
-{
-  _cffi_init("native_engine", 0x2601, &_cffi_type_context);
-}
-#endif
-"""
+    #  ifdef _MSC_VER
+         PyMODINIT_FUNC
+    #  if PY_MAJOR_VERSION >= 3
+         PyInit_native_engine(void) { return NULL; }
+    #  else
+         initnative_engine(void) { }
+    #  endif
+    #  endif
+    #elif PY_MAJOR_VERSION >= 3
+    PyMODINIT_FUNC
+    PyInit_native_engine(void)
+    {
+      return _cffi_init("native_engine", 0x2601, &_cffi_type_context);
+    }
+    #else
+    PyMODINIT_FUNC
+    initnative_engine(void)
+    {
+      _cffi_init("native_engine", 0x2601, &_cffi_type_context);
+    }
+    #endif
+    """
 )
 CFFI_C_PATCH_AFTER = dedent(
     """
-#endif
+    #endif
 
-PyObject* // PyMODINIT_FUNC for PY3
-wrapped_PyInit_native_engine(void)
-{
-  return _cffi_init("native_engine", 0x2601, &_cffi_type_context);
-}
+    PyObject* // PyMODINIT_FUNC for PY3
+    wrapped_PyInit_native_engine(void)
+    {
+      return _cffi_init("native_engine", 0x2601, &_cffi_type_context);
+    }
 
-void // PyMODINIT_FUNC for PY2
-wrapped_initnative_engine(void)
-{
-  _cffi_init("native_engine", 0x2601, &_cffi_type_context);
-}
-"""
+    void // PyMODINIT_FUNC for PY2
+    wrapped_initnative_engine(void)
+    {
+      _cffi_init("native_engine", 0x2601, &_cffi_type_context);
+    }
+    """
 )
 
 
@@ -205,7 +205,8 @@ def bootstrap_c_source(scheduler_bindings_path, output_dir, module_name=NATIVE_E
 def _replace_file(path, content):
     """Writes a file if it doesn't already exist with the same content.
 
-  This is useful because cargo uses timestamps to decide whether to compile things."""
+    This is useful because cargo uses timestamps to decide whether to compile things.
+    """
     if os.path.exists(path):
         with open(path, "r") as f:
             if content == f.read():
@@ -232,9 +233,9 @@ class _ExternSignature(NamedTuple):
 def _extern_decl(return_type, arg_types):
     """A decorator for methods corresponding to extern functions. All types should be strings.
 
-  The _FFISpecification class is able to automatically convert these into method declarations for
-  cffi.
-  """
+    The _FFISpecification class is able to automatically convert these into method declarations for
+    cffi.
+    """
 
     def wrapper(func):
         signature = _ExternSignature(
@@ -268,10 +269,10 @@ class _FFISpecification(object):
     def register_cffi_externs(self, native):
         """Registers the @_extern_decl methods with our ffi instance.
 
-    Also establishes an `onerror` handler for each extern method which stores any exception in the
-    `native` object so that it can be retrieved later. See
-    https://cffi.readthedocs.io/en/latest/using.html#extern-python-reference for more info.
-    """
+        Also establishes an `onerror` handler for each extern method which stores any exception in the
+        `native` object so that it can be retrieved later. See
+        https://cffi.readthedocs.io/en/latest/using.html#extern-python-reference for more info.
+        """
         native.reset_cffi_extern_method_runtime_exceptions()
 
         def exc_handler(exc_type, exc_value, traceback):
@@ -326,11 +327,11 @@ class _FFISpecification(object):
     def extern_identify(self, context_handle, val):
         """Return a representation of the object's identity, including a hash and TypeId.
 
-    `extern_get_type_for()` also returns a TypeId, but doesn't hash the object -- this allows that
-    method to be used on unhashable objects. `extern_identify()` returns a TypeId as well to avoid
-    having to make two separate Python calls when interning a Python object in interning.rs, which
-    requires both the hash and type.
-    """
+        `extern_get_type_for()` also returns a TypeId, but doesn't hash the object -- this allows that
+        method to be used on unhashable objects. `extern_identify()` returns a TypeId as well to avoid
+        having to make two separate Python calls when interning a Python object in interning.rs, which
+        requires both the hash and type.
+        """
         # NB: This check is exposed for testing error handling in CFFI methods. This code path should
         # never be active in normal pants usage.
         if self._do_raise_keyboardinterrupt_on_identify:
@@ -410,10 +411,10 @@ class _FFISpecification(object):
     def extern_store_dict(self, context_handle, vals_ptr, vals_len):
         """Given storage and an array of Handles, return a new Handle to represent the dict.
 
-    Array of handles alternates keys and values (i.e. key0, value0, key1, value1, ...).
+        Array of handles alternates keys and values (i.e. key0, value0, key1, value1, ...).
 
-    It is assumed that an even number of values were passed.
-    """
+        It is assumed that an even number of values were passed.
+        """
         c = self._ffi.from_handle(context_handle)
         tup = tuple(c.from_value(val[0]) for val in self._ffi.unpack(vals_ptr, vals_len))
         d = dict()
@@ -552,9 +553,10 @@ class Function(NamedTuple):
 class EngineTypes(NamedTuple):
     """Python types that need to be passed to the engine.
 
-  N.B. EngineTypes needs to correspond field-by-field to the Types struct defined in
-  `src/rust/engine/src/types.rs` in order to avoid breakage
-  (field definition order matters, not just the names of fields!)."""
+    N.B. EngineTypes needs to correspond field-by-field to the Types struct defined in
+    `src/rust/engine/src/types.rs` in order to avoid breakage
+    (field definition order matters, not just the names of fields!).
+    """
 
     construct_directory_digest: Function
     directory_digest: TypeId
@@ -604,14 +606,14 @@ class RawResult(NamedTuple):
 class ExternContext:
     """A wrapper around python objects used in static extern functions in this module.
 
-  See comments in `src/rust/engine/src/interning.rs` for more information on the relationship
-  between `Key`s and `Handle`s.
-  """
+    See comments in `src/rust/engine/src/interning.rs` for more information on the relationship
+    between `Key`s and `Handle`s.
+    """
 
     def __init__(self, ffi, lib):
         """
-    :param CompiledCFFI ffi: The CFFI handle to the compiled native engine lib.
-    """
+        :param CompiledCFFI ffi: The CFFI handle to the compiled native engine lib.
+        """
         self._ffi = ffi
         self._lib = lib
 
@@ -705,18 +707,18 @@ class Native(metaclass=SingletonMetaclass):
     class CFFIExternMethodRuntimeErrorInfo(NamedTuple):
         """Encapsulates an exception raised when a CFFI extern is called so that it can be displayed.
 
-    When an exception is raised in the body of a CFFI extern, the `onerror` handler is used to
-    capture it, storing the exception info as an instance of `CFFIExternMethodRuntimeErrorInfo` with
-    `.add_cffi_extern_method_runtime_exception()`. The scheduler will then check whether any
-    exceptions were stored by calling `.consume_cffi_extern_method_runtime_exceptions()` after
-    specific calls to the native library which may raise.
+        When an exception is raised in the body of a CFFI extern, the `onerror` handler is used to
+        capture it, storing the exception info as an instance of `CFFIExternMethodRuntimeErrorInfo` with
+        `.add_cffi_extern_method_runtime_exception()`. The scheduler will then check whether any
+        exceptions were stored by calling `.consume_cffi_extern_method_runtime_exceptions()` after
+        specific calls to the native library which may raise.
 
-    Note that `.consume_cffi_extern_method_runtime_exceptions()` will also clear out all stored
-    exceptions, so exceptions should be stored separately after consumption.
+        Note that `.consume_cffi_extern_method_runtime_exceptions()` will also clear out all stored
+        exceptions, so exceptions should be stored separately after consumption.
 
-    Some ways that exceptions in CFFI extern methods can be handled are described in
-    https://cffi.readthedocs.io/en/latest/using.html#extern-python-reference.
-    """
+        Some ways that exceptions in CFFI extern methods can be handled are described in
+        https://cffi.readthedocs.io/en/latest/using.html#extern-python-reference.
+        """
 
         exc_type: Type
         exc_value: BaseException
@@ -832,8 +834,8 @@ class Native(metaclass=SingletonMetaclass):
     def gc(self, cdata, destructor):
         """Register a method to be called when `cdata` is garbage collected.
 
-    Returns a new reference that should be used in place of `cdata`.
-    """
+        Returns a new reference that should be used in place of `cdata`.
+        """
         return self.ffi.gc(cdata, destructor)
 
     def unpack(self, cdata_ptr, count):

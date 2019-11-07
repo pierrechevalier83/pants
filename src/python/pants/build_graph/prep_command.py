@@ -11,17 +11,17 @@ from pants.util.memo import memoized_property
 class PrepCommand(Target):
     """A shell command to be run prior to running a goal.
 
-  For example, you can use `prep_command()` to execute a script that sets up tunnels to database
-  servers. These tunnels could then be leveraged by integration tests.
+    For example, you can use `prep_command()` to execute a script that sets up tunnels to database
+    servers. These tunnels could then be leveraged by integration tests.
 
-  Pants will only execute the `prep_command()` under the specified goal, when processing targets
-  that depend on the `prep_command()` target.  If not otherwise specified, prep_commands
-  execute in the test goal.
+    Pants will only execute the `prep_command()` under the specified goal, when processing targets
+    that depend on the `prep_command()` target.  If not otherwise specified, prep_commands
+    execute in the test goal.
 
-  See also jvm_prep_command for running tasks defined by a JVM language.
+    See also jvm_prep_command for running tasks defined by a JVM language.
 
-  :API: public
-  """
+    :API: public
+    """
 
     _goals = frozenset()
 
@@ -50,17 +50,17 @@ class PrepCommand(Target):
         **kwargs
     ):
         """
-    :API: public
+        :API: public
 
-    :param prep_executable: The path to the executable that should be run.
-    :param prep_args: A list of command-line args to the excutable.
-    :param prep_environ: If True, the output of the command will be treated as
-      a \\\\0-separated list of key=value pairs to insert into the environment.
-      Note that this will pollute the environment for all future tests, so
-      avoid it if at all possible.
-    :param goals: One or more pants goals to run this command in [test, binary or compile]. If not
-      specified, runs in the 'test' goal.
-    """
+        :param prep_executable: The path to the executable that should be run.
+        :param prep_args: A list of command-line args to the excutable.
+        :param prep_environ: If True, the output of the command will be treated as
+          a \\\\0-separated list of key=value pairs to insert into the environment.
+          Note that this will pollute the environment for all future tests, so
+          avoid it if at all possible.
+        :param goals: One or more pants goals to run this command in [test, binary or compile]. If not
+          specified, runs in the 'test' goal.
+        """
 
         def raise_bad_target(msg):
             raise TargetDefinitionException(address.spec, msg)

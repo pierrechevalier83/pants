@@ -344,8 +344,8 @@ class JarPublishAuthTest(NailgunTaskTestBase):
 
     def test_options_with_no_auth(self):
         """When called without authentication credentials, `JarPublish._ivy_jvm_options()` shouldn't
-    modify any options.
-    """
+        modify any options.
+        """
         self._jar_publish._jvm_options = self._default_jvm_opts()
         repo = {}
         modified_opts = self._jar_publish._ivy_jvm_options(repo)
@@ -353,8 +353,8 @@ class JarPublishAuthTest(NailgunTaskTestBase):
 
     def test_options_with_auth(self):
         """`JarPublish._ivy_jvm_options()` should produce the same list, when called multiple times
-    with authentication credentials.
-    """
+        with authentication credentials.
+        """
         self._jar_publish._jvm_options = self._default_jvm_opts()
 
         username = "mjk"

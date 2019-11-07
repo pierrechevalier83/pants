@@ -145,26 +145,26 @@ class RscCompile(ZincCompile, MirroredTargetOptionMixin):
     class JvmCompileWorkflowType(Enum):
         """Target classifications used to correctly schedule Zinc and Rsc jobs.
 
-    There are some limitations we have to work around before we can compile everything through Rsc
-    and followed by Zinc.
-    - rsc is not able to outline all scala code just yet (this is also being addressed through
-      automated rewrites).
-    - javac is unable to consume rsc's jars just yet.
-    - rsc is not able to outline all java code just yet (this is likely to *not* require rewrites,
-      just some more work on rsc).
+        There are some limitations we have to work around before we can compile everything through Rsc
+        and followed by Zinc.
+        - rsc is not able to outline all scala code just yet (this is also being addressed through
+          automated rewrites).
+        - javac is unable to consume rsc's jars just yet.
+        - rsc is not able to outline all java code just yet (this is likely to *not* require rewrites,
+          just some more work on rsc).
 
-    As we work on improving our Rsc integration, we'll need to create more workflows to more closely
-    map the supported features of Rsc. This enum class allows us to do that.
+        As we work on improving our Rsc integration, we'll need to create more workflows to more closely
+        map the supported features of Rsc. This enum class allows us to do that.
 
-      - zinc-only: compiles targets just with Zinc and uses the Zinc products of their dependencies.
-      - zinc-java: the same as zinc-only for now, for targets with any java sources (which rsc can't
-                   syet outline).
-      - rsc-and-zinc: compiles targets with Rsc to create "header" jars, and runs Zinc against the
-        Rsc products of their dependencies. The Rsc compile uses the Rsc products of Rsc compatible
-        targets and the Zinc products of zinc-only targets.
-      - outline-and-zinc: compiles targets with scalac's outlining to create "header" jars,
-        in place of Rsc. While this is slower, it conforms to Scala without rewriting code.
-    """
+          - zinc-only: compiles targets just with Zinc and uses the Zinc products of their dependencies.
+          - zinc-java: the same as zinc-only for now, for targets with any java sources (which rsc can't
+                       syet outline).
+          - rsc-and-zinc: compiles targets with Rsc to create "header" jars, and runs Zinc against the
+            Rsc products of their dependencies. The Rsc compile uses the Rsc products of Rsc compatible
+            targets and the Zinc products of zinc-only targets.
+          - outline-and-zinc: compiles targets with scalac's outlining to create "header" jars,
+            in place of Rsc. While this is slower, it conforms to Scala without rewriting code.
+        """
 
         zinc_only = "zinc-only"
         zinc_java = "zinc-java"
@@ -280,9 +280,9 @@ class RscCompile(ZincCompile, MirroredTargetOptionMixin):
     def _nailgunnable_combined_classpath(self):
         """Register all of the component tools of the rsc compile task as a "combined" jvm tool.
 
-    This allows us to invoke their combined classpath in a single nailgun instance (see #7089 and
-    #7092). We still invoke their classpaths separately when not using nailgun, however.
-    """
+        This allows us to invoke their combined classpath in a single nailgun instance (see #7089 and
+        #7092). We still invoke their classpaths separately when not using nailgun, however.
+        """
         cp = []
         cp.extend(self._rsc_classpath)
         # Add zinc's classpath so that it can be invoked from the same nailgun instance.

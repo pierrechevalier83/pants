@@ -12,30 +12,30 @@ from pants.contrib.python.checks.checker.import_order import ImportOrder, Import
 
 IMPORT_CHUNKS = {
     ImportType.STDLIB: """
-  import ast
-  from collections import namedtuple
-  import io
-  """,
+                       import ast
+                       from collections import namedtuple
+                       import io
+                       """,
     ImportType.TWITTER: """
-  from twitter.common import app
-  from twitter.common.dirutil import (
-      safe_mkdtemp,
-      safe_open,
-      safe_rmtree)
-  """,
+                        from twitter.common import app
+                        from twitter.common.dirutil import (
+                            safe_mkdtemp,
+                            safe_open,
+                            safe_rmtree)
+                        """,
     ImportType.GEN: """
-  from gen.twitter.aurora.ttypes import TwitterTaskInfo
-  """,
+                    from gen.twitter.aurora.ttypes import TwitterTaskInfo
+                    """,
     ImportType.PACKAGE: """
-  from .import_order import (
-      ImportOrder,
-      ImportType
-  )
-  """,
+                        from .import_order import (
+                            ImportOrder,
+                            ImportType
+                        )
+                        """,
     ImportType.THIRD_PARTY: """
-  from kazoo.client import KazooClient
-  import zookeeper
-  """,
+                            from kazoo.client import KazooClient
+                            import zookeeper
+                            """,
 }
 
 
@@ -122,8 +122,8 @@ class ImportOrderTest(CheckstylePluginTestBase):
 
         io = self.get_plugin(
             """
-      import io, pkg_resources
-    """
+            import io, pkg_resources
+            """
         )
         import_chunks = list(io.iter_import_chunks())
         self.assertEqual(1, len(import_chunks))
@@ -137,12 +137,12 @@ class ImportOrderTest(CheckstylePluginTestBase):
 
     def test_import_lexical_order(self):
         imp = """
-      from twitter.common.dirutil import safe_rmtree, safe_mkdtemp
-    """
+              from twitter.common.dirutil import safe_rmtree, safe_mkdtemp
+              """
         self.assertNit(imp, "T401")
 
     def test_import_wildcard(self):
         imp = """
-      from twitter.common.dirutil import *
-    """
+              from twitter.common.dirutil import *
+              """
         self.assertNit(imp, "T400")

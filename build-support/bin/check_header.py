@@ -14,10 +14,10 @@ from common import die
 
 EXPECTED_HEADER = dedent(
     """\
-  # Copyright YYYY Pants project contributors (see CONTRIBUTORS.md).
-  # Licensed under the Apache License, Version 2.0 (see LICENSE).
+    # Copyright YYYY Pants project contributors (see CONTRIBUTORS.md).
+    # Licensed under the Apache License, Version 2.0 (see LICENSE).
 
-  """
+    """
 )
 
 EXPECTED_NUM_LINES = 3
@@ -46,13 +46,14 @@ def main() -> None:
         failures = "\n  ".join(str(failure) for failure in header_parse_failures)
         die(
             f"""\
-ERROR: All .py files other than __init__.py should start with the header:
-{EXPECTED_HEADER}
+            ERROR: All .py files other than __init__.py should start with the header:
+            {EXPECTED_HEADER}
 
----
+            ---
 
-The following {len(header_parse_failures)} file(s) do not conform:
-{failures}"""
+            The following {len(header_parse_failures)} file(s) do not conform:
+            {failures}
+            """
         )
 
 
@@ -118,7 +119,8 @@ def check_header_present(file_path: Path, lines: List[str]) -> None:
 
 def check_copyright_year(file_path: Path, *, copyright_line: str, is_newly_created: bool) -> None:
     """Check that copyright is current year if for a new file, else that it's within
-  the current century."""
+    the current century.
+    """
     year = copyright_line[12:16]
     if is_newly_created and year != CURRENT_YEAR:
         raise HeaderCheckFailure(f"{file_path}: copyright year must be {CURRENT_YEAR} (was {year})")

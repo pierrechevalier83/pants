@@ -8,13 +8,13 @@ from typing import Any, Callable, Optional, Type, TypeVar, Union
 
 class SingletonMetaclass(type):
     """When using this metaclass in your class definition, your class becomes a singleton. That is,
-  every construction returns the same instance.
+    every construction returns the same instance.
 
-  Example class definition:
+    Example class definition:
 
-    class Unicorn(metaclass=SingletonMetaclass):
-      pass
-  """
+      class Unicorn(metaclass=SingletonMetaclass):
+        pass
+    """
 
     def __call__(cls, *args: Any, **kwargs: Any) -> Any:
         # TODO: convert this into an `@memoized_classproperty`!
@@ -47,9 +47,10 @@ class ClassPropertyDescriptor:
             field_name = self.fget.__func__.fget.__name__  # type: ignore
             raise TypeError(
                 """\
-The classproperty '{func_name}' in type '{type_name}' was an abstractproperty, meaning that type \
-{type_name} must override it by setting it as a variable in the class body or defining a method \
-with an @classproperty decorator.""".format(
+                The classproperty '{func_name}' in type '{type_name}' was an abstractproperty, meaning that type \
+                {type_name} must override it by setting it as a variable in the class body or defining a method \
+                with an @classproperty decorator.
+                """.format(
                     func_name=field_name, type_name=objtype.__name__
                 )
             )
@@ -59,23 +60,23 @@ with an @classproperty decorator.""".format(
 def classproperty(func: Union[classmethod, staticmethod, Callable]) -> ClassPropertyDescriptor:
     """Use as a decorator on a method definition to make it a class-level attribute.
 
-  This decorator can be applied to a method, a classmethod, or a staticmethod. This decorator will
-  bind the first argument to the class object.
+    This decorator can be applied to a method, a classmethod, or a staticmethod. This decorator will
+    bind the first argument to the class object.
 
-  Usage:
-  >>> class Foo:
-  ...   @classproperty
-  ...   def name(cls):
-  ...     return cls.__name__
-  ...
-  >>> Foo.name
-  'Foo'
+    Usage:
+    >>> class Foo:
+    ...   @classproperty
+    ...   def name(cls):
+    ...     return cls.__name__
+    ...
+    >>> Foo.name
+    'Foo'
 
-  Setting or deleting the attribute of this name will overwrite this property.
+    Setting or deleting the attribute of this name will overwrite this property.
 
-  The docstring of the classproperty `x` for a class `C` can be obtained by
-  `C.__dict__['x'].__doc__`.
-  """
+    The docstring of the classproperty `x` for a class `C` can be obtained by
+    `C.__dict__['x'].__doc__`.
+    """
     doc = func.__doc__
 
     if not isinstance(func, (classmethod, staticmethod)):
@@ -87,24 +88,24 @@ def classproperty(func: Union[classmethod, staticmethod, Callable]) -> ClassProp
 def staticproperty(func: Union[staticmethod, Callable]) -> ClassPropertyDescriptor:
     """Use as a decorator on a method definition to make it a class-level attribute (without binding).
 
-  This decorator can be applied to a method or a staticmethod. This decorator does not bind any
-  arguments.
+    This decorator can be applied to a method or a staticmethod. This decorator does not bind any
+    arguments.
 
-  Usage:
-  >>> other_x = 'value'
-  >>> class Foo:
-  ...   @staticproperty
-  ...   def x():
-  ...     return other_x
-  ...
-  >>> Foo.x
-  'value'
+    Usage:
+    >>> other_x = 'value'
+    >>> class Foo:
+    ...   @staticproperty
+    ...   def x():
+    ...     return other_x
+    ...
+    >>> Foo.x
+    'value'
 
-  Setting or deleting the attribute of this name will overwrite this property.
+    Setting or deleting the attribute of this name will overwrite this property.
 
-  The docstring of the classproperty `x` for a class `C` can be obtained by
-  `C.__dict__['x'].__doc__`.
-  """
+    The docstring of the classproperty `x` for a class `C` can be obtained by
+    `C.__dict__['x'].__doc__`.
+    """
     doc = func.__doc__
 
     if not isinstance(func, staticmethod):
@@ -116,10 +117,11 @@ def staticproperty(func: Union[staticmethod, Callable]) -> ClassPropertyDescript
 def frozen_after_init(cls: Type[T]) -> Type[T]:
     """Class decorator to freeze any modifications to the object after __init__() is done.
 
-  The primary use case is for @dataclasses who cannot use frozen=True due to the need for a custom
-  __init__(), but who still want to remain as immutable as possible (e.g. for safety with the V2
-  engine). When using with dataclasses, this should be the first decorator applied, i.e. be used
-  before @dataclass."""
+    The primary use case is for @dataclasses who cannot use frozen=True due to the need for a custom
+    __init__(), but who still want to remain as immutable as possible (e.g. for safety with the V2
+    engine). When using with dataclasses, this should be the first decorator applied, i.e. be used
+    before @dataclass.
+    """
 
     prev_init = cls.__init__
     prev_setattr = cls.__setattr__

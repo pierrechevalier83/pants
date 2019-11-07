@@ -91,12 +91,12 @@ class TestExceptionSink(TestBase):
 
             # We only logged a single error, so the files should both contain only that single log entry.
             err_rx = """\
-timestamp: ([^\n]+)
-process title: {fake_process_title}
-sys.argv: ([^\n]+)
-pid: {pid}
-{msg}
-""".format(
+                     timestamp: ([^\n]+)
+                     process title: {fake_process_title}
+                     sys.argv: ([^\n]+)
+                     pid: {pid}
+                     {msg}
+                     """.format(
                 fake_process_title=re.escape(fake_process_title), pid=pid, msg=msg
             )
             with open(cur_process_error_log_path, "r") as cur_pid_file:

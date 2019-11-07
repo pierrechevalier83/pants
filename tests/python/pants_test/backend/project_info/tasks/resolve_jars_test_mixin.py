@@ -13,12 +13,12 @@ class ResolveJarsTestMixin:
     def evaluate_subtask(self, targets, workdir, load_extra_confs, extra_args, expected_jars):
         """Evaluate the underlying task with the given target specs.
 
-    :param targets: the list of targets.
-    :param string workdir: the working directory to execute in.
-    :param bool load_extra_confs: whether to attempt to download sources and javadocs.
-    :param list extra_args: extra args to pass to the task.
-    :param list expected_jars: list of jars that were expected to be resolved.
-    """
+        :param targets: the list of targets.
+        :param string workdir: the working directory to execute in.
+        :param bool load_extra_confs: whether to attempt to download sources and javadocs.
+        :param list extra_args: extra args to pass to the task.
+        :param list expected_jars: list of jars that were expected to be resolved.
+        """
         raise NotImplementedError()
 
     def _test_jar_lib_with_url(self, load_all):
@@ -30,34 +30,34 @@ class ResolveJarsTestMixin:
                         f.write(
                             dedent(
                                 """
-              jvm_binary(name='synthetic',
-                source='Main.java',
-              )
-            """
+                                jvm_binary(name='synthetic',
+                                  source='Main.java',
+                                )
+                                """
                             )
                         )
                     with open(os.path.join(source_dir, "src", "Main.java"), "w+") as f:
                         f.write(
                             dedent(
                                 """
-              public class Main {
-                public static void main(String[] args) {
-                  System.out.println("Hello.");
-                }
-              }
-            """
+                                public class Main {
+                                  public static void main(String[] args) {
+                                    System.out.println("Hello.");
+                                  }
+                                }
+                                """
                             )
                         )
                     with open(os.path.join(source_dir, "src", "Foo.java"), "w+") as f:
                         f.write(
                             dedent(
                                 """
-              public class Foo {
-                public static void main(String[] args) {
-                  Main.main(args);
-                }
-              }
-            """
+                                public class Foo {
+                                  public static void main(String[] args) {
+                                    Main.main(args);
+                                  }
+                                }
+                                """
                             )
                         )
 
@@ -74,18 +74,18 @@ class ResolveJarsTestMixin:
                         f.write(
                             dedent(
                                 """
-              jar_library(name='lib_with_url',
-                jars=[
-                  jar(org='org.pantsbuild', name='synthetic-test-jar', rev='1.2.3',
-                  url='{jar_url}')
-                ],
-              )
+                                jar_library(name='lib_with_url',
+                                  jars=[
+                                    jar(org='org.pantsbuild', name='synthetic-test-jar', rev='1.2.3',
+                                    url='{jar_url}')
+                                  ],
+                                )
 
-              java_library(name='src',
-                sources=['Foo.java'],
-                dependencies=[':lib_with_url'],
-              )
-            """
+                                java_library(name='src',
+                                  sources=['Foo.java'],
+                                  dependencies=[':lib_with_url'],
+                                )
+                                """
                             ).format(jar_url=jar_url)
                         )
 

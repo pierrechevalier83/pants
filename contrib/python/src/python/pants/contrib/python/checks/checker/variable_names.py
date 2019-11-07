@@ -73,13 +73,13 @@ def is_constant(name):
 
 class PEP8VariableNames(CheckstylePlugin):
     """Enforces PEP8 recommendations for variable names.
-  Specifically:
-     UpperCamel class names
-     lower_snake / _lower_snake / __lower_snake function names
-     lower_snake expression variable names
-     CLASS_LEVEL_CONSTANTS = {}
-     GLOBAL_LEVEL_CONSTANTS = {}
-  """
+    Specifically:
+       UpperCamel class names
+       lower_snake / _lower_snake / __lower_snake function names
+       lower_snake expression variable names
+       CLASS_LEVEL_CONSTANTS = {}
+       GLOBAL_LEVEL_CONSTANTS = {}
+    """
 
     @classmethod
     def name(cls):

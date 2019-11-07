@@ -32,12 +32,12 @@ class TestBuildLocalDistsWithCtypesNativeSources(BuildLocalPythonDistributionsTe
                     "sources": ["c_math_lib.c", "c_math_lib.h"],
                     "filemap": {
                         "c_math_lib.c": """\
-#include "c_math_lib.h"
-int add_two(int x) { return x + 2; }
-        """,
+                                        #include "c_math_lib.h"
+                                        int add_two(int x) { return x + 2; }
+                                        """,
                         "c_math_lib.h": """\
-int add_two(int);
-        """,
+                                        int add_two(int);
+                                        """,
                     },
                 },
             ),
@@ -51,14 +51,14 @@ int add_two(int);
                     "filemap": {
                         "__init__.py": "",
                         "setup.py": """\
-from setuptools import setup, find_packages
-setup(
-  name='platform_specific_ctypes_c_dist',
-  version='0.0.0',
-  packages=find_packages(),
-  data_files=[('', ['libc-math-lib.so'])],
-)
-        """,
+                                    from setuptools import setup, find_packages
+                                    setup(
+                                      name='platform_specific_ctypes_c_dist',
+                                      version='0.0.0',
+                                      packages=find_packages(),
+                                      data_files=[('', ['libc-math-lib.so'])],
+                                    )
+                                    """,
                     },
                 },
             ),
@@ -71,12 +71,12 @@ setup(
                     "sources": ["cpp_math_lib.cpp", "cpp_math_lib.hpp"],
                     "filemap": {
                         "cpp_math_lib.cpp": """\
-#include "cpp_math_lib.hpp"
-int add_two(int x) { return (x++) + 1; }
-        """,
+                                            #include "cpp_math_lib.hpp"
+                                            int add_two(int x) { return (x++) + 1; }
+                                            """,
                         "cpp_math_lib.hpp": """\
-int add_two(int);
-        """,
+                                            int add_two(int);
+                                            """,
                     },
                 },
             ),
@@ -90,14 +90,14 @@ int add_two(int);
                     "filemap": {
                         "__init__.py": "",
                         "setup.py": """\
-from setuptools import setup, find_packages
-setup(
-  name='platform_specific_ctypes_cpp_dist',
-  version='0.0.0',
-  packages=find_packages(),
-  data_files=[('', ['libcpp-math-lib.so'])],
-)
-        """,
+                                    from setuptools import setup, find_packages
+                                    setup(
+                                      name='platform_specific_ctypes_cpp_dist',
+                                      version='0.0.0',
+                                      packages=find_packages(),
+                                      data_files=[('', ['libcpp-math-lib.so'])],
+                                    )
+                                    """,
                     },
                 },
             ),

@@ -10,9 +10,9 @@ from pants.task.console_task import ConsoleTask
 class Depmap(ConsoleTask):
     """Depict the target's dependencies.
 
-  Generates either a textual dependency tree or a graphviz digraph dot file for the dependency
-  set of a target.
-  """
+    Generates either a textual dependency tree or a graphviz digraph dot file for the dependency
+    set of a target.
+    """
 
     class SourceRootTypes:
         """Defines SourceRoot Types Constants"""

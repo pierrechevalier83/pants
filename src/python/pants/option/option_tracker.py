@@ -23,12 +23,12 @@ class OptionTracker:
         def record_value(self, value, rank, deprecation_version, details=None):
             """Record that the option was set to the given value at the given rank.
 
-      :param value: the value the option was set to.
-      :param int rank: the rank of the option when it was set to this value.
-      :param deprecation_version: Deprecation version for this option.
-      :param string details: optional elaboration of where the option came from (eg, a particular
-        config file).
-      """
+            :param value: the value the option was set to.
+            :param int rank: the rank of the option when it was set to this value.
+            :param deprecation_version: Deprecation version for this option.
+            :param string details: optional elaboration of where the option came from (eg, a particular
+              config file).
+            """
             deprecation_version_to_write = deprecation_version
 
             if self.values:
@@ -76,15 +76,15 @@ class OptionTracker:
     def record_option(self, scope, option, value, rank, deprecation_version=None, details=None):
         """Records that the given option was set to the given value.
 
-    :param string scope: scope of the option.
-    :param string option: name of the option.
-    :param string value: value the option was set to.
-    :param int rank: the rank of the option (Eg, RankedValue.HARDCODED), to keep track of where the
-      option came from.
-    :param deprecation_version: Deprecation version for this option.
-    :param string details: optional additional details about how the option was set (eg, the name
-           of a particular config file, if the rank is RankedValue.CONFIG).
-    """
+        :param string scope: scope of the option.
+        :param string option: name of the option.
+        :param string value: value the option was set to.
+        :param int rank: the rank of the option (Eg, RankedValue.HARDCODED), to keep track of where the
+          option came from.
+        :param deprecation_version: Deprecation version for this option.
+        :param string details: optional additional details about how the option was set (eg, the name
+               of a particular config file, if the rank is RankedValue.CONFIG).
+        """
         scoped_options = self.option_history_by_scope[scope]
         if option not in scoped_options:
             scoped_options[option] = self.OptionHistory()

@@ -17,8 +17,8 @@ from pants.pantsd.service.pants_service import PantsService
 class SchedulerService(PantsService):
     """The pantsd scheduler service.
 
-  This service holds an online Scheduler instance that is primed via watchman filesystem events.
-  """
+    This service holds an online Scheduler instance that is primed via watchman filesystem events.
+    """
 
     QUEUE_SIZE = 64
 
@@ -31,15 +31,15 @@ class SchedulerService(PantsService):
         pantsd_pidfile,
     ):
         """
-    :param FSEventService fs_event_service: An unstarted FSEventService instance for setting up
-                                            filesystem event handlers.
-    :param LegacyGraphScheduler legacy_graph_scheduler: The LegacyGraphScheduler instance for graph
-                                                        construction.
-    :param str build_root: The current build root.
-    :param list invalidation_globs: A list of `globs` that when encountered in filesystem event
-                                    subscriptions will tear down the daemon.
-    :param string pantsd_pidfile: The path to the pantsd pidfile for fs event monitoring.
-    """
+        :param FSEventService fs_event_service: An unstarted FSEventService instance for setting up
+                                                filesystem event handlers.
+        :param LegacyGraphScheduler legacy_graph_scheduler: The LegacyGraphScheduler instance for graph
+                                                            construction.
+        :param str build_root: The current build root.
+        :param list invalidation_globs: A list of `globs` that when encountered in filesystem event
+                                        subscriptions will tear down the daemon.
+        :param string pantsd_pidfile: The path to the pantsd pidfile for fs event monitoring.
+        """
         super().__init__()
         self._fs_event_service = fs_event_service
         self._graph_helper = legacy_graph_scheduler
@@ -182,18 +182,18 @@ class SchedulerService(PantsService):
     def product_graph_len(self):
         """Provides the size of the captive product graph.
 
-    :returns: The node count for the captive product graph.
-    """
+        :returns: The node count for the captive product graph.
+        """
         return self._scheduler.graph_len()
 
     def prepare_v1_graph_run_v2(self, options, options_bootstrapper):
         """For v1 (and v2): computing TargetRoots for a later v1 run
 
-    For v2: running an entire v2 run
-    The exit_code in the return indicates whether any issue was encountered
+        For v2: running an entire v2 run
+        The exit_code in the return indicates whether any issue was encountered
 
-    :returns: `(LegacyGraphSession, TargetRoots, exit_code)`
-    """
+        :returns: `(LegacyGraphSession, TargetRoots, exit_code)`
+        """
         # If any nodes exist in the product graph, wait for the initial watchman event to avoid
         # racing watchman startup vs invalidation events.
         graph_len = self._scheduler.graph_len()
@@ -268,8 +268,8 @@ class SchedulerService(PantsService):
 class LoopCondition:
     """A wrapped condition variable to handle deciding when loop consumers should re-run.
 
-  Any number of threads may wait and/or notify the condition.
-  """
+    Any number of threads may wait and/or notify the condition.
+    """
 
     def __init__(self):
         super().__init__()
@@ -285,8 +285,8 @@ class LoopCondition:
     def wait(self, timeout):
         """Waits for the condition for at most the given timeout and returns True if the condition triggered.
 
-    Generally called in a loop until the condition triggers.
-    """
+        Generally called in a loop until the condition triggers.
+        """
 
         with self._condition:
             previous_iteration = self._iteration

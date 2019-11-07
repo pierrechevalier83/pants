@@ -80,11 +80,11 @@ class PantsJoinHandle:
 def ensure_cached(expected_num_artifacts=None):
     """Decorator for asserting cache writes in an integration test.
 
-  :param expected_num_artifacts: Expected number of artifacts to be in the task's
-                                 cache after running the test. If unspecified, will
-                                 assert that the number of artifacts in the cache is
-                                 non-zero.
-  """
+    :param expected_num_artifacts: Expected number of artifacts to be in the task's
+                                   cache after running the test. If unspecified, will
+                                   assert that the number of artifacts in the cache is
+                                   non-zero.
+    """
 
     def decorator(test_fn):
         def wrapper(self, *args, **kwargs):
@@ -188,18 +188,18 @@ class PantsRunIntegrationTest(unittest.TestCase):
     @classmethod
     def use_pantsd_env_var(cls):
         """Subclasses may override to acknowledge that the tests cannot run when pantsd is enabled,
-    or they want to configure pantsd themselves.
+        or they want to configure pantsd themselves.
 
-    In those cases, --enable-pantsd will not be added to their configuration.
-    This approach is coarsely grained, meaning we disable pantsd in some tests that actually run
-    when pantsd is enabled. However:
-      - The number of mislabeled tests is currently small (~20 tests).
-      - Those tests will still run, just with pantsd disabled.
+        In those cases, --enable-pantsd will not be added to their configuration.
+        This approach is coarsely grained, meaning we disable pantsd in some tests that actually run
+        when pantsd is enabled. However:
+          - The number of mislabeled tests is currently small (~20 tests).
+          - Those tests will still run, just with pantsd disabled.
 
-    N.B. Currently, this doesn't interact with test hermeticity.
-    This means that, if the test coordinator has set PANTS_ENABLE_PANTSD, and a test is not marked
-    as hermetic, it will run under pantsd regardless of the value of this function.
-    """
+        N.B. Currently, this doesn't interact with test hermeticity.
+        This means that, if the test coordinator has set PANTS_ENABLE_PANTSD, and a test is not marked
+        as hermetic, it will run under pantsd regardless of the value of this function.
+        """
         should_pantsd = os.getenv("USE_PANTSD_FOR_INTEGRATION_TESTS")
         return should_pantsd in ["True", "true", "1"]
 
@@ -207,8 +207,8 @@ class PantsRunIntegrationTest(unittest.TestCase):
     def hermetic(cls):
         """Subclasses may override to acknowledge that they are hermetic.
 
-    That is, that they should run without reading the real pants.ini.
-    """
+        That is, that they should run without reading the real pants.ini.
+        """
         return False
 
     @classmethod
@@ -279,21 +279,21 @@ class PantsRunIntegrationTest(unittest.TestCase):
 
     def get_cache_subdir(self, cache_dir, subdir_glob="*/", other_dirs=()):
         """Check that there is only one entry of `cache_dir` which matches the glob
-    specified by `subdir_glob`, excluding `other_dirs`, and
-    return it.
+        specified by `subdir_glob`, excluding `other_dirs`, and
+        return it.
 
-    :param str cache_dir: absolute path to some directory.
-    :param str subdir_glob: string specifying a glob for (one level down)
-                            subdirectories of `cache_dir`.
-    :param list other_dirs: absolute paths to subdirectories of `cache_dir`
-                            which must exist and match `subdir_glob`.
-    :return: Assert that there is a single remaining directory entry matching
-             `subdir_glob` after removing `other_dirs`, and return it.
+        :param str cache_dir: absolute path to some directory.
+        :param str subdir_glob: string specifying a glob for (one level down)
+                                subdirectories of `cache_dir`.
+        :param list other_dirs: absolute paths to subdirectories of `cache_dir`
+                                which must exist and match `subdir_glob`.
+        :return: Assert that there is a single remaining directory entry matching
+                 `subdir_glob` after removing `other_dirs`, and return it.
 
-             This method oes not check if its arguments or return values are
-             files or directories. If `subdir_glob` has a trailing slash, so
-             will the return value of this method.
-    """
+                 This method oes not check if its arguments or return values are
+                 files or directories. If `subdir_glob` has a trailing slash, so
+                 will the return value of this method.
+        """
         subdirs = set(glob.glob(os.path.join(cache_dir, subdir_glob)))
         other_dirs = set(other_dirs)
         self.assertTrue(other_dirs.issubset(subdirs))
@@ -416,11 +416,11 @@ class PantsRunIntegrationTest(unittest.TestCase):
     ) -> PantsResult:
         """Runs pants in a subprocess.
 
-    :param list command: A list of command line arguments coming after `./pants`.
-    :param config: Optional data for a generated ini file. A map of <section-name> ->
-    map of key -> value. If order in the ini file matters, this should be an OrderedDict.
-    :param kwargs: Extra keyword args to pass to `subprocess.Popen`.
-    """
+        :param list command: A list of command line arguments coming after `./pants`.
+        :param config: Optional data for a generated ini file. A map of <section-name> ->
+        map of key -> value. If order in the ini file matters, this should be an OrderedDict.
+        :param kwargs: Extra keyword args to pass to `subprocess.Popen`.
+        """
         with self.temporary_workdir() as workdir:
             return self.run_pants_with_workdir(
                 command, workdir, config, stdin_data=stdin_data, extra_env=extra_env, **kwargs
@@ -429,14 +429,14 @@ class PantsRunIntegrationTest(unittest.TestCase):
     @contextmanager
     def pants_results(self, command, config=None, stdin_data=None, extra_env=None, **kwargs):
         """Similar to run_pants in that it runs pants in a subprocess, but yields in order to give
-    callers a chance to do any necessary validations on the workdir.
+        callers a chance to do any necessary validations on the workdir.
 
-    :param list command: A list of command line arguments coming after `./pants`.
-    :param config: Optional data for a generated ini file. A map of <section-name> ->
-    map of key -> value. If order in the ini file matters, this should be an OrderedDict.
-    :param kwargs: Extra keyword args to pass to `subprocess.Popen`.
-    :returns a PantsResult instance.
-    """
+        :param list command: A list of command line arguments coming after `./pants`.
+        :param config: Optional data for a generated ini file. A map of <section-name> ->
+        map of key -> value. If order in the ini file matters, this should be an OrderedDict.
+        :param kwargs: Extra keyword args to pass to `subprocess.Popen`.
+        :returns a PantsResult instance.
+        """
         with self.temporary_workdir() as workdir:
             yield self.run_pants_with_workdir(
                 command, workdir, config, stdin_data=stdin_data, extra_env=extra_env, **kwargs
@@ -455,19 +455,19 @@ class PantsRunIntegrationTest(unittest.TestCase):
     ):
         """Creates the bundle with pants, then does java -jar {bundle_name}.jar to execute the bundle.
 
-    :param target: target name to compile
-    :param bundle_name: resulting bundle filename (minus .zip extension)
-    :param bundle_jar_name: monolithic jar filename (minus .jar extension), if None will be the
-      same as bundle_name
-    :param bundle_options: additional options for bundle
-    :param args: optional arguments to pass to executable
-    :param expected_bundle_content: verify the bundle zip content
-    :param expected_bundle_jar_content: verify the bundle jar content
-    :param library_jars_are_symlinks: verify library jars are symlinks if True, and actual
-      files if False. Default `True` because we always create symlinks for both external and internal
-      dependencies, only exception is when shading is used.
-    :return: stdout as a string on success, raises an Exception on error
-    """
+        :param target: target name to compile
+        :param bundle_name: resulting bundle filename (minus .zip extension)
+        :param bundle_jar_name: monolithic jar filename (minus .jar extension), if None will be the
+          same as bundle_name
+        :param bundle_options: additional options for bundle
+        :param args: optional arguments to pass to executable
+        :param expected_bundle_content: verify the bundle zip content
+        :param expected_bundle_jar_content: verify the bundle jar content
+        :param library_jars_are_symlinks: verify library jars are symlinks if True, and actual
+          files if False. Default `True` because we always create symlinks for both external and internal
+          dependencies, only exception is when shading is used.
+        :return: stdout as a string on success, raises an Exception on error
+        """
         bundle_jar_name = bundle_jar_name or bundle_name
         bundle_options = bundle_options or []
         bundle_options = ["bundle.jvm"] + bundle_options + ["--archive=zip", target]
@@ -537,11 +537,11 @@ class PantsRunIntegrationTest(unittest.TestCase):
 
     def assert_contains_log(self, msg, level, module, log, pid=None):
         """
-    Asserts that the passed log contains the message logged by the module at the level.
+        Asserts that the passed log contains the message logged by the module at the level.
 
-    If pid is specified, performs an exact match including the pid of the pants process.
-    Otherwise performs a regex match asserting that some pid is present.
-    """
+        If pid is specified, performs an exact match including the pid of the pants process.
+        Otherwise performs a regex match asserting that some pid is present.
+        """
         prefix = f"[{level}] {module}:pid="
         suffix = f": {msg}"
         if pid is None:
@@ -589,12 +589,12 @@ class PantsRunIntegrationTest(unittest.TestCase):
     def with_overwritten_file_content(self, file_path, temporary_content=None):
         """A helper that resets a file after the method runs.
 
-     It will read a file, save the content, maybe write temporary_content to it, yield, then write the
-     original content to the file.
+         It will read a file, save the content, maybe write temporary_content to it, yield, then write the
+         original content to the file.
 
-    :param file_path: Absolute path to the file to be reset after the method runs.
-    :param temporary_content: Optional content to write into the file.
-    """
+        :param file_path: Absolute path to the file to be reset after the method runs.
+        :param temporary_content: Optional content to write into the file.
+        """
         with open(file_path, "r") as f:
             file_original_content = f.read()
 
@@ -670,8 +670,8 @@ class PantsRunIntegrationTest(unittest.TestCase):
     def do_command(self, *args, **kwargs) -> PantsResult:
         """Wrapper around run_pants method.
 
-    :param args: command line arguments used to run pants
-    """
+        :param args: command line arguments used to run pants
+        """
         cmd = list(args)
         success = kwargs.pop("success", True)
         pants_run = self.run_pants(cmd, **kwargs)

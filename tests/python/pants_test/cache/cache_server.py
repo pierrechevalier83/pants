@@ -96,8 +96,8 @@ class FailRESTHandler(http.server.SimpleHTTPRequestHandler):
 class TestCacheServer:
     """A wrapper class that represents the underlying REST server.
 
-  To create a TestCacheServer, use the `cache_server` factory function.
-  """
+    To create a TestCacheServer, use the `cache_server` factory function.
+    """
 
     def __init__(self, url, cache_root):
         self.url = url
@@ -106,8 +106,8 @@ class TestCacheServer:
     def corrupt_artifacts(self, pattern):
         """Corrupts any artifacts matching the given pattern.
 
-    Returns the number of files affected.
-    """
+        Returns the number of files affected.
+        """
         regex = re.compile(pattern)
         count = 0
         for f in exact_files(self._cache_root, ignore_links=True):
@@ -128,8 +128,8 @@ class TestCacheServer:
 def _cache_server_process(queue, return_failed, cache_root):
     """A pickleable top-level function to wrap a SimpleRESTHandler.
 
-  We fork a separate process to avoid affecting the `cwd` of the requesting process.
-  """
+    We fork a separate process to avoid affecting the `cwd` of the requesting process.
+    """
     httpd = None
     try:
         with temporary_dir() as tmpdir:
@@ -152,8 +152,8 @@ def _cache_server_process(queue, return_failed, cache_root):
 def cache_server(return_failed=False, cache_root=None):
     """A context manager which launches a temporary cache server on a random port.
 
-  Yields a TestCacheServer to represent the running server.
-  """
+    Yields a TestCacheServer to represent the running server.
+    """
     queue = Queue()
     process = Process(target=_cache_server_process, args=(queue, return_failed, cache_root))
     process.start()

@@ -18,14 +18,14 @@ SCOVERAGE = "scoverage"
 class ScalaLibrary(ExportableJvmLibrary):
     """A Scala library.
 
-  Normally has conceptually-related sources; invoking the ``compile`` goal
-  on this target compiles scala and generates classes. Invoking the ``bundle``
-  goal on this target creates a ``.jar``; but that's an unusual thing to do.
-  Instead, a ``jvm_binary`` might depend on this library; that binary is a
-  more sensible thing to bundle.
+    Normally has conceptually-related sources; invoking the ``compile`` goal
+    on this target compiles scala and generates classes. Invoking the ``bundle``
+    goal on this target creates a ``.jar``; but that's an unusual thing to do.
+    Instead, a ``jvm_binary`` might depend on this library; that binary is a
+    more sensible thing to bundle.
 
-  :API: public
-  """
+    :API: public
+    """
 
     default_sources_globs = "*.scala"
     default_sources_exclude_globs = JUnitTests.scala_test_globs
@@ -50,16 +50,16 @@ class ScalaLibrary(ExportableJvmLibrary):
         **kwargs,
     ):
         """
-    :param java_sources: Java libraries this library has a *circular*
-      dependency on.
-      If you don't have the particular problem of circular dependencies
-      forced by splitting interdependent java and scala into multiple targets,
-      don't use this at all.
-      Prefer using ``dependencies`` to express non-circular dependencies.
-    :type java_sources: target spec or list of target specs
-    :param resources: An optional list of paths (DEPRECATED) or ``resources``
-      targets containing resources that belong on this library's classpath.
-    """
+        :param java_sources: Java libraries this library has a *circular*
+          dependency on.
+          If you don't have the particular problem of circular dependencies
+          forced by splitting interdependent java and scala into multiple targets,
+          don't use this at all.
+          Prefer using ``dependencies`` to express non-circular dependencies.
+        :type java_sources: target spec or list of target specs
+        :param resources: An optional list of paths (DEPRECATED) or ``resources``
+          targets containing resources that belong on this library's classpath.
+        """
         payload = payload or Payload()
         payload.add_fields(
             {

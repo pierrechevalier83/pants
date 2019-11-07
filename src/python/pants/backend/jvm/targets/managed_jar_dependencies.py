@@ -18,10 +18,10 @@ class ManagedJarDependencies(Target):
 
     def __init__(self, payload=None, artifacts=None, **kwargs):
         """
-    :param artifacts: List of `jar <#jar>`_\\s or specs to jar_library targets with pinned versions.
-      Versions are pinned per (org, name, classifier, ext) artifact coordinate (excludes, etc are
-      ignored for the purposes of pinning).
-    """
+        :param artifacts: List of `jar <#jar>`_\\s or specs to jar_library targets with pinned versions.
+          Versions are pinned per (org, name, classifier, ext) artifact coordinate (excludes, etc are
+          ignored for the purposes of pinning).
+        """
         jar_objects, library_specs = self._split_jars_and_specs(artifacts or ())
         payload = payload or Payload()
         payload.add_fields(
@@ -66,54 +66,54 @@ class ManagedJarDependencies(Target):
 class ManagedJarLibraries:
     """Creates a managed_jar_dependencies(), and also generates a jar_library for each artifact.
 
-  Using this factory saves a lot of duplication. For example, this: ::
+    Using this factory saves a lot of duplication. For example, this: ::
 
-      managed_jar_libraries(name='managed',
-        artifacts=[
-          jar('org.foobar', 'foobar', '1.2'),
-          jar('com.example', 'example', '8'),
-        ],
-      )
+        managed_jar_libraries(name='managed',
+          artifacts=[
+            jar('org.foobar', 'foobar', '1.2'),
+            jar('com.example', 'example', '8'),
+          ],
+        )
 
-  Is equivalent to: ::
+    Is equivalent to: ::
 
-      managed_jar_dependencies(name='managed',
-        artifacts=[
-          jar('org.foobar', 'foobar', '1.2'),
-          jar('com.example', 'example', '8'),
-        ],
-      )
+        managed_jar_dependencies(name='managed',
+          artifacts=[
+            jar('org.foobar', 'foobar', '1.2'),
+            jar('com.example', 'example', '8'),
+          ],
+        )
 
-      jar_library(name='org.foobar.foobar',
-        jars=[jar('org.foobar', 'foobar')],
-        managed_dependencies=':managed',
-      )
+        jar_library(name='org.foobar.foobar',
+          jars=[jar('org.foobar', 'foobar')],
+          managed_dependencies=':managed',
+        )
 
-      jar_library(name='com.example.example',
-        jars=[jar('com.example', 'example')],
-        managed_dependencies=':managed',
-      )
+        jar_library(name='com.example.example',
+          jars=[jar('com.example', 'example')],
+          managed_dependencies=':managed',
+        )
 
-  Which is also equivalent to: ::
+    Which is also equivalent to: ::
 
-      managed_jar_dependencies(name='managed',
-        artifacts=[
-          ':org.foobar.foobar',
-          ':com.example.example',
-        ],
-      )
+        managed_jar_dependencies(name='managed',
+          artifacts=[
+            ':org.foobar.foobar',
+            ':com.example.example',
+          ],
+        )
 
-      jar_library(name='org.foobar.foobar',
-        jars=[jar('org.foobar', 'foobar')],
-        managed_dependencies=':managed',
-      )
+        jar_library(name='org.foobar.foobar',
+          jars=[jar('org.foobar', 'foobar')],
+          managed_dependencies=':managed',
+        )
 
-      jar_library(name='com.example.example',
-        jars=[jar('com.example', 'example')],
-        managed_dependencies=':managed',
-      )
+        jar_library(name='com.example.example',
+          jars=[jar('com.example', 'example')],
+          managed_dependencies=':managed',
+        )
 
-  """
+    """
 
     class JarLibraryNameCollision(TargetDefinitionException):
         """Two generated jar_libraries would have the same name."""
@@ -123,11 +123,11 @@ class ManagedJarLibraries:
 
     def __call__(self, name=None, artifacts=None, **kwargs):
         """
-    :param string name: The optional name of the generated managed_jar_dependencies() target.
-    :param artifacts: List of `jar <#jar>`_\\s or specs to jar_library targets with pinned versions.
-      Versions are pinned per (org, name, classifier, ext) artifact coordinate (excludes, etc are
-      ignored for the purposes of pinning).
-    """
+        :param string name: The optional name of the generated managed_jar_dependencies() target.
+        :param artifacts: List of `jar <#jar>`_\\s or specs to jar_library targets with pinned versions.
+          Versions are pinned per (org, name, classifier, ext) artifact coordinate (excludes, etc are
+          ignored for the purposes of pinning).
+        """
         # Support the default target name protocol.
         if name is None:
             name = os.path.basename(self._parse_context.rel_path)

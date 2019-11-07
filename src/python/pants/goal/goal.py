@@ -10,15 +10,15 @@ from pants.util.memo import memoized
 def _create_stable_task_type(superclass, options_scope):
     """Creates a singleton (via `memoized`) subclass instance for the given superclass and scope.
 
-  Currently we need to support registering the same task type multiple times in different
-  scopes. However we still want to have each task class know the options scope it was
-  registered in. So we create a synthetic subclass here.
+    Currently we need to support registering the same task type multiple times in different
+    scopes. However we still want to have each task class know the options scope it was
+    registered in. So we create a synthetic subclass here.
 
-  TODO(benjy): Revisit this when we revisit the task lifecycle. We probably want to have
-  a task *instance* know its scope, but this means converting option registration from
-  a class method to an instance method, and instantiating the task much sooner in the
-  lifecycle.
-  """
+    TODO(benjy): Revisit this when we revisit the task lifecycle. We probably want to have
+    a task *instance* know its scope, but this means converting option registration from
+    a class method to an instance method, and instantiating the task much sooner in the
+    lifecycle.
+    """
     subclass_name = "{0}_{1}".format(
         superclass.__name__, options_scope.replace(".", "_").replace("-", "_")
     )
@@ -37,10 +37,10 @@ def _create_stable_task_type(superclass, options_scope):
 class Goal:
     """Factory for objects representing goals.
 
-  Ensures that we have exactly one instance per goal name.
+    Ensures that we have exactly one instance per goal name.
 
-  :API: public
-  """
+    :API: public
+    """
 
     _goal_by_name = dict()
 
@@ -51,24 +51,24 @@ class Goal:
     def register(cls, name, description, options_registrar_cls=None):
         """Register a goal description.
 
-    Otherwise the description must be set when registering some task on the goal,
-    which is clunky, and dependent on things like registration order of tasks in the goal.
+        Otherwise the description must be set when registering some task on the goal,
+        which is clunky, and dependent on things like registration order of tasks in the goal.
 
-    A goal that isn't explicitly registered with a description will fall back to the description
-    of the task in that goal with the same name (if any).  So singleton goals (e.g., 'clean-all')
-    need not be registered explicitly.  This method is primarily useful for setting a
-    description on a generic goal like 'compile' or 'test', that multiple backends will
-    register tasks on.
+        A goal that isn't explicitly registered with a description will fall back to the description
+        of the task in that goal with the same name (if any).  So singleton goals (e.g., 'clean-all')
+        need not be registered explicitly.  This method is primarily useful for setting a
+        description on a generic goal like 'compile' or 'test', that multiple backends will
+        register tasks on.
 
-    :API: public
+        :API: public
 
-    :param string name: The name of the goal; ie: the way to specify it on the command line.
-    :param string description: A description of the tasks in the goal do.
-    :param :class:pants.option.Optionable options_registrar_cls: A class for registering options
-           at the goal scope. Useful for registering recursive options on all tasks in a goal.
-    :return: The freshly registered goal.
-    :rtype: :class:`_Goal`
-    """
+        :param string name: The name of the goal; ie: the way to specify it on the command line.
+        :param string description: A description of the tasks in the goal do.
+        :param :class:pants.option.Optionable options_registrar_cls: A class for registering options
+               at the goal scope. Useful for registering recursive options on all tasks in a goal.
+        :return: The freshly registered goal.
+        :rtype: :class:`_Goal`
+        """
         goal = cls.by_name(name)
         goal._description = description
         goal._options_registrar_cls = (
@@ -80,8 +80,8 @@ class Goal:
     def by_name(cls, name):
         """Returns the unique object representing the goal of the specified name.
 
-    :API: public
-    """
+        :API: public
+        """
         if name not in cls._goal_by_name:
             cls._goal_by_name[name] = _Goal(name)
         return cls._goal_by_name[name]
@@ -90,26 +90,26 @@ class Goal:
     def clear(cls):
         """Remove all goals and tasks.
 
-    This method is EXCLUSIVELY for use in tests and during pantsd startup.
+        This method is EXCLUSIVELY for use in tests and during pantsd startup.
 
-    :API: public
-    """
+        :API: public
+        """
         cls._goal_by_name.clear()
 
     @staticmethod
     def scope(goal_name, task_name):
         """Returns options scope for specified task in specified goal.
 
-    :API: public
-    """
+        :API: public
+        """
         return goal_name if goal_name == task_name else "{0}.{1}".format(goal_name, task_name)
 
     @staticmethod
     def all():
         """Returns all active registered goals, sorted alphabetically by name.
 
-    :API: public
-    """
+        :API: public
+        """
         return [goal for _, goal in sorted(Goal._goal_by_name.items()) if goal.active]
 
     @classmethod
@@ -124,8 +124,8 @@ class Goal:
     def subsystems(cls):
         """Returns all subsystem types used by all tasks, in no particular order.
 
-    :API: public
-    """
+        :API: public
+        """
         ret = set()
         for goal in cls.all():
             ret.update(goal.subsystems())
@@ -136,8 +136,8 @@ class _Goal(object):
     def __init__(self, name):
         """Don't call this directly.
 
-    Create goals only through the Goal.by_name() factory.
-    """
+        Create goals only through the Goal.by_name() factory.
+        """
         Optionable.validate_scope_name_component(name)
         self.name = name
         self._description = ""
@@ -170,16 +170,16 @@ class _Goal(object):
     def install(self, task_registrar, first=False, replace=False, before=None, after=None):
         """Installs the given task in this goal.
 
-    The placement of the task in this goal's execution list defaults to the end but its position
-    can be influenced by specifying exactly one of the following arguments:
+        The placement of the task in this goal's execution list defaults to the end but its position
+        can be influenced by specifying exactly one of the following arguments:
 
-    first: Places the task 1st in the execution list.
-    replace: Removes all existing tasks in this goal and installs this task.
-    before: Places the task before the named task in the execution list.
-    after: Places the task after the named task in the execution list.
+        first: Places the task 1st in the execution list.
+        replace: Removes all existing tasks in this goal and installs this task.
+        before: Places the task before the named task in the execution list.
+        after: Places the task after the named task in the execution list.
 
-    :API: public
-    """
+        :API: public
+        """
         if [bool(place) for place in [first, replace, before, after]].count(True) > 1:
             raise GoalError("Can only specify one of first, replace, before or after")
 
@@ -221,13 +221,13 @@ class _Goal(object):
     def uninstall_task(self, name):
         """Removes the named task from this goal.
 
-    Allows external plugins to modify the execution plan. Use with caution.
+        Allows external plugins to modify the execution plan. Use with caution.
 
-    Note: Does not relax a serialization requirement that originated
-    from the uninstalled task's install() call.
+        Note: Does not relax a serialization requirement that originated
+        from the uninstalled task's install() call.
 
-    :API: public
-    """
+        :API: public
+        """
         if name in self._task_type_by_name:
             self._task_type_by_name[name].options_scope = None
             del self._task_type_by_name[name]
@@ -269,10 +269,10 @@ class _Goal(object):
     def active(self):
         """Return `True` if this goal has tasks installed.
 
-    Some goals are installed in pants core without associated tasks in anticipation of plugins
-    providing tasks that implement the goal being installed. If no such plugins are installed, the
-    goal may be inactive in the repo.
-    """
+        Some goals are installed in pants core without associated tasks in anticipation of plugins
+        providing tasks that implement the goal being installed. If no such plugins are installed, the
+        goal may be inactive in the repo.
+        """
         return len(self._task_type_by_name) > 0
 
     def __repr__(self):

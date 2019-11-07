@@ -17,8 +17,8 @@ logger = logging.getLogger(__name__)
 
 class ProjectTree(ABC):
     """Represents project tree which is used to locate and read build files.
-  Has two implementations: one backed by file system and one backed by SCM.
-  """
+    Has two implementations: one backed by file system and one backed by SCM.
+    """
 
     class InvalidBuildRootError(Exception):
         """Raised when the build_root specified to a ProjectTree is not valid."""
@@ -68,8 +68,8 @@ class ProjectTree(ABC):
     def _walk_raw(self, relpath, topdown=True):
         """Walk the file tree rooted at `path`.
 
-    Works like os.walk but returned root value is relative path.
-    """
+        Works like os.walk but returned root value is relative path.
+        """
 
     def glob1(self, dir_relpath, glob):
         """Returns a list of paths in path that match glob and are not ignored."""
@@ -110,8 +110,8 @@ class ProjectTree(ABC):
     def content(self, file_relpath):
         """Returns the content for file at path. Raises exception if path is ignored.
 
-    Raises exception if path is ignored.
-    """
+        Raises exception if path is ignored.
+        """
         if self.isignored(file_relpath):
             self._raise_access_ignored(file_relpath)
 
@@ -120,8 +120,8 @@ class ProjectTree(ABC):
     def relative_readlink(self, relpath):
         """Execute `readlink` for the given path, which may result in a relative path.
 
-    Raises exception if path is ignored.
-    """
+        Raises exception if path is ignored.
+        """
         if self.isignored(self._append_slash_if_dir_path(relpath)):
             self._raise_access_ignored(relpath)
         return self._relative_readlink_raw(relpath)
@@ -129,9 +129,9 @@ class ProjectTree(ABC):
     def walk(self, relpath, topdown=True):
         """Walk the file tree rooted at `path`.
 
-    Works like os.walk but returned root value is relative path.
-    Ignored paths will not be returned.
-    """
+        Works like os.walk but returned root value is relative path.
+        Ignored paths will not be returned.
+        """
         for root, dirs, files in self._walk_raw(relpath, topdown):
             matched_dirs = self.ignore.match_files(
                 [os.path.join(root, "{}/".format(d)) for d in dirs]
@@ -168,10 +168,10 @@ class ProjectTree(ABC):
     def _filter_ignored(self, entries, selector=None):
         """Given an opaque entry list, filter any ignored entries.
 
-    :param entries: A list or generator that produces entries to filter.
-    :param selector: A function that computes a path for an entry relative to the root of the
-      ProjectTree, or None to use identity.
-    """
+        :param entries: A list or generator that produces entries to filter.
+        :param selector: A function that computes a path for an entry relative to the root of the
+          ProjectTree, or None to use identity.
+        """
         selector = selector or (lambda x: x)
         prefixed_entries = [
             (self._append_slash_if_dir_path(selector(entry)), entry) for entry in entries
@@ -202,9 +202,9 @@ class ProjectTree(ABC):
 class Stat(ABC):
     """An existing filesystem path with a known type, relative to the ProjectTree's buildroot.
 
-  Note that in order to preserve these invariants, end-user functions are not able to instantiate
-  this base class (via the `init=False` argument to the dataclass decorator).
-  """
+    Note that in order to preserve these invariants, end-user functions are not able to instantiate
+    this base class (via the `init=False` argument to the dataclass decorator).
+    """
 
     path: str
 

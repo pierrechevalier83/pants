@@ -13,45 +13,45 @@ from pants_test.task_test_base import TaskTestBase
 
 ragel_file_contents = dedent(
     """
-package com.example.atoi;
-%%{
-  machine parser;
+    package com.example.atoi;
+    %%{
+      machine parser;
 
-  action minus {
-    negative = true;
-  }
+      action minus {
+        negative = true;
+      }
 
-  action digit {
-    val *= 10;
-    val += fc - '0';
-  }
+      action digit {
+        val *= 10;
+        val += fc - '0';
+      }
 
-  main := ( '-'@minus )? ( [0-9] @digit ) + '\0';
-}%%
+      main := ( '-'@minus )? ( [0-9] @digit ) + '\0';
+    }%%
 
-public class Parser {
-  %% write data;
+    public class Parser {
+      %% write data;
 
-  public static int parse(CharSequence input) {
-    StringBuilder builder = new StringBuilder(input);
-    builder.append('\0');
-    char[] data = builder.toString().toCharArray();
-    int p = 0;
-    int pe = data.length;
-    int eof = pe;
-    int cs;
-    boolean negative = false;
-    int val = 0;
+      public static int parse(CharSequence input) {
+        StringBuilder builder = new StringBuilder(input);
+        builder.append('\0');
+        char[] data = builder.toString().toCharArray();
+        int p = 0;
+        int pe = data.length;
+        int eof = pe;
+        int cs;
+        boolean negative = false;
+        int val = 0;
 
-    %% write init;
-    %% write exec;
-    if (negative)
-      return -val;
-    else
-      return val;
-  }
-}
-"""
+        %% write init;
+        %% write exec;
+        if (negative)
+          return -val;
+        else
+          return val;
+      }
+    }
+    """
 )
 
 

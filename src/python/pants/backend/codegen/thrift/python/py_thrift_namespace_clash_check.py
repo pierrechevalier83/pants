@@ -15,11 +15,11 @@ from pants.util.dirutil import safe_file_dump
 class PyThriftNamespaceClashCheck(Task):
     """Check that no python thrift libraries in the build graph have files with clashing namespaces.
 
-  This is a temporary workaround for https://issues.apache.org/jira/browse/THRIFT-515. A real fix
-  would ideally be to extend Scrooge to support clashing namespaces with Python code. A second-best
-  solution would be to check all *thrift* libraries in the build graph, but there is currently no
-  "ThriftLibraryMixin" or other way to identify targets containing thrift code generically.
-  """
+    This is a temporary workaround for https://issues.apache.org/jira/browse/THRIFT-515. A real fix
+    would ideally be to extend Scrooge to support clashing namespaces with Python code. A second-best
+    solution would be to check all *thrift* libraries in the build graph, but there is currently no
+    "ThriftLibraryMixin" or other way to identify targets containing thrift code generically.
+    """
 
     # This scope is set for testing only.
     options_scope = "py-thrift-namespace-clash-check"
@@ -109,12 +109,12 @@ class PyThriftNamespaceClashCheck(Task):
             error = self.NamespaceExtractionError(
                 no_py_namespace_output_file,
                 """\
-Python namespaces could not be extracted from some thrift sources. Declaring a `namespace py` in
-thrift sources for python thrift library targets will soon become required.
+                Python namespaces could not be extracted from some thrift sources. Declaring a `namespace py` in
+                thrift sources for python thrift library targets will soon become required.
 
-{} python library target(s) contained thrift sources not declaring a python namespace. The targets
-and/or files which need to be edited will be dumped to: {}
-""".format(
+                {} python library target(s) contained thrift sources not declaring a python namespace. The targets
+                and/or files which need to be edited will be dumped to: {}
+                """.format(
                     len(failing_py_thrift_by_target), no_py_namespace_output_file
                 ),
             )
@@ -152,13 +152,13 @@ and/or files which need to be edited will be dumped to: {}
             )
             error = self.ClashingNamespaceError(
                 """\
-Clashing namespaces for python thrift library sources detected in build graph. This will silently
-overwrite previously generated python sources with generated sources from thrift files declaring the
-same python namespace. This is an upstream WONTFIX in thrift, see:
-      https://issues.apache.org/jira/browse/THRIFT-515
-Errors:
-{}
-""".format(
+                Clashing namespaces for python thrift library sources detected in build graph. This will silently
+                overwrite previously generated python sources with generated sources from thrift files declaring the
+                same python namespace. This is an upstream WONTFIX in thrift, see:
+                      https://issues.apache.org/jira/browse/THRIFT-515
+                Errors:
+                {}
+                """.format(
                     pretty_printed_clashing
                 )
             )

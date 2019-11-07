@@ -14,16 +14,16 @@ from pants.java.nailgun_protocol import ChunkType, NailgunProtocol
 
 class Pipe:
     """
-  Wrapper around OS pipes, that knows whether its write end is closed.
+    Wrapper around OS pipes, that knows whether its write end is closed.
 
-  Note that this exposes raw file descriptors,
-  which means that we could plausibly close one of the ends and re-open it with a different file,
-  before this class notices. For this reason, it is advised to be very careful with these
-  file descriptors.
+    Note that this exposes raw file descriptors,
+    which means that we could plausibly close one of the ends and re-open it with a different file,
+    before this class notices. For this reason, it is advised to be very careful with these
+    file descriptors.
 
-  TODO Wrap the read and write operations, so that we don't have to expose raw fds anymore.
-  This is not possible yet, because stdio_as needs to replace the fds at the OS level.
-  """
+    TODO Wrap the read and write operations, so that we don't have to expose raw fds anymore.
+    This is not possible yet, because stdio_as needs to replace the fds at the OS level.
+    """
 
     def __init__(self, read_fd, write_fd):
         self.read_fd = read_fd
@@ -33,12 +33,12 @@ class Pipe:
 
     def is_writable(self):
         """
-    If the write end of a pipe closes, the read end might still be open, to allow
-    readers to finish reading before closing it.
-    However, there are cases where we still want to know if the write end is closed.
+        If the write end of a pipe closes, the read end might still be open, to allow
+        readers to finish reading before closing it.
+        However, there are cases where we still want to know if the write end is closed.
 
-    :return: True if the write end of the pipe is open.
-    """
+        :return: True if the write end of the pipe is open.
+        """
         if not self.writable:
             return False
 
@@ -111,18 +111,18 @@ class _StoppableDaemonThread(threading.Thread):
 class NailgunStreamStdinReader(_StoppableDaemonThread):
     """Reads Nailgun 'stdin' chunks on a socket and writes them to an output file-like.
 
-  Because a Nailgun server only ever receives STDIN and STDIN_EOF ChunkTypes after initial
-  setup, this thread executes all reading from a server socket.
+    Because a Nailgun server only ever receives STDIN and STDIN_EOF ChunkTypes after initial
+    setup, this thread executes all reading from a server socket.
 
-  Runs until the socket is closed.
-  """
+    Runs until the socket is closed.
+    """
 
     def __init__(self, maybe_shutdown_socket, write_handle):
         """
-    :param socket sock: the socket to read nailgun protocol chunks from.
-    :param file write_handle: A file-like (usually the write end of a pipe/pty) onto which
-      to write data decoded from the chunks.
-    """
+        :param socket sock: the socket to read nailgun protocol chunks from.
+        :param file write_handle: A file-like (usually the write end of a pipe/pty) onto which
+          to write data decoded from the chunks.
+        """
         super().__init__(name=self.__class__.__name__)
         self._maybe_shutdown_socket = maybe_shutdown_socket
         self._write_handle = write_handle
@@ -178,9 +178,9 @@ class NailgunStreamWriterError(Exception):
 class NailgunStreamWriter(_StoppableDaemonThread):
     """Reads input from an input fd and writes Nailgun chunks on a socket.
 
-  Should generally be managed with the `open` classmethod contextmanager, which will create
-  a pipe and provide its writing end to the caller.
-  """
+    Should generally be managed with the `open` classmethod contextmanager, which will create
+    a pipe and provide its writing end to the caller.
+    """
 
     SELECT_TIMEOUT = 0.15
 
@@ -188,13 +188,13 @@ class NailgunStreamWriter(_StoppableDaemonThread):
         self, in_fds, sock, chunk_types, chunk_eof_type, buf_size=None, select_timeout=None
     ):
         """
-    :param tuple in_fds: A tuple of input file descriptors to read from.
-    :param socket sock: the socket to emit nailgun protocol chunks over.
-    :param tuple chunk_types: A tuple of chunk types with a 1:1 positional association with in_files.
-    :param int chunk_eof_type: The nailgun chunk type for EOF (applies only to stdin).
-    :param int buf_size: the buffer size for reads from the file descriptor.
-    :param int select_timeout: the timeout (in seconds) for select.select() calls against the fd.
-    """
+        :param tuple in_fds: A tuple of input file descriptors to read from.
+        :param socket sock: the socket to emit nailgun protocol chunks over.
+        :param tuple chunk_types: A tuple of chunk types with a 1:1 positional association with in_files.
+        :param int chunk_eof_type: The nailgun chunk type for EOF (applies only to stdin).
+        :param int buf_size: the buffer size for reads from the file descriptor.
+        :param int select_timeout: the timeout (in seconds) for select.select() calls against the fd.
+        """
         super().__init__(name=self.__class__.__name__)
         # Validates that we've received file descriptor numbers.
         self._in_fds = [int(f) for f in in_fds]
@@ -254,8 +254,8 @@ class NailgunStreamWriter(_StoppableDaemonThread):
 
 class PipedNailgunStreamWriter(NailgunStreamWriter):
     """
-  Represents a NailgunStreamWriter that reads from a pipe.
-  """
+    Represents a NailgunStreamWriter that reads from a pipe.
+    """
 
     def __init__(self, pipes, socket, chunk_type, *args, **kwargs):
         self._pipes = pipes
@@ -264,14 +264,14 @@ class PipedNailgunStreamWriter(NailgunStreamWriter):
 
     def do_run(self, readable_fds, errored_fds):
         """
-    Overrides the superclass.
+        Overrides the superclass.
 
-    Wraps the running logic of the parent class to handle pipes that have been closed on the write end.
-    If no file descriptors are readable (i.e. there is no more to read from any pipe for now),
-    it will check each of its pipes. If a pipe is not writable, it will interpret that the writer class
-    does not want to write any more, and so it will remove that pipe from the available pipes to read from.
-    When there are no more pipes to read from, it will stop.
-    """
+        Wraps the running logic of the parent class to handle pipes that have been closed on the write end.
+        If no file descriptors are readable (i.e. there is no more to read from any pipe for now),
+        it will check each of its pipes. If a pipe is not writable, it will interpret that the writer class
+        does not want to write any more, and so it will remove that pipe from the available pipes to read from.
+        When there are no more pipes to read from, it will stop.
+        """
         if not readable_fds:
             for pipe in self._pipes:
                 if not pipe.is_writable():

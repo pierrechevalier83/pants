@@ -17,8 +17,8 @@ PY_37 = "3.7"
 def has_python_version(version):
     """Returns `True` if the current system has the specified version of python.
 
-  :param string version: A python version string, such as 2.7, 3.
-  """
+    :param string version: A python version string, such as 2.7, 3.
+    """
     # TODO: Tests that skip unless a python interpreter is present often need the path to that
     # interpreter, and so end up calling python_interpreter_path again. Find a way to streamline this.
     return python_interpreter_path(version) is not None
@@ -27,10 +27,10 @@ def has_python_version(version):
 def python_interpreter_path(version):
     """Returns the interpreter path if the current system has the specified version of python.
 
-  :param string version: A python version string, such as 2.7, 3.
-  :returns: the normalized path to the interpreter binary if found; otherwise `None`
-  :rtype: string
-  """
+    :param string version: A python version string, such as 2.7, 3.
+    :returns: the normalized path to the interpreter binary if found; otherwise `None`
+    :rtype: string
+    """
     try:
         command = ["python{}".format(version), "-c", "import sys; print(sys.executable)"]
         py_path = subprocess.check_output(command).decode().strip()
@@ -42,8 +42,8 @@ def python_interpreter_path(version):
 def skip_unless_all_pythons_present(*versions):
     """A decorator that only runs the decorated test method if all of the specified pythons are present.
 
-  :param string *versions: Python version strings, such as 2.7, 3.
-  """
+    :param string *versions: Python version strings, such as 2.7, 3.
+    """
     missing_versions = [v for v in versions if not has_python_version(v)]
     if len(missing_versions) == 1:
         return skipIf(

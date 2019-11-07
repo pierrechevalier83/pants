@@ -98,7 +98,8 @@ def create_pex(
     platform: Platform,
 ) -> Pex:
     """Returns a PEX with the given requirements, optional entry point, and optional
-  interpreter constraints."""
+    interpreter constraints.
+    """
 
     argv = ["--output-file", request.output_filename]
     if request.entry_point is not None:

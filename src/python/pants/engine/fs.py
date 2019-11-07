@@ -33,9 +33,9 @@ class FilesContent(Collection[FileContent]):
 
 class InputFilesContent(FilesContent):
     """A newtype wrapper for FilesContent.
-  TODO(7710): This class is currently necessary because the engine
-  otherwise finds a cycle between FilesContent <=> DirectoryDigest.
-  """
+    TODO(7710): This class is currently necessary because the engine
+    otherwise finds a cycle between FilesContent <=> DirectoryDigest.
+    """
 
 
 @frozen_after_init
@@ -43,11 +43,11 @@ class InputFilesContent(FilesContent):
 class PathGlobs:
     """A wrapper around sets of filespecs to include and exclude.
 
-  The syntax supported is roughly git's glob syntax.
+    The syntax supported is roughly git's glob syntax.
 
-  NB: this object is interpreted from within Snapshot::lift_path_globs() -- that method will need to
-  be aware of any changes to this object's definition.
-  """
+    NB: this object is interpreted from within Snapshot::lift_path_globs() -- that method will need to
+    be aware of any changes to this object's definition.
+    """
 
     include: Tuple[str, ...]
     exclude: Tuple[str, ...]
@@ -71,20 +71,20 @@ class PathGlobs:
 class Digest:
     """A Digest is a content-digest fingerprint, and a length of underlying content.
 
-  These are used both to reference digests of strings/bytes/content, and as an opaque handle to a
-  set of files known about by the engine.
+    These are used both to reference digests of strings/bytes/content, and as an opaque handle to a
+    set of files known about by the engine.
 
-  The contents of file sets referenced opaquely can be inspected by requesting a FilesContent for
-  it.
+    The contents of file sets referenced opaquely can be inspected by requesting a FilesContent for
+    it.
 
-  In the future, it will be possible to inspect the file metadata by requesting a Snapshot for it,
-  but at the moment we can't install rules which go both:
-   PathGlobs -> Digest -> Snapshot
-   PathGlobs -> Snapshot
-  because it would lead to an ambiguity in the engine, and we have existing code which already
-  relies on the latter existing. This can be resolved when ordering is removed from Snapshots. See
-  https://github.com/pantsbuild/pants/issues/5802
-  """
+    In the future, it will be possible to inspect the file metadata by requesting a Snapshot for it,
+    but at the moment we can't install rules which go both:
+     PathGlobs -> Digest -> Snapshot
+     PathGlobs -> Snapshot
+    because it would lead to an ambiguity in the engine, and we have existing code which already
+    relies on the latter existing. This can be resolved when ordering is removed from Snapshots. See
+    https://github.com/pantsbuild/pants/issues/5802
+    """
 
     fingerprint: str
     serialized_bytes_length: int
@@ -102,8 +102,8 @@ class Digest:
     def load(cls, digested_path):
         """Load a Digest from a `.digest` file adjacent to the given digested_path.
 
-    :return: A Digest, or None if the Digest did not exist.
-    """
+        :return: A Digest, or None if the Digest did not exist.
+        """
         read_file = maybe_read_file(cls._path(digested_path))
         if read_file:
             fingerprint, length = read_file.split(":")
@@ -121,11 +121,11 @@ class Digest:
 class PathGlobsAndRoot:
     """A set of PathGlobs to capture relative to some root (which may exist outside of the buildroot).
 
-  If the `digest_hint` is set, it must be the Digest that we would expect to get if we were to
-  expand and Digest the globs. The hint is an optimization that allows for bypassing filesystem
-  operations in cases where the expected Digest is known, and the content for the Digest is already
-  stored.
-  """
+    If the `digest_hint` is set, it must be the Digest that we would expect to get if we were to
+    expand and Digest the globs. The hint is an optimization that allows for bypassing filesystem
+    operations in cases where the expected Digest is known, and the content for the Digest is already
+    stored.
+    """
 
     path_globs: PathGlobs
     root: str
@@ -136,10 +136,10 @@ class PathGlobsAndRoot:
 class Snapshot:
     """A Snapshot is a collection of file paths and dir paths fingerprinted by their names/content.
 
-  Snapshots are used to make it easier to isolate process execution by fixing the contents
-  of the files being operated on and easing their movement to and from isolated execution
-  sandboxes.
-  """
+    Snapshots are used to make it easier to isolate process execution by fixing the contents
+    of the files being operated on and easing their movement to and from isolated execution
+    sandboxes.
+    """
 
     directory_digest: Digest
     files: Tuple[str, ...]

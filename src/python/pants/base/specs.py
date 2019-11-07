@@ -17,12 +17,12 @@ from pants.util.meta import frozen_after_init
 class Spec(ABC):
     """Represents address selectors as passed from the command line.
 
-  Supports `Single` target addresses as well as `Sibling` (:) and `Descendant` (::) selector forms.
+    Supports `Single` target addresses as well as `Sibling` (:) and `Descendant` (::) selector forms.
 
-  Note: In general, 'spec' should not be a user visible term, it is usually appropriate to
-  substitute 'address' for a spec resolved to an address, or 'address selector' if you are
-  referring to an unresolved spec string.
-  """
+    Note: In general, 'spec' should not be a user visible term, it is usually appropriate to
+    substitute 'address' for a spec resolved to an address, or 'address selector' if you are
+    referring to an unresolved spec string.
+    """
 
     @abstractmethod
     def to_spec_string(self):
@@ -35,9 +35,9 @@ class Spec(ABC):
     def matching_address_families(self, address_families_dict):
         """Given a dict of (namespace path) -> AddressFamily, return the values matching this spec.
 
-    :raises: :class:`Spec.AddressFamilyResolutionError` if no address families matched this spec.
-    :return: list of AddressFamily.
-    """
+        :raises: :class:`Spec.AddressFamilyResolutionError` if no address families matched this spec.
+        :return: list of AddressFamily.
+        """
 
     @classmethod
     def address_families_for_dir(cls, address_families_dict, spec_dir_path):
@@ -56,12 +56,12 @@ class Spec(ABC):
     def address_target_pairs_from_address_families(self, address_families):
         """Given a list of AddressFamily, return (address, target) pairs matching this spec.
 
-    :raises: :class:`SingleAddress._SingleAddressResolutionError` for resolution errors with a
-             :class:`SingleAddress` instance.
-    :raises: :class:`Spec.AddressResolutionError` if no targets could be found otherwise, if the
-             spec type requires a non-empty set of targets.
-    :return: list of (Address, Target) pairs.
-    """
+        :raises: :class:`SingleAddress._SingleAddressResolutionError` for resolution errors with a
+                 :class:`SingleAddress` instance.
+        :raises: :class:`Spec.AddressResolutionError` if no targets could be found otherwise, if the
+                 spec type requires a non-empty set of targets.
+        :return: list of (Address, Target) pairs.
+        """
 
     @classmethod
     def all_address_target_pairs(cls, address_families):
@@ -109,10 +109,10 @@ class SingleAddress(Spec):
     def address_target_pairs_from_address_families(self, address_families):
         """Return the pair for the single target matching the single AddressFamily, or error.
 
-    :raises: :class:`SingleAddress._SingleAddressResolutionError` if no targets could be found for a
-             :class:`SingleAddress` instance.
-    :return: list of (Address, Target) pairs with exactly one element.
-    """
+        :raises: :class:`SingleAddress._SingleAddressResolutionError` if no targets could be found for a
+                 :class:`SingleAddress` instance.
+        :return: list of (Address, Target) pairs with exactly one element.
+        """
         single_af = assert_single_element(address_families)
         addr_tgt_pairs = [
             (addr, tgt)
@@ -213,9 +213,9 @@ _specificity = {
 def more_specific(spec1: Spec, spec2: Spec) -> Spec:
     """Returns which of the two specs is more specific.
 
-  This is useful when a target matches multiple specs, and we want to associate it with
-  the "most specific" one, which will make the most intuitive sense to the user.
-  """
+    This is useful when a target matches multiple specs, and we want to associate it with
+    the "most specific" one, which will make the most intuitive sense to the user.
+    """
     # Note that if either of spec1 or spec2 is None, the other will be returned.
     return spec1 if _specificity[type(spec1)] < _specificity[type(spec2)] else spec2
 
@@ -225,11 +225,11 @@ def more_specific(spec1: Spec, spec2: Spec) -> Spec:
 class SpecsMatcher:
     """Contains filters for the output of a Specs match.
 
-  This class is separated out from `Specs` to allow for both stuctural equality of the `tags` and
-  `exclude_patterns`, and for caching of their compiled forms using `@memoized_property` (which uses
-  the hash of the class instance in its key, and results in a very large key when used with `Specs`
-  directly).
-  """
+    This class is separated out from `Specs` to allow for both stuctural equality of the `tags` and
+    `exclude_patterns`, and for caching of their compiled forms using `@memoized_property` (which uses
+    the hash of the class instance in its key, and results in a very large key when used with `Specs`
+    directly).
+    """
 
     tags: Tuple
     exclude_patterns: Tuple
@@ -254,11 +254,11 @@ class SpecsMatcher:
 
     def matches_target_address_pair(self, address, target):
         """
-    :param Address address: An Address to match
-    :param HydratedTarget target: The Target for the address.
+        :param Address address: An Address to match
+        :param HydratedTarget target: The Target for the address.
 
-    :return: True if the given Address/HydratedTarget are included by this matcher.
-    """
+        :return: True if the given Address/HydratedTarget are included by this matcher.
+        """
         return self._target_tag_matches(target) and not self._excluded_by_pattern(address)
 
 

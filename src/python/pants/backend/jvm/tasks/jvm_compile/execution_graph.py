@@ -15,9 +15,9 @@ from pants.util.contextutil import Timer
 class Job:
     """A unit of scheduling for the ExecutionGraph.
 
-  The ExecutionGraph represents a DAG of dependent work. A Job a node in the graph along with the
-  keys of its dependent jobs.
-  """
+    The ExecutionGraph represents a DAG of dependent work. A Job a node in the graph along with the
+    keys of its dependent jobs.
+    """
 
     def __init__(
         self,
@@ -34,15 +34,16 @@ class Job:
     ):
         """
 
-    :param key: Key used to reference and look up jobs
-    :param fn callable: The work to perform
-    :param dependencies: List of keys for dependent jobs
-    :param size: Estimated job size used for prioritization
-    :param on_success: Zero parameter callback to run if job completes successfully. Run on main
-                       thread.
-    :param on_failure: Zero parameter callback to run if job completes successfully. Run on main
-                       thread.
-    :param run_asap: Boolean indicating whether or not to queue job immediately once unblocked."""
+        :param key: Key used to reference and look up jobs
+        :param fn callable: The work to perform
+        :param dependencies: List of keys for dependent jobs
+        :param size: Estimated job size used for prioritization
+        :param on_success: Zero parameter callback to run if job completes successfully. Run on main
+                           thread.
+        :param on_failure: Zero parameter callback to run if job completes successfully. Run on main
+                           thread.
+        :param run_asap: Boolean indicating whether or not to queue job immediately once unblocked.
+        """
         self.key = key
         self.fn = fn
         self.dependencies = dependencies
@@ -167,15 +168,15 @@ class ThreadSafeCounter:
 class ExecutionGraph:
     """A directed acyclic graph of work to execute.
 
-  This is currently only used within jvm compile, but the intent is to unify it with the future
-  global execution graph.
-  """
+    This is currently only used within jvm compile, but the intent is to unify it with the future
+    global execution graph.
+    """
 
     def __init__(self, job_list, print_stack_trace):
         """
 
-    :param job_list Job: list of Jobs to schedule and run.
-    """
+        :param job_list Job: list of Jobs to schedule and run.
+        """
         self._print_stack_trace = print_stack_trace
         self._dependencies = defaultdict(list)
         self._dependees = defaultdict(list)
@@ -222,7 +223,8 @@ class ExecutionGraph:
 
     def _compute_job_priorities(self, job_list):
         """Walks the dependency graph breadth-first, starting from the most dependent tasks,
-     and computes the job priority as the sum of the jobs sizes along the critical path."""
+        and computes the job priority as the sum of the jobs sizes along the critical path.
+        """
 
         job_size = {job.key: job.size for job in job_list}
         job_priority = defaultdict(int)
@@ -258,24 +260,24 @@ class ExecutionGraph:
     def execute(self, pool, log):
         """Runs scheduled work, ensuring all dependencies for each element are done before execution.
 
-    :param pool: A WorkerPool to run jobs on
-    :param log: logger for logging debug information and progress
+        :param pool: A WorkerPool to run jobs on
+        :param log: logger for logging debug information and progress
 
-    submits all the work without any dependencies to the worker pool
-    when a unit of work finishes,
-      if it is successful
-        calls success callback
-        checks for dependees whose dependencies are all successful, and submits them
-      if it fails
-        calls failure callback
-        marks dependees as failed and queues them directly into the finished work queue
-    when all work is either successful or failed,
-      cleans up the work pool
-    if there's an exception on the main thread,
-      calls failure callback for unfinished work
-      aborts work pool
-      re-raises
-    """
+        submits all the work without any dependencies to the worker pool
+        when a unit of work finishes,
+          if it is successful
+            calls success callback
+            checks for dependees whose dependencies are all successful, and submits them
+          if it fails
+            calls failure callback
+            marks dependees as failed and queues them directly into the finished work queue
+        when all work is either successful or failed,
+          cleans up the work pool
+        if there's an exception on the main thread,
+          calls failure callback for unfinished work
+          aborts work pool
+          re-raises
+        """
         log.debug(self.format_dependee_graph())
 
         status_table = StatusTable(

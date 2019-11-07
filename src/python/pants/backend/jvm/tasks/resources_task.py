@@ -14,11 +14,11 @@ from pants.util.dirutil import fast_relpath
 class ResourcesTask(Task):
     """A base class for tasks that process or create resource files.
 
-  This base assumes that resources targets or targets that generate resources are independent from
-  each other and can be processed in isolation in any order.
+    This base assumes that resources targets or targets that generate resources are independent from
+    each other and can be processed in isolation in any order.
 
-  :API: public
-  """
+    :API: public
+    """
 
     @classmethod
     def product_types(cls):
@@ -79,8 +79,8 @@ class ResourcesTask(Task):
     def _capture_resources(self, vts):
         """Given a list of VersionedTargets, capture DirectoryDigests for all of them.
 
-    :returns: A list of tuples of VersionedTargets and digests for their content.
-    """
+        :returns: A list of tuples of VersionedTargets and digests for their content.
+        """
         # Capture Snapshots for each directory, using an optional adjacent digest. Create the digest
         # afterward if it does not exist.
         buildroot = get_buildroot()
@@ -107,17 +107,17 @@ class ResourcesTask(Task):
     def create_invalidation_strategy(self):
         """Creates a custom fingerprint strategy for determining invalid resources targets.
 
-    :returns: A custom fingerprint strategy to use for determining invalid targets, or `None` to
-              use the standard target payload.
-    :rtype: :class:`pants.base.fingerprint_strategy.FingerprintStrategy`
-    """
+        :returns: A custom fingerprint strategy to use for determining invalid targets, or `None` to
+                  use the standard target payload.
+        :rtype: :class:`pants.base.fingerprint_strategy.FingerprintStrategy`
+        """
         return None
 
     @abstractmethod
     def prepare_resources(self, target, chroot):
         """Prepares the resources associated with `target` in the given `chroot`.
 
-    :param target: The target to prepare resource files for.
-    :type target: :class:`pants.build_graph.target.Target`
-    :param string chroot: An existing, clean chroot dir to generate `target`'s resources to.
-    """
+        :param target: The target to prepare resource files for.
+        :type target: :class:`pants.build_graph.target.Target`
+        :param string chroot: An existing, clean chroot dir to generate `target`'s resources to.
+        """

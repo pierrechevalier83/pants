@@ -28,13 +28,13 @@ class TestBuildLocalPythonDistributions(BuildLocalPythonDistributionsTestBase):
                     "filemap": {
                         "__init__.py": "",
                         "setup.py": """\
-from setuptools import find_packages, setup
-setup(
-  name='universal_dist',
-  version='0.0.0',
-  packages=find_packages()
-)
-        """,
+                                    from setuptools import find_packages, setup
+                                    setup(
+                                      name='universal_dist',
+                                      version='0.0.0',
+                                      packages=find_packages()
+                                    )
+                                    """,
                     },
                 },
             ),
@@ -56,17 +56,17 @@ setup(
                     "filemap": {
                         "__init__.py": "",
                         "setup.py": """\
-from setuptools import find_packages, setup
-import pycountry
+                                    from setuptools import find_packages, setup
+                                    import pycountry
 
-us_country_string = pycountry.countries.get(alpha_2='US').name.replace(' ', '_').lower()
+                                    us_country_string = pycountry.countries.get(alpha_2='US').name.replace(' ', '_').lower()
 
-setup(
-  name='setup_requires_dist_{}'.format(us_country_string),
-  version='0.0.0',
-  packages=find_packages(),
-)
-        """,
+                                    setup(
+                                      name='setup_requires_dist_{}'.format(us_country_string),
+                                      version='0.0.0',
+                                      packages=find_packages(),
+                                    )
+                                    """,
                     },
                 },
             ),
@@ -79,14 +79,14 @@ setup(
                     "filemap": {
                         "__init__.py": "",
                         "setup.py": """\
-from setuptools import setup
+                                    from setuptools import setup
 
-setup(
-  name='install_requires_dist',
-  version='0.0.0',
-  install_requires=['pycountry==17.1.2'],
-)
-        """,
+                                    setup(
+                                      name='install_requires_dist',
+                                      version='0.0.0',
+                                      install_requires=['pycountry==17.1.2'],
+                                    )
+                                    """,
                     },
                 },
             ),

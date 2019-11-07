@@ -241,13 +241,13 @@ class BuildLocalPythonDistributions(Task):
     def _generate_snapshot_bdist_wheel_argv(self, snapshot_fingerprint, is_platform_specific):
         """Create a command line to pass to :class:`SetupPyRunner`.
 
-    Note that distutils will convert `snapshot_fingerprint` into a string suitable for a version
-    tag. Currently for versioned target fingerprints, this seems to convert all punctuation into
-    '.' and downcase all ASCII chars. See https://www.python.org/dev/peps/pep-0440/ for further
-    information on allowed version names.
+        Note that distutils will convert `snapshot_fingerprint` into a string suitable for a version
+        tag. Currently for versioned target fingerprints, this seems to convert all punctuation into
+        '.' and downcase all ASCII chars. See https://www.python.org/dev/peps/pep-0440/ for further
+        information on allowed version names.
 
-    NB: adds a '+' before the fingerprint to the build tag!
-    """
+        NB: adds a '+' before the fingerprint to the build tag!
+        """
         egg_info_snapshot_tag_args = ["egg_info", f"--tag-build=+{snapshot_fingerprint}"]
         bdist_whl_args = ["bdist_wheel"]
         if is_platform_specific:
@@ -309,10 +309,10 @@ class BuildLocalPythonDistributions(Task):
     def _inject_synthetic_dist_requirements(self, dist, req_lib_addr):
         """Inject a synthetic requirements library that references a local wheel.
 
-    :param dist: Path of the locally built wheel to reference.
-    :param req_lib_addr:  :class: `Address` to give to the synthetic target.
-    :return: a :class: `PythonRequirementLibrary` referencing the locally-built wheel.
-    """
+        :param dist: Path of the locally built wheel to reference.
+        :param req_lib_addr:  :class: `Address` to give to the synthetic target.
+        :return: a :class: `PythonRequirementLibrary` referencing the locally-built wheel.
+        """
         whl_dir, base = split_basename_and_dirname(dist)
         whl_metadata = base.split("-")
         req_name = "==".join([whl_metadata[0], whl_metadata[1]])

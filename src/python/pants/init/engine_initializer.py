@@ -101,11 +101,11 @@ _apply_default_sources_globs(RemoteSourcesAdaptor, RemoteSources)
 def _legacy_symbol_table(build_file_aliases):
     """Construct a SymbolTable for the given BuildFileAliases.
 
-  :param build_file_aliases: BuildFileAliases to register.
-  :type build_file_aliases: :class:`pants.build_graph.build_file_aliases.BuildFileAliases`
+    :param build_file_aliases: BuildFileAliases to register.
+    :type build_file_aliases: :class:`pants.build_graph.build_file_aliases.BuildFileAliases`
 
-  :returns: A SymbolTable.
-  """
+    :returns: A SymbolTable.
+    """
     table = {
         alias: _make_target_adaptor(TargetAdaptor, target_type)
         for alias, target_type in build_file_aliases.target_types.items()
@@ -192,13 +192,13 @@ class LegacyGraphSession:
     def run_console_rules(self, options_bootstrapper, goals, target_roots):
         """Runs @console_rules sequentially and interactively by requesting their implicit Goal products.
 
-    For retryable failures, raises scheduler.ExecutionError.
+        For retryable failures, raises scheduler.ExecutionError.
 
-    :param list goals: The list of requested goal names as passed on the commandline.
-    :param TargetRoots target_roots: The targets root of the request.
+        :param list goals: The list of requested goal names as passed on the commandline.
+        :param TargetRoots target_roots: The targets root of the request.
 
-    :returns: An exit code.
-    """
+        :returns: An exit code.
+        """
         subject = target_roots.specs
         console = Console(
             use_colors=options_bootstrapper.bootstrap_options.for_global_scope().colors
@@ -222,10 +222,10 @@ class LegacyGraphSession:
     def create_build_graph(self, target_roots, build_root=None):
         """Construct and return a `BuildGraph` given a set of input specs.
 
-    :param TargetRoots target_roots: The targets root of the request.
-    :param string build_root: The build root.
-    :returns: A tuple of (BuildGraph, AddressMapper).
-    """
+        :param TargetRoots target_roots: The targets root of the request.
+        :param string build_root: The build root.
+        :returns: A tuple of (BuildGraph, AddressMapper).
+        """
         logger.debug("target_roots are: %r", target_roots)
         graph = LegacyBuildGraph.create(self.scheduler_session, self.build_file_aliases)
         logger.debug("build_graph is: %s", graph)
@@ -298,32 +298,32 @@ class EngineInitializer:
     ):
         """Construct and return the components necessary for LegacyBuildGraph construction.
 
-    :param list pants_ignore_patterns: A list of path ignore patterns for FileSystemProjectTree,
-                                       usually taken from the '--pants-ignore' global option.
-    :param local_store_dir: The directory to use for storing the engine's LMDB store in.
-    :param build_file_imports_behavior: How to behave if a BUILD file being parsed tries to use
-      import statements. Valid values: "allow", "warn", "error".
-    :type build_file_imports_behavior: string
-    :param str build_root: A path to be used as the build root. If None, then default is used.
-    :param Native native: An instance of the native-engine subsystem.
-    :param options_bootstrapper: A `OptionsBootstrapper` object containing bootstrap options.
-    :type options_bootstrapper: :class:`pants.options.options_bootstrapper.OptionsBootstrapper`
-    :param build_configuration: The `BuildConfiguration` object to get build file aliases from.
-    :type build_configuration: :class:`pants.build_graph.build_configuration.BuildConfiguration`
-    :param glob_match_error_behavior: How to behave if a glob specified for a target's sources or
-                                      bundles does not expand to anything.
-    :type glob_match_error_behavior: :class:`pants.option.global_options.GlobMatchErrorBehavior`
-    :param list build_ignore_patterns: A list of paths ignore patterns used when searching for BUILD
-                                       files, usually taken from the '--build-ignore' global option.
-    :param list exclude_target_regexps: A list of regular expressions for excluding targets.
-    :param list subproject_roots: Paths that correspond with embedded build roots
-                                  under the current build root.
-    :param bool include_trace_on_error: If True, when an error occurs, the error message will
-                include the graph trace.
-    :param execution_options: Option values for (remote) process execution.
-    :type execution_options: :class:`pants.option.global_options.ExecutionOptions`
-    :returns: A LegacyGraphScheduler.
-    """
+        :param list pants_ignore_patterns: A list of path ignore patterns for FileSystemProjectTree,
+                                           usually taken from the '--pants-ignore' global option.
+        :param local_store_dir: The directory to use for storing the engine's LMDB store in.
+        :param build_file_imports_behavior: How to behave if a BUILD file being parsed tries to use
+          import statements. Valid values: "allow", "warn", "error".
+        :type build_file_imports_behavior: string
+        :param str build_root: A path to be used as the build root. If None, then default is used.
+        :param Native native: An instance of the native-engine subsystem.
+        :param options_bootstrapper: A `OptionsBootstrapper` object containing bootstrap options.
+        :type options_bootstrapper: :class:`pants.options.options_bootstrapper.OptionsBootstrapper`
+        :param build_configuration: The `BuildConfiguration` object to get build file aliases from.
+        :type build_configuration: :class:`pants.build_graph.build_configuration.BuildConfiguration`
+        :param glob_match_error_behavior: How to behave if a glob specified for a target's sources or
+                                          bundles does not expand to anything.
+        :type glob_match_error_behavior: :class:`pants.option.global_options.GlobMatchErrorBehavior`
+        :param list build_ignore_patterns: A list of paths ignore patterns used when searching for BUILD
+                                           files, usually taken from the '--build-ignore' global option.
+        :param list exclude_target_regexps: A list of regular expressions for excluding targets.
+        :param list subproject_roots: Paths that correspond with embedded build roots
+                                      under the current build root.
+        :param bool include_trace_on_error: If True, when an error occurs, the error message will
+                    include the graph trace.
+        :param execution_options: Option values for (remote) process execution.
+        :type execution_options: :class:`pants.option.global_options.ExecutionOptions`
+        :returns: A LegacyGraphScheduler.
+        """
 
         build_root = build_root or get_buildroot()
         build_configuration = build_configuration or BuildConfigInitializer.get(

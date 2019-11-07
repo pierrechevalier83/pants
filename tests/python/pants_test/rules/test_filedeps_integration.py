@@ -24,14 +24,14 @@ class FiledepsIntegrationTest(PantsRunIntegrationTest):
             pants_run.stdout_data,
             dedent(
                 """\
-      examples/src/scala/org/pantsbuild/example/hello/exe/BUILD
-      examples/src/scala/org/pantsbuild/example/hello/exe/Exe.scala
-      examples/src/scala/org/pantsbuild/example/hello/welcome/BUILD
-      examples/src/scala/org/pantsbuild/example/hello/welcome/Welcome.scala
-      examples/src/java/org/pantsbuild/example/hello/greet/BUILD
-      examples/src/java/org/pantsbuild/example/hello/greet/Greeting.java
-      examples/src/resources/org/pantsbuild/example/hello/BUILD
-      examples/src/resources/org/pantsbuild/example/hello/world.txt
-      """
+                examples/src/scala/org/pantsbuild/example/hello/exe/BUILD
+                examples/src/scala/org/pantsbuild/example/hello/exe/Exe.scala
+                examples/src/scala/org/pantsbuild/example/hello/welcome/BUILD
+                examples/src/scala/org/pantsbuild/example/hello/welcome/Welcome.scala
+                examples/src/java/org/pantsbuild/example/hello/greet/BUILD
+                examples/src/java/org/pantsbuild/example/hello/greet/Greeting.java
+                examples/src/resources/org/pantsbuild/example/hello/BUILD
+                examples/src/resources/org/pantsbuild/example/hello/world.txt
+                """
             ),
         )

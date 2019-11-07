@@ -25,9 +25,9 @@ class BuildLocalPythonDistributionsIntegrationTest(PantsRunIntegrationTest):
     def _assert_nation_and_greeting(self, output, punctuation="!"):
         self.assertEquals(
             """\
-hello{}
-United States
-""".format(
+            hello{}
+            United States
+            """.format(
                 punctuation
             ),
             output,

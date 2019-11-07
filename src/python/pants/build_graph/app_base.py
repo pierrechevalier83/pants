@@ -45,9 +45,9 @@ class DirectoryReMapper:
     def __init__(self, base, dest):
         """The base directory files should be mapped from, and the dest they should be mapped to.
 
-    :param string base: the relative path to get_buildroot()
-    :param string dest: the dest path in the bundle
-    """
+        :param string base: the relative path to get_buildroot()
+        :param string dest: the dest path in the bundle
+        """
         self.base = os.path.abspath(os.path.join(get_buildroot(), base))
         if not os.path.isdir(self.base):
             raise DirectoryReMapper.NonexistentBaseError(
@@ -101,44 +101,44 @@ class BundleProps(namedtuple("_BundleProps", ["rel_path", "mapper", "fileset"]))
 class Bundle:
     """A set of files to include in an application bundle.
 
-  To learn about application bundles, see
-  `bundles <JVMProjects.html#jvm-bundles>`_.
-  Looking for Java-style resources accessible via the ``Class.getResource`` API?
-  Those are `resources <build_dictionary.html#resources>`_.
+    To learn about application bundles, see
+    `bundles <JVMProjects.html#jvm-bundles>`_.
+    Looking for Java-style resources accessible via the ``Class.getResource`` API?
+    Those are `resources <build_dictionary.html#resources>`_.
 
-  Files added to the bundle will be included when bundling an application target.
-  By default relative paths are preserved. For example, to include ``config``
-  and ``scripts`` directories: ::
+    Files added to the bundle will be included when bundling an application target.
+    By default relative paths are preserved. For example, to include ``config``
+    and ``scripts`` directories: ::
 
-    bundles=[
-      bundle(fileset=[rglobs('config/*', 'scripts/*'), 'my.cfg']),
-    ]
+      bundles=[
+        bundle(fileset=[rglobs('config/*', 'scripts/*'), 'my.cfg']),
+      ]
 
-  To include files relative to some path component use the ``relative_to`` parameter.
-  The following places the contents of ``common/config`` in a  ``config`` directory
-  in the bundle. ::
+    To include files relative to some path component use the ``relative_to`` parameter.
+    The following places the contents of ``common/config`` in a  ``config`` directory
+    in the bundle. ::
 
-    bundles=[
-      bundle(relative_to='common', fileset=globs('common/config/*'))
-    ]
+      bundles=[
+        bundle(relative_to='common', fileset=globs('common/config/*'))
+      ]
 
-  """
+    """
 
     def __init__(self, parse_context):
         self._parse_context = parse_context
 
     def __call__(self, rel_path=None, mapper=None, relative_to=None, fileset=None):
         """
-    :param rel_path: Base path of the "source" file paths. By default, path of the
-      BUILD file. Useful for assets that don't live in the source code repo.
-    :param mapper: Function that takes a path string and returns a path string. Takes a path in
-      the source tree, returns a path to use in the resulting bundle. By default, an identity
-      mapper.
-    :param string relative_to: Set up a simple mapping from source path to bundle path.
-    :param fileset: The set of files to include in the bundle.  A string filename, or list of
-      filenames, or a Fileset object (e.g. globs()).
-      E.g., ``relative_to='common'`` removes that prefix from all files in the application bundle.
-    """
+        :param rel_path: Base path of the "source" file paths. By default, path of the
+          BUILD file. Useful for assets that don't live in the source code repo.
+        :param mapper: Function that takes a path string and returns a path string. Takes a path in
+          the source tree, returns a path to use in the resulting bundle. By default, an identity
+          mapper.
+        :param string relative_to: Set up a simple mapping from source path to bundle path.
+        :param fileset: The set of files to include in the bundle.  A string filename, or list of
+          filenames, or a Fileset object (e.g. globs()).
+          E.g., ``relative_to='common'`` removes that prefix from all files in the application bundle.
+        """
 
         if fileset is None:
             raise ValueError(
@@ -184,8 +184,8 @@ class Bundle:
 class BundleField(tuple, PayloadField):
     """A tuple subclass that mixes in PayloadField.
 
-  Must be initialized with an iterable of Bundle instances.
-  """
+    Must be initialized with an iterable of Bundle instances.
+    """
 
     @staticmethod
     def _hash_bundle(bundle):
@@ -209,13 +209,13 @@ class BundleField(tuple, PayloadField):
 class AppBase(Target):
     """A base class for deployable application targets
 
-  Invoking the ``bundle`` goal on one of these targets creates a
-  self-contained artifact suitable for deployment on some other machine.
-  The artifact contains the executable, its dependencies, and
-  extra files like config files, startup scripts, etc.
+    Invoking the ``bundle`` goal on one of these targets creates a
+    self-contained artifact suitable for deployment on some other machine.
+    The artifact contains the executable, its dependencies, and
+    extra files like config files, startup scripts, etc.
 
-  :API: public
-  """
+    :API: public
+    """
 
     class InvalidArchiveType(Exception):
         """Raised when archive type defined in Target is invalid"""
@@ -231,17 +231,17 @@ class AppBase(Target):
         **kwargs
     ):
         """
-    :param string binary: Target spec of the ``jvm_binary`` or the ``python_binary``
-      that contains the app main.
-    :param bundles: One or more ``bundle``\\s
-      describing "extra files" that should be included with this app
-      (e.g.: config files, startup scripts).
-    :param string basename: Name of this application, if different from the
-      ``name``. Optionally pants uses this in the ``bundle`` goal to name the distribution
-      artifact.  Note this is unsafe because of the possible conflict when multiple bundles
-      are built.
-    :param string archive: Create an archive of this type from the bundle.
-    """
+        :param string binary: Target spec of the ``jvm_binary`` or the ``python_binary``
+          that contains the app main.
+        :param bundles: One or more ``bundle``\\s
+          describing "extra files" that should be included with this app
+          (e.g.: config files, startup scripts).
+        :param string basename: Name of this application, if different from the
+          ``name``. Optionally pants uses this in the ``bundle`` goal to name the distribution
+          artifact.  Note this is unsafe because of the possible conflict when multiple bundles
+          are built.
+        :param string archive: Create an archive of this type from the bundle.
+        """
         if name == basename:
             raise TargetDefinitionException(self, "basename must not equal name.")
 

@@ -48,9 +48,9 @@ class JvmPrepCommandIntegration(PantsRunIntegrationTest):
             prep_output = f.read()
 
         expected = """Running: org.pantsbuild.testproject.jvmprepcommand.ExampleJvmPrepCommand
-args are: "/tmp/running-in-goal-test","foo",
-org.pantsbuild properties: "org.pantsbuild.jvm_prep_command=WORKS-IN-TEST"
-"""
+                   args are: "/tmp/running-in-goal-test","foo",
+                   org.pantsbuild properties: "org.pantsbuild.jvm_prep_command=WORKS-IN-TEST"
+                   """
         self.assertEqual(expected, prep_output)
         self.assert_prep_compile()
 
@@ -67,8 +67,8 @@ org.pantsbuild properties: "org.pantsbuild.jvm_prep_command=WORKS-IN-TEST"
             prep_output = f.read()
 
         expected = """Running: org.pantsbuild.testproject.jvmprepcommand.ExampleJvmPrepCommand
-args are: "/tmp/running-in-goal-binary","bar",
-org.pantsbuild properties: "org.pantsbuild.jvm_prep_command=WORKS-IN-BINARY"
-"""
+                   args are: "/tmp/running-in-goal-binary","bar",
+                   org.pantsbuild properties: "org.pantsbuild.jvm_prep_command=WORKS-IN-BINARY"
+                   """
         self.assertEqual(expected, prep_output)
         self.assert_prep_compile()

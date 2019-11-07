@@ -17,23 +17,22 @@ from pants.contrib.python.checks.checker.common import (
 
 
 FILE_TEXT = """
-  import ast
-  from os.path import (
-      join,
-      split,
-  )
+            import ast
+            from os.path import (
+                join,
+                split,
+            )
 
-  import zookeeper
+            import zookeeper
 
 
-  class Keeper(object):
-    def __init__(self):
-      self._session = None
+            class Keeper(object):
+              def __init__(self):
+                self._session = None
 
-    def session(self):
-      return self._session
-
-"""
+              def session(self):
+                return self._session
+            """
 
 
 class MinimalCheckstylePlugin(CheckstylePlugin):
@@ -88,8 +87,8 @@ class CommonTest(unittest.TestCase):
     def test_python_file_index_offset(self):
         """Test that we can not index into a python file with 0.
 
-    PythonFile is offset by one to match users expectations with file line numbering.
-    """
+        PythonFile is offset by one to match users expectations with file line numbering.
+        """
         with self.assertRaises(IndexError):
             self._python_file_for_testing()[0]
 
@@ -162,9 +161,9 @@ class CommonTest(unittest.TestCase):
     def test_style_error(self):
         """Test error with actual AST node.
 
-    Verify that when we fetch a node form AST and create an error we get the
-    same result as generating the error manually.
-    """
+        Verify that when we fetch a node form AST and create an error we get the
+        same result as generating the error manually.
+        """
         plugin = MinimalCheckstylePlugin({}, PythonFile.from_statement(FILE_TEXT))
         import_from = None
         for node in ast.walk(self._python_file_for_testing().tree):

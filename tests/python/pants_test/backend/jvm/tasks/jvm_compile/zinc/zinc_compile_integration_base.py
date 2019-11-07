@@ -37,11 +37,11 @@ class BaseZincCompileIntegrationTest:
     def test_consecutive_compiler_option_sets(self):
         """Test that the ordering of args in compiler option sets are respected.
 
-    Generating a scalac profile requires two consecutive arguments, '-Yprofile-destination' and its
-    following argument, the file to write the CSV profile to. We want to be able to allow users to
-    successfully run scalac with profiling from pants, so we test this case in particular. See the
-    discussion from https://github.com/pantsbuild/pants/pull/7683.
-    """
+        Generating a scalac profile requires two consecutive arguments, '-Yprofile-destination' and its
+        following argument, the file to write the CSV profile to. We want to be able to allow users to
+        successfully run scalac with profiling from pants, so we test this case in particular. See the
+        discussion from https://github.com/pantsbuild/pants/pull/7683.
+        """
         with temporary_dir() as tmp_dir:
             profile_destination = os.path.join(tmp_dir, "scala_profile.csv")
             self.do_command(
@@ -174,10 +174,10 @@ class BaseZincCompileIntegrationTest:
     def test_stale_apt_with_deps(self):
         """An annotation processor with a dependency doesn't pollute other annotation processors.
 
-    At one point, when you added an annotation processor, it stayed configured for all subsequent
-    compiles.  Meaning that if that annotation processor had a dep that wasn't on the classpath,
-    subsequent compiles would fail with missing symbols required by the stale annotation processor.
-    """
+        At one point, when you added an annotation processor, it stayed configured for all subsequent
+        compiles.  Meaning that if that annotation processor had a dep that wasn't on the classpath,
+        subsequent compiles would fail with missing symbols required by the stale annotation processor.
+        """
 
         # Demonstrate that the annotation processor is working
         with self.do_test_compile(
@@ -345,9 +345,9 @@ class BaseZincCompileIntegrationTest:
 
     def test_barebones_logger_works(self):
         """
-    Test that the barebones logger logs the expected warning.
-    TODO(#8312): this should be synced up with the normal logging output in order to use native-image zinc!
-    """
+        Test that the barebones logger logs the expected warning.
+        TODO(#8312): this should be synced up with the normal logging output in order to use native-image zinc!
+        """
         pants_run = self._compile_unused_import(use_barebones_logger=True)
         expected_strings = [
             "/testprojects/src/scala/org/pantsbuild/testproject/compilation_warnings/unused_import_warning/UnusedImportWarning.scala",
@@ -400,29 +400,29 @@ class BaseZincCompileIntegrationTest:
                 buildfile,
                 dedent(
                     """
-                  scala_library(name='a',
-                               sources=['A.scala'])
-                  scala_library(name='b',
-                               sources=['B.scala'],
-                               dependencies=[':a'])
-                  jvm_binary(name='bin',
-                   main='org.pantsbuild.cachetest.B',
-                   dependencies=[':b']
-                  )
-                  """
+                    scala_library(name='a',
+                                 sources=['A.scala'])
+                    scala_library(name='b',
+                                 sources=['B.scala'],
+                                 dependencies=[':a'])
+                    jvm_binary(name='bin',
+                     main='org.pantsbuild.cachetest.B',
+                     dependencies=[':b']
+                    )
+                    """
                 ),
             )
             self.create_file(
                 srcfile,
                 dedent(
                     """
-                          package org.pantsbuild.cachetest
-                          object A {
-                            def x(y: Option[Int] = None) = {
-                              println("x");
-                            }
-                          }
-                          """
+                    package org.pantsbuild.cachetest
+                    object A {
+                      def x(y: Option[Int] = None) = {
+                        println("x");
+                      }
+                    }
+                    """
                 ),
             )
 
@@ -430,12 +430,12 @@ class BaseZincCompileIntegrationTest:
                 srcfile_b,
                 dedent(
                     """
-                                package org.pantsbuild.cachetest
-                                object B extends App {
-                                  A.x();
-                                  System.exit(0);
-                                }
-                                """
+                    package org.pantsbuild.cachetest
+                    object B extends App {
+                      A.x();
+                      System.exit(0);
+                    }
+                    """
                 ),
             )
 
@@ -451,13 +451,13 @@ class BaseZincCompileIntegrationTest:
                 srcfile,
                 dedent(
                     """
-                          package org.pantsbuild.cachetest;
-                          object A {
-                            def x(y: Option[Int] = None, z:Option[Int]=None) = {
-                              println("x");
-                            }
-                          }
-                          """
+                    package org.pantsbuild.cachetest;
+                    object A {
+                      def x(y: Option[Int] = None, z:Option[Int]=None) = {
+                        println("x");
+                      }
+                    }
+                    """
                 ),
             )
             self.run_run(cachetest_bin_spec, config, workdir)
@@ -480,29 +480,29 @@ class BaseZincCompileIntegrationTest:
                 buildfile,
                 dedent(
                     """
-                  java_library(name='cachetest',
-                               sources=['A.java'])
-                  java_library(name='b',
-                               sources=['B.java'],
-                               dependencies=[':a']
-                               )
-                  jvm_binary(name='bin',
-                      main='org.pantsbuild.cachetest.B',
-                      dependencies=[':b']
-                     )
-                  """
+                    java_library(name='cachetest',
+                                 sources=['A.java'])
+                    java_library(name='b',
+                                 sources=['B.java'],
+                                 dependencies=[':a']
+                                 )
+                    jvm_binary(name='bin',
+                        main='org.pantsbuild.cachetest.B',
+                        dependencies=[':b']
+                       )
+                    """
                 ),
             )
             self.create_file(
                 srcfile,
                 dedent(
                     """package org.pantsbuild.cachetest;
-                          class A {
-                            public static void x() {
-                              System.out.println("x");
-                            }
-                          }
-                          """
+                    class A {
+                      public static void x() {
+                        System.out.println("x");
+                      }
+                    }
+                    """
                 ),
             )
 
@@ -510,12 +510,12 @@ class BaseZincCompileIntegrationTest:
                 srcfile_b,
                 dedent(
                     """package org.pantsbuild.cachetest;
-                                class B {
-                                  public static void main(String[] args) {
-                                    A.x();
-                                  }
-                                }
-                                """
+                    class B {
+                      public static void main(String[] args) {
+                        A.x();
+                      }
+                    }
+                    """
                 ),
             )
 
@@ -529,13 +529,13 @@ class BaseZincCompileIntegrationTest:
                 srcfile,
                 dedent(
                     """package org.pantsbuild.cachetest;
-                                class A {
-                                  public static int x() {
-                                    System.out.println("x");
-                                    return 0;
-                                  }
-                                }
-                                """
+                    class A {
+                      public static int x() {
+                        System.out.println("x");
+                        return 0;
+                      }
+                    }
+                    """
                 ),
             )
 

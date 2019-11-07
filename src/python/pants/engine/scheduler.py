@@ -32,11 +32,11 @@ logger = logging.getLogger(__name__)
 class ExecutionRequest:
     """Holds the roots for an execution, which might have been requested by a user.
 
-  To create an ExecutionRequest, see `SchedulerSession.execution_request`.
+    To create an ExecutionRequest, see `SchedulerSession.execution_request`.
 
-  :param roots: Roots for this request.
-  :type roots: list of tuples of subject and product.
-  """
+    :param roots: Roots for this request.
+    :type roots: list of tuples of subject and product.
+    """
 
     roots: Any
     native: Any
@@ -65,18 +65,18 @@ class Scheduler:
         visualize_to_dir=None,
     ):
         """
-    :param native: An instance of engine.native.Native.
-    :param project_tree: An instance of ProjectTree for the current build root.
-    :param work_dir: The pants work dir.
-    :param local_store_dir: The directory to use for storing the engine's LMDB store in.
-    :param rules: A set of Rules which is used to compute values in the graph.
-    :param union_rules: A dict mapping union base types to member types so that rules can be written
-                        against abstract union types without knowledge of downstream rulesets.
-    :param execution_options: Execution options for (remote) processes.
-    :param include_trace_on_error: Include the trace through the graph upon encountering errors.
-    :type include_trace_on_error: bool
-    :param validate: True to assert that the ruleset is valid.
-    """
+        :param native: An instance of engine.native.Native.
+        :param project_tree: An instance of ProjectTree for the current build root.
+        :param work_dir: The pants work dir.
+        :param local_store_dir: The directory to use for storing the engine's LMDB store in.
+        :param rules: A set of Rules which is used to compute values in the graph.
+        :param union_rules: A dict mapping union base types to member types so that rules can be written
+                            against abstract union types without knowledge of downstream rulesets.
+        :param execution_options: Execution options for (remote) processes.
+        :param include_trace_on_error: Include the trace through the graph upon encountering errors.
+        :type include_trace_on_error: bool
+        :param validate: True to assert that the ruleset is valid.
+        """
         self._native = native
         self.include_trace_on_error = include_trace_on_error
         self._visualize_to_dir = visualize_to_dir
@@ -324,9 +324,9 @@ class _DirectoriesToMaterialize(Collection[DirectoryToMaterialize]):
 class SchedulerSession:
     """A handle to a shared underlying Scheduler and a unique Session.
 
-  Generally a Session corresponds to a single run of pants: some metrics are specific to
-  a Session.
-  """
+    Generally a Session corresponds to a single run of pants: some metrics are specific to
+    a Session.
+    """
 
     execution_error_type = ExecutionError
 
@@ -346,8 +346,8 @@ class SchedulerSession:
     def visualize_graph_to_file(self, filename):
         """Visualize a graph walk by writing graphviz `dot` output to a file.
 
-    :param str filename: The filename to output the graphviz output to.
-    """
+        :param str filename: The filename to output the graphviz output to.
+        """
         self._scheduler.visualize_graph_to_file(self._session, filename)
 
     def visualize_rule_graph_to_file(self, filename):
@@ -362,19 +362,19 @@ class SchedulerSession:
     def execution_request(self, products, subjects):
         """Create and return an ExecutionRequest for the given products and subjects.
 
-    The resulting ExecutionRequest object will contain keys tied to this scheduler's product Graph,
-    and so it will not be directly usable with other scheduler instances without being re-created.
+        The resulting ExecutionRequest object will contain keys tied to this scheduler's product Graph,
+        and so it will not be directly usable with other scheduler instances without being re-created.
 
-    NB: This method does a "cross product", mapping all subjects to all products. To create a
-    request for just the given list of subject -> product tuples, use `execution_request_literal()`!
+        NB: This method does a "cross product", mapping all subjects to all products. To create a
+        request for just the given list of subject -> product tuples, use `execution_request_literal()`!
 
-    :param products: A list of product types to request for the roots.
-    :type products: list of types
-    :param subjects: A list of Spec and/or PathGlobs objects.
-    :type subject: list of :class:`pants.base.specs.Spec`, `pants.build_graph.Address`, and/or
-      :class:`pants.engine.fs.PathGlobs` objects.
-    :returns: An ExecutionRequest for the given products and subjects.
-    """
+        :param products: A list of product types to request for the roots.
+        :type products: list of types
+        :param subjects: A list of Spec and/or PathGlobs objects.
+        :type subject: list of :class:`pants.base.specs.Spec`, `pants.build_graph.Address`, and/or
+          :class:`pants.engine.fs.PathGlobs` objects.
+        :returns: An ExecutionRequest for the given products and subjects.
+        """
         roots = tuple((s, p) for s in subjects for p in products)
         return self.execution_request_literal(roots)
 
@@ -413,8 +413,8 @@ class SchedulerSession:
     def execute(self, execution_request):
         """Invoke the engine for the given ExecutionRequest, returning Return and Throw states.
 
-    :return: A tuple of (root, Return) tuples and (root, Throw) tuples.
-    """
+        :return: A tuple of (root, Return) tuples and (root, Throw) tuples.
+        """
         start_time = time.time()
         roots = list(
             zip(
@@ -458,10 +458,10 @@ class SchedulerSession:
 
     def run_console_rule(self, product, subject):
         """
-    :param product: A Goal subtype.
-    :param subject: subject for the request.
-    :returns: An exit_code for the given Goal.
-    """
+        :param product: A Goal subtype.
+        :param subject: subject for the request.
+        :returns: An exit_code for the given Goal.
+        """
         request = self.execution_request([product], [subject])
         returns, throws = self.execute(request)
 
@@ -476,10 +476,10 @@ class SchedulerSession:
     def product_request(self, product, subjects):
         """Executes a request for a single product for some subjects, and returns the products.
 
-    :param class product: A product type for the request.
-    :param list subjects: A list of subjects or Params instances for the request.
-    :returns: A list of the requested products, with length match len(subjects).
-    """
+        :param class product: A product type for the request.
+        :param list subjects: A list of subjects or Params instances for the request.
+        :returns: A list of the requested products, with length match len(subjects).
+        """
         request = None
         raised_exception = None
         try:
@@ -515,10 +515,10 @@ class SchedulerSession:
                 exc_type, exc_value, tb = raised_exception
                 raised_exception_message = dedent(
                     """\
-          The engine execution request raised this error, which is probably due to the errors in the
-          CFFI extern methods listed above, as CFFI externs return None upon error:
-          {}
-        """
+                    The engine execution request raised this error, which is probably due to the errors in the
+                    CFFI extern methods listed above, as CFFI externs return None upon error:
+                    {}
+                    """
                 ).format(
                     "".join(traceback.format_exception(etype=exc_type, value=exc_value, tb=tb))
                 )
@@ -526,9 +526,9 @@ class SchedulerSession:
             raise ExecutionError(
                 dedent(
                     """\
-        {error_description} raised in CFFI extern methods:
-        {joined_tracebacks}{raised_exception_message}
-        """
+                    {error_description} raised in CFFI extern methods:
+                    {joined_tracebacks}{raised_exception_message}
+                    """
                 ).format(
                     error_description=pluralize(len(internal_errors), "Exception"),
                     joined_tracebacks="\n+++++++++\n".join(
@@ -556,12 +556,12 @@ class SchedulerSession:
     def capture_snapshots(self, path_globs_and_roots):
         """Synchronously captures Snapshots for each matching PathGlobs rooted at a its root directory.
 
-    This is a blocking operation, and should be avoided where possible.
+        This is a blocking operation, and should be avoided where possible.
 
-    :param path_globs_and_roots tuple<PathGlobsAndRoot>: The PathGlobs to capture, and the root
-           directory relative to which each should be captured.
-    :returns: A tuple of Snapshots.
-    """
+        :param path_globs_and_roots tuple<PathGlobsAndRoot>: The PathGlobs to capture, and the root
+               directory relative to which each should be captured.
+        :returns: A tuple of Snapshots.
+        """
         result = self._scheduler._native.lib.capture_snapshots(
             self._scheduler._scheduler,
             self._session,
@@ -572,9 +572,9 @@ class SchedulerSession:
     def merge_directories(self, directory_digests):
         """Merges any number of directories.
 
-    :param directory_digests: Tuple of DirectoryDigests.
-    :return: A Digest.
-    """
+        :param directory_digests: Tuple of DirectoryDigests.
+        :return: A Digest.
+        """
         result = self._scheduler._native.lib.merge_directories(
             self._scheduler._scheduler,
             self._session,
@@ -594,10 +594,10 @@ class SchedulerSession:
 
     def materialize_directories(self, directories_paths_and_digests):
         """Creates the specified directories on the file system.
-    :param directories_paths_and_digests tuple<DirectoryToMaterialize>: Tuple of the path and
-           digest of the directories to materialize.
-    :returns: Nothing or an error.
-    """
+        :param directories_paths_and_digests tuple<DirectoryToMaterialize>: Tuple of the path and
+               digest of the directories to materialize.
+        :returns: Nothing or an error.
+        """
         # Ensure there isn't more than one of the same directory paths and paths do not have the same prefix.
         dir_list = [dpad.path for dpad in directories_paths_and_digests]
         check_no_overlapping_paths(dir_list)

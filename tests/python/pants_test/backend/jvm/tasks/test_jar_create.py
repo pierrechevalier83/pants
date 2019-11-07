@@ -75,11 +75,11 @@ class JarCreateExecuteTest(JarCreateTestBase):
             path,
             dedent(
                 """
-          jvm_binary(name=%(name)r,
-            source=%(source)r,
-            dependencies=[%(dependencies)r],
-          )
-        """
+                jvm_binary(name=%(name)r,
+                  source=%(source)r,
+                  dependencies=[%(dependencies)r],
+                )
+                """
                 % dict(name=name, source=source, dependencies=dependencies)
             ),
         )
@@ -137,8 +137,8 @@ class JarCreateExecuteTest(JarCreateTestBase):
     def assert_jar_contents(self, context, product_type, target, *contents):
         """Contents is a list of lists representing contents from particular classpath entries.
 
-    Ordering across classpath entries is guaranteed, but not within classpath entries.
-    """
+        Ordering across classpath entries is guaranteed, but not within classpath entries.
+        """
         jar_mapping = context.products.get(product_type).get(target)
         self.assertEqual(1, len(jar_mapping))
         for basedir, jars in jar_mapping.items():

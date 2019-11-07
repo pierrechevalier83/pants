@@ -22,20 +22,20 @@ from pants.util.memo import memoized_property
 class JvmDependencyUsage(Task):
     """Determines the dependency usage ratios of targets.
 
-  Analyzes the relationship between the products a target T produces vs. the products
-  which T's dependents actually require (this is done by observing analysis files).
-  If the ratio of required products to available products is low, then this is a sign
-  that target T isn't factored well.
+    Analyzes the relationship between the products a target T produces vs. the products
+    which T's dependents actually require (this is done by observing analysis files).
+    If the ratio of required products to available products is low, then this is a sign
+    that target T isn't factored well.
 
-  A graph is formed from these results, where each node of the graph is a target, and
-  each edge is a product usage ratio between a target and its dependency. The nodes
-  also contain additional information to guide refactoring -- for example, the estimated
-  job size of each target, which indicates the impact a poorly factored target has on
-  the build times. (see DependencyUsageGraph->to_json)
+    A graph is formed from these results, where each node of the graph is a target, and
+    each edge is a product usage ratio between a target and its dependency. The nodes
+    also contain additional information to guide refactoring -- for example, the estimated
+    job size of each target, which indicates the impact a poorly factored target has on
+    the build times. (see DependencyUsageGraph->to_json)
 
-  The graph is either summarized for local analysis or outputted as a JSON file for
-  aggregation and analysis on a larger scale.
-  """
+    The graph is either summarized for local analysis or outputted as a JSON file for
+    aggregation and analysis on a larger scale.
+    """
 
     size_estimators = create_size_estimators()
 
@@ -130,15 +130,15 @@ class JvmDependencyUsage(Task):
     def _dep_type(self, target, dep, declared_deps, eligible_unused_deps, is_used):
         """Returns a tuple of a 'declared'/'undeclared' boolean, and 'used'/'unused' boolean.
 
-    These values are related, because some declared deps are not eligible to be considered unused.
+        These values are related, because some declared deps are not eligible to be considered unused.
 
-    :param target: The source target.
-    :param dep: The dependency to compute a type for.
-    :param declared_deps: The declared dependencies of the target.
-    :param eligible_unused_deps: The declared dependencies of the target that are eligible
-      to be considered unused; this is generally only 'DEFAULT' scoped dependencies.
-    :param is_used: True if the dep was actually used at compile time.
-    """
+        :param target: The source target.
+        :param dep: The dependency to compute a type for.
+        :param declared_deps: The declared dependencies of the target.
+        :param eligible_unused_deps: The declared dependencies of the target that are eligible
+          to be considered unused; this is generally only 'DEFAULT' scoped dependencies.
+        :param is_used: True if the dep was actually used at compile time.
+        """
         if target == dep:
             return True, True
         return (dep in declared_deps), (is_used or dep not in eligible_unused_deps)
@@ -154,8 +154,8 @@ class JvmDependencyUsage(Task):
     def create_dep_usage_graph(self, targets):
         """Creates a graph of concrete targets, with their sum of products and dependencies.
 
-    Synthetic targets contribute products and dependencies to their concrete target.
-    """
+        Synthetic targets contribute products and dependencies to their concrete target.
+        """
         with self.invalidated(targets, invalidate_dependents=True) as invalidation_check:
             target_to_vts = {}
             for vts in invalidation_check.all_vts:
@@ -181,9 +181,9 @@ class JvmDependencyUsage(Task):
 
     def calculating_node_creator(self, target_to_vts):
         """Strategy directly computes dependency graph node based on
-    `classes_by_source`, `runtime_classpath`, `product_deps_by_src` parameters and
-    stores the result to the build cache.
-    """
+        `classes_by_source`, `runtime_classpath`, `product_deps_by_src` parameters and
+        stores the result to the build cache.
+        """
         targets = self.context.targets()
         targets_by_file = self._analyzer.targets_by_file(targets)
         transitive_deps_by_target = self._analyzer.compute_transitive_deps_by_target(targets)
@@ -201,7 +201,7 @@ class JvmDependencyUsage(Task):
 
     def cached_node_creator(self, target_to_vts):
         """Strategy restores dependency graph node from the build cache.
-    """
+        """
 
         def creator(target):
             vt = target_to_vts[target]

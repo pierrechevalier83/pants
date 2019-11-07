@@ -17,16 +17,16 @@ from pants.util.meta import classproperty
 class Goal(metaclass=ABCMeta):
     """The named product of a `@console_rule`.
 
-  This abstract class should be subclassed and given a `Goal.name` that it will be referred to by
-  when invoked from the command line. The `Goal.name` also acts as the options_scope for the `Goal`.
+    This abstract class should be subclassed and given a `Goal.name` that it will be referred to by
+    when invoked from the command line. The `Goal.name` also acts as the options_scope for the `Goal`.
 
-  Since `@console_rules` always run in order to produce side effects (generally: console output), they
-  are not cacheable, and the `Goal` product of a `@console_rule` contains only a exit_code value to
-  indicate whether the rule exited cleanly.
+    Since `@console_rules` always run in order to produce side effects (generally: console output), they
+    are not cacheable, and the `Goal` product of a `@console_rule` contains only a exit_code value to
+    indicate whether the rule exited cleanly.
 
-  Options values for a Goal can be retrived by declaring a dependency on the relevant `Goal.Options`
-  class.
-  """
+    Options values for a Goal can be retrived by declaring a dependency on the relevant `Goal.Options`
+    class.
+    """
 
     exit_code: int
 
@@ -39,19 +39,19 @@ class Goal(metaclass=ABCMeta):
     def deprecated_cache_setup_removal_version(cls):
         """Optionally defines a deprecation version for a CacheSetup dependency.
 
-    If this Goal should have an associated deprecated instance of `CacheSetup` (which was implicitly
-    required by all v1 Tasks), subclasses may set this to a valid deprecation version to create
-    that association.
-    """
+        If this Goal should have an associated deprecated instance of `CacheSetup` (which was implicitly
+        required by all v1 Tasks), subclasses may set this to a valid deprecation version to create
+        that association.
+        """
         return None
 
     @classmethod
     def register_options(cls, register):
         """Register options for the `Goal.Options` of this `Goal`.
 
-    Subclasses may override and call register(*args, **kwargs). Callers can retrieve the resulting
-    options values by declaring a dependency on the `Goal.Options` class.
-    """
+        Subclasses may override and call register(*args, **kwargs). Callers can retrieve the resulting
+        options values by declaring a dependency on the `Goal.Options` class.
+        """
 
     @memoized_classproperty
     def Options(cls):
@@ -114,10 +114,10 @@ class _GoalOptions(object):
 class Outputting:
     """A mixin for Goal that adds options to support output-related context managers.
 
-  Allows output to go to a file or to stdout.
+    Allows output to go to a file or to stdout.
 
-  Useful for goals whose purpose is to emit output to the end user (as distinct from incidental logging to stderr).
-  """
+    Useful for goals whose purpose is to emit output to the end user (as distinct from incidental logging to stderr).
+    """
 
     @classmethod
     def register_options(cls, register):
@@ -133,8 +133,8 @@ class Outputting:
     def output(cls, options, console):
         """Given Goal.Options and a Console, yields a function for writing data to stdout, or a file.
 
-    The passed options instance will generally be the `Goal.Options` of an `Outputting` `Goal`.
-    """
+        The passed options instance will generally be the `Goal.Options` of an `Outputting` `Goal`.
+        """
         with cls.output_sink(options, console) as output_sink:
             yield lambda msg: output_sink.write(msg)
 
@@ -173,8 +173,8 @@ class LineOriented(Outputting):
     def line_oriented(cls, options, console):
         """Given Goal.Options and a Console, yields a function for printing lines to stdout or a file.
 
-    The passed options instance will generally be the `Goal.Options` of an `Outputting` `Goal`.
-    """
+        The passed options instance will generally be the `Goal.Options` of an `Outputting` `Goal`.
+        """
         sep = options.values.sep.encode().decode("unicode_escape")
         with cls.output_sink(options, console) as output_sink:
             yield lambda msg: print(msg, file=output_sink, end=sep)

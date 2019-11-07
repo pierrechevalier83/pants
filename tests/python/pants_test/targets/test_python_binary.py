@@ -32,14 +32,15 @@ class TestPythonBinary(TestBase):
         self.add_to_build_file(
             "",
             """python_binary(
-  name = "binary1",
-  source = "blork.py",
-)
+              name = "binary1",
+              source = "blork.py",
+            )
 
-python_binary(
-  name = "binary2",
-  source = "bin/blork.py",
-)""",
+            python_binary(
+              name = "binary2",
+              source = "bin/blork.py",
+            )
+            """,
         )
         assert self.target(":binary1").entry_point == "blork"
         assert self.target(":binary2").entry_point == "bin.blork"
@@ -48,22 +49,23 @@ python_binary(
         self.add_to_build_file(
             "",
             """python_binary(
-  name = "binary1",
-  entry_point = "blork",
-  source = "blork.py",
-)
+              name = "binary1",
+              entry_point = "blork",
+              source = "blork.py",
+            )
 
-python_binary(
-  name = "binary2",
-  entry_point = "blork:main",
-  source = "blork.py",
-)
+            python_binary(
+              name = "binary2",
+              entry_point = "blork:main",
+              source = "blork.py",
+            )
 
-python_binary(
-  name = "binary3",
-  entry_point = "bin.blork:main",
-  source = "bin/blork.py",
-)""",
+            python_binary(
+              name = "binary3",
+              entry_point = "bin.blork:main",
+              source = "bin/blork.py",
+            )
+            """,
         )
 
         assert "blork" == self.target(":binary1").entry_point

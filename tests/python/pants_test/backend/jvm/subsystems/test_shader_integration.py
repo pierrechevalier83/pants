@@ -17,8 +17,8 @@ class ShaderIntegrationTest(PantsRunIntegrationTest):
     def test_shader_project(self):
         """Test that the binary target at the ``shading_project`` can be built and run.
 
-    Explicitly checks that the classes end up with the correct shaded fully qualified classnames.
-    """
+        Explicitly checks that the classes end up with the correct shaded fully qualified classnames.
+        """
         shading_project = "testprojects/src/java/org/pantsbuild/testproject/shading"
         self.assert_success(self.run_pants(["clean-all"]))
         self.assert_success(self.run_pants(["binary", shading_project]))
@@ -69,8 +69,8 @@ class ShaderIntegrationTest(PantsRunIntegrationTest):
     def test_no_deployjar_run(self):
         """Shading continues to work with --no-deployjar.
 
-    All jars including the main jar as well as libraries will run through shader.
-    """
+        All jars including the main jar as well as libraries will run through shader.
+        """
         self.assertEqual(
             {
                 "Gson": "moc.elgoog.nosg.Gson",
@@ -121,23 +121,23 @@ class ShaderIntegrationTest(PantsRunIntegrationTest):
                 f.write(
                     dedent(
                         """
-          java_library(name='lib',
-            sources=['Foo.java'],
-          )
-        """
+                        java_library(name='lib',
+                          sources=['Foo.java'],
+                        )
+                        """
                     )
                 )
             with open(os.path.join(tmpdir, "BUILD"), "w+") as f:
                 f.write(
                     dedent(
                         """
-          jvm_binary(name='{name}',
-            basename='{name}',
-            dependencies=[
-              ':lib',
-            ],
-          )
-        """
+                        jvm_binary(name='{name}',
+                          basename='{name}',
+                          dependencies=[
+                            ':lib',
+                          ],
+                        )
+                        """
                     ).format(name=tmp_name)
                 )
 
@@ -152,16 +152,16 @@ class ShaderIntegrationTest(PantsRunIntegrationTest):
                 f.write(
                     dedent(
                         """
-          jvm_binary(name='{name}',
-            basename='{name}',
-            dependencies=[
-              ':lib',
-            ],
-            shading_rules=[
-              shading_relocate_package('org.foo.bar'),
-            ],
-          )
-        """
+                        jvm_binary(name='{name}',
+                          basename='{name}',
+                          dependencies=[
+                            ':lib',
+                          ],
+                          shading_rules=[
+                            shading_relocate_package('org.foo.bar'),
+                          ],
+                        )
+                        """
                     ).format(name=tmp_name)
                 )
 

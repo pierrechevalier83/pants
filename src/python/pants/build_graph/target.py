@@ -34,33 +34,33 @@ class AbstractTarget:
     def subsystems(cls):
         """The subsystems this target uses.
 
-    Targets always use the global subsystem instance. They have no notion of any other scope.
+        Targets always use the global subsystem instance. They have no notion of any other scope.
 
-    :API: public
+        :API: public
 
-    :return: A tuple of subsystem types.
-    """
+        :return: A tuple of subsystem types.
+        """
         return tuple()
 
     @classmethod
     def alias(cls):
         """Subclasses should return their desired BUILD file alias.
 
-    :rtype: string
-    """
+        :rtype: string
+        """
         raise NotImplementedError()
 
 
 class Target(AbstractTarget):
     """A generic target used to group dependencies.
 
-  The baseclass for all pants targets.
+    The baseclass for all pants targets.
 
-  Handles registration of a target amongst all parsed targets as well as location of the target
-  parse context.
+    Handles registration of a target amongst all parsed targets as well as location of the target
+    parse context.
 
-  :API: public
-  """
+    :API: public
+    """
 
     class RecursiveDepthError(AddressLookupError):
         """Raised when there are too many recursive calls to calculate the fingerprint."""
@@ -70,14 +70,14 @@ class Target(AbstractTarget):
     class WrongNumberOfAddresses(Exception):
         """Internal error, too many elements in Addresses
 
-    :API: public
-    """
+        :API: public
+        """
 
     class IllegalArgument(TargetDefinitionException):
         """Argument that isn't allowed supplied to Target.
 
-    :API: public
-    """
+        :API: public
+        """
 
     class Arguments(Subsystem):
         """Options relating to handling target arguments."""
@@ -101,14 +101,14 @@ class Target(AbstractTarget):
         @classmethod
         def check(cls, target, kwargs):
             """
-      :API: public
-      """
+            :API: public
+            """
             cls.global_instance().check_unknown(target, kwargs)
 
         def check_unknown(self, target, kwargs):
             """
-      :API: public
-      """
+            :API: public
+            """
             ignore_params = set((self.get_options().ignored or {}).get(target.type_alias, ()))
             # The source argument is automatically promoted to the sources argument, and rules should
             # always use the sources argument; don't error if people used source in their BUILD file.
@@ -174,8 +174,8 @@ class Target(AbstractTarget):
     @classmethod
     def get_addressable_type(target_cls):
         """
-    :API: public
-    """
+        :API: public
+        """
 
         class ConcreteTargetAddressable(TargetAddressable):
             @classmethod
@@ -187,10 +187,10 @@ class Target(AbstractTarget):
     @memoized_property
     def target_base(self):
         """
-    :API: public
+        :API: public
 
-    :returns: the source root path for this target.
-    """
+        :returns: the source root path for this target.
+        """
         source_root = self._sources_field.source_root
         if not source_root:
             raise TargetDefinitionException(self, "Not under any configured source root.")
@@ -200,18 +200,18 @@ class Target(AbstractTarget):
     def identify(cls, targets):
         """Generates an id for a set of targets.
 
-    :API: public
-    """
+        :API: public
+        """
         return cls.combine_ids(target.id for target in targets)
 
     @classmethod
     def maybe_readable_identify(cls, targets):
         """Generates an id for a set of targets.
 
-    If the set is a single target, just use that target's id.
+        If the set is a single target, just use that target's id.
 
-    :API: public
-    """
+        :API: public
+        """
         return cls.maybe_readable_combine_ids([target.id for target in targets])
 
     @classmethod
@@ -223,16 +223,16 @@ class Target(AbstractTarget):
     def combine_ids(ids):
         """Generates a combined id for a set of ids.
 
-    :API: public
-    """
+        :API: public
+        """
         return hash_all(sorted(ids))  # We sort so that the id isn't sensitive to order.
 
     @classmethod
     def maybe_readable_combine_ids(cls, ids):
         """Generates combined id for a set of ids, but if the set is a single id, just use that.
 
-    :API: public
-    """
+        :API: public
+        """
         ids = list(ids)  # We can't len a generator.
         return ids[0] if len(ids) == 1 else cls.combine_ids(ids)
 
@@ -269,19 +269,19 @@ class Target(AbstractTarget):
     ):
         """Computes the closure of the given targets respecting the given input scopes.
 
-    :API: public
+        :API: public
 
-    :param list target_roots: The list of Targets to start from. These targets will always be
-      included in the closure, regardless of scope settings.
-    :param Scope exclude_scopes: If present and non-empty, only dependencies which have none of the
-      scope names in this Scope will be traversed.
-    :param Scope include_scopes: If present and non-empty, only dependencies which have at least one
-      of the scope names in this Scope will be traversed.
-    :param bool bfs: Whether to traverse in breadth-first or depth-first order. (Defaults to True).
-    :param bool respect_intransitive: If True, any dependencies which have the 'intransitive' scope
-      will not be included unless they are direct dependencies of one of the root targets. (Defaults
-      to False).
-    """
+        :param list target_roots: The list of Targets to start from. These targets will always be
+          included in the closure, regardless of scope settings.
+        :param Scope exclude_scopes: If present and non-empty, only dependencies which have none of the
+          scope names in this Scope will be traversed.
+        :param Scope include_scopes: If present and non-empty, only dependencies which have at least one
+          of the scope names in this Scope will be traversed.
+        :param bool bfs: Whether to traverse in breadth-first or depth-first order. (Defaults to True).
+        :param bool respect_intransitive: If True, any dependencies which have the 'intransitive' scope
+          will not be included unless they are direct dependencies of one of the root targets. (Defaults
+          to False).
+        """
         target_roots = list(target_roots)  # Sometimes generators are passed into this function.
         if not target_roots:
             return OrderedSet()
@@ -329,32 +329,32 @@ class Target(AbstractTarget):
         **kwargs
     ):
         """
-    :API: public
+        :API: public
 
-    :param string name: The name of this target, which combined with this build file defines the
-                        target address.
-    :param dependencies: Target address specs of other targets that this target depends on.
-    :type dependencies: list of strings
-    :param address: The Address that maps to this Target in the BuildGraph.
-    :type address: :class:`pants.build_graph.address.Address`
-    :param build_graph: The BuildGraph that this Target lives within.
-    :type build_graph: :class:`pants.build_graph.build_graph.BuildGraph`
-    :param string type_alias: The type_alias used to construct this target, may be None if
-                              constructed directly.
-    :param payload: The configuration encapsulated by this target.  Also in charge of most
-                    fingerprinting details.
-    :type payload: :class:`pants.base.payload.Payload`
-    :param tags: Arbitrary string tags that describe this target. Usable by downstream/custom tasks
-                 for reasoning about the build graph. NOT included in payloads and thus not used in
-                 fingerprinting, thus not suitable for anything that affects how a particular
-                 target is built.
-    :type tags: :class:`collections.Iterable` of strings
-    :param no_cache: If True, results for this target should not be stored in the artifact cache.
-    :param string description: Human-readable description of this target.
-    :param string scope: The scope of this target, used to determine its inclusion on the classpath
-      (and possibly more things in the future). See :class:`pants.build_graph.target_scopes.Scopes`.
-      A value of None, '', or 'default' results in the default scope, which is included everywhere.
-    """
+        :param string name: The name of this target, which combined with this build file defines the
+                            target address.
+        :param dependencies: Target address specs of other targets that this target depends on.
+        :type dependencies: list of strings
+        :param address: The Address that maps to this Target in the BuildGraph.
+        :type address: :class:`pants.build_graph.address.Address`
+        :param build_graph: The BuildGraph that this Target lives within.
+        :type build_graph: :class:`pants.build_graph.build_graph.BuildGraph`
+        :param string type_alias: The type_alias used to construct this target, may be None if
+                                  constructed directly.
+        :param payload: The configuration encapsulated by this target.  Also in charge of most
+                        fingerprinting details.
+        :type payload: :class:`pants.base.payload.Payload`
+        :param tags: Arbitrary string tags that describe this target. Usable by downstream/custom tasks
+                     for reasoning about the build graph. NOT included in payloads and thus not used in
+                     fingerprinting, thus not suitable for anything that affects how a particular
+                     target is built.
+        :type tags: :class:`collections.Iterable` of strings
+        :param no_cache: If True, results for this target should not be stored in the artifact cache.
+        :param string description: Human-readable description of this target.
+        :param string scope: The scope of this target, used to determine its inclusion on the classpath
+          (and possibly more things in the future). See :class:`pants.build_graph.target_scopes.Scopes`.
+          A value of None, '', or 'default' results in the default scope, which is included everywhere.
+        """
         # NB: dependencies are in the pydoc above as a BUILD dictionary hack only; implementation hides
         # the dependencies via TargetAddressable.
 
@@ -397,29 +397,29 @@ class Target(AbstractTarget):
     def type_alias(self):
         """Returns the type alias this target was constructed via.
 
-    For a target read from a BUILD file, this will be target alias, like 'java_library'.
-    For a target constructed in memory, this will be the simple class name, like 'JavaLibrary'.
+        For a target read from a BUILD file, this will be target alias, like 'java_library'.
+        For a target constructed in memory, this will be the simple class name, like 'JavaLibrary'.
 
-    The end result is that the type alias should be the most natural way to refer to this target's
-    type to the author of the target instance.
+        The end result is that the type alias should be the most natural way to refer to this target's
+        type to the author of the target instance.
 
-    :API: public
+        :API: public
 
-    :rtype: string
-    """
+        :rtype: string
+        """
         return self._type_alias or type(self).__name__
 
     @property
     def tags(self):
         """
-    :API: public
-    """
+        :API: public
+        """
         return self._tags
 
     def assert_list(self, putative_list, expected_type=str, key_arg=None):
         """
-    :API: public
-    """
+        :API: public
+        """
         return assert_list(
             putative_list,
             expected_type,
@@ -429,20 +429,20 @@ class Target(AbstractTarget):
 
     def compute_invalidation_hash(self, fingerprint_strategy=None):
         """
-    :API: public
+        :API: public
 
-     :param FingerprintStrategy fingerprint_strategy: optional fingerprint strategy to use to compute
-    the fingerprint of a target
-    :return: a fingerprint representing this target (no dependencies)
-    :rtype: string
-    """
+         :param FingerprintStrategy fingerprint_strategy: optional fingerprint strategy to use to compute
+        the fingerprint of a target
+        :return: a fingerprint representing this target (no dependencies)
+        :rtype: string
+        """
         fingerprint_strategy = fingerprint_strategy or DefaultFingerprintStrategy()
         return fingerprint_strategy.fingerprint_target(self)
 
     def invalidation_hash(self, fingerprint_strategy=None):
         """
-    :API: public
-    """
+        :API: public
+        """
         fingerprint_strategy = fingerprint_strategy or DefaultFingerprintStrategy()
         if fingerprint_strategy not in self._cached_fingerprint_map:
             self._cached_fingerprint_map[fingerprint_strategy] = self.compute_invalidation_hash(
@@ -452,16 +452,16 @@ class Target(AbstractTarget):
 
     def mark_extra_invalidation_hash_dirty(self):
         """
-    :API: public
-    """
+        :API: public
+        """
 
     def mark_invalidation_hash_dirty(self):
         """Invalidates memoized fingerprints for this target, including those in payloads.
 
-    Exposed for testing.
+        Exposed for testing.
 
-    :API: public
-    """
+        :API: public
+        """
         self._cached_fingerprint_map = {}
         self._cached_all_transitive_fingerprint_map = {}
         self._cached_direct_transitive_fingerprint_map = {}
@@ -472,15 +472,15 @@ class Target(AbstractTarget):
 
     def transitive_invalidation_hash(self, fingerprint_strategy=None, depth=0):
         """
-    :API: public
+        :API: public
 
-    :param FingerprintStrategy fingerprint_strategy: optional fingerprint strategy to use to compute
-    the fingerprint of a target
-    :return: A fingerprint representing this target and all of its dependencies.
-      The return value can be `None`, indicating that this target and all of its transitive dependencies
-      did not contribute to the fingerprint, according to the provided FingerprintStrategy.
-    :rtype: string
-    """
+        :param FingerprintStrategy fingerprint_strategy: optional fingerprint strategy to use to compute
+        the fingerprint of a target
+        :return: A fingerprint representing this target and all of its dependencies.
+          The return value can be `None`, indicating that this target and all of its transitive dependencies
+          did not contribute to the fingerprint, according to the provided FingerprintStrategy.
+        :rtype: string
+        """
         if depth > self._MAX_RECURSION_DEPTH:
             # NB(zundel) without this catch, we'll eventually hit the python stack limit
             # RuntimeError: maximum recursion depth exceeded while calling a Python object
@@ -533,21 +533,21 @@ class Target(AbstractTarget):
 
     def mark_transitive_invalidation_hash_dirty(self):
         """
-    :API: public
-    """
+        :API: public
+        """
         self._cached_all_transitive_fingerprint_map = {}
         self._cached_direct_transitive_fingerprint_map = {}
         self.mark_extra_transitive_invalidation_hash_dirty()
 
     def mark_extra_transitive_invalidation_hash_dirty(self):
         """
-    :API: public
-    """
+        :API: public
+        """
 
     def inject_dependency(self, dependency_address):
         """
-    :API: public
-    """
+        :API: public
+        """
         self._build_graph.inject_dependency(dependent=self.address, dependency=dependency_address)
 
         def invalidate_dependee(dependee):
@@ -565,12 +565,12 @@ class Target(AbstractTarget):
     def has_sources(self, extension=None):
         """Return `True` if this target owns sources; optionally of the given `extension`.
 
-    :API: public
+        :API: public
 
-    :param string extension: Optional suffix of filenames to test for.
-    :return: `True` if the target contains sources that match the optional extension suffix.
-    :rtype: bool
-    """
+        :param string extension: Optional suffix of filenames to test for.
+        :return: `True` if the target contains sources that match the optional extension suffix.
+        :rtype: bool
+        """
         source_paths = self._sources_field.source_paths
         if not source_paths:
             return False
@@ -580,8 +580,8 @@ class Target(AbstractTarget):
 
     def sources_relative_to_buildroot(self):
         """
-    :API: public
-    """
+        :API: public
+        """
         if self.has_sources():
             return self._sources_field.relative_to_buildroot()
         else:
@@ -589,8 +589,8 @@ class Target(AbstractTarget):
 
     def sources_relative_to_source_root(self):
         """
-    :API: public
-    """
+        :API: public
+        """
         if self.has_sources():
             abs_source_root = os.path.join(get_buildroot(), self.target_base)
             for source in self.sources_relative_to_buildroot():
@@ -599,14 +599,14 @@ class Target(AbstractTarget):
 
     def globs_relative_to_buildroot(self):
         """
-    :API: public
-    """
+        :API: public
+        """
         return self._sources_field.filespec
 
     def sources_relative_to_target_base(self):
         """
-    :API: public
-    """
+        :API: public
+        """
         return self._sources_field.sources
 
     def sources_count(self):
@@ -615,30 +615,30 @@ class Target(AbstractTarget):
 
     def sources_snapshot(self, scheduler=None):
         """
-    Get a Snapshot of the sources attribute of this target.
+        Get a Snapshot of the sources attribute of this target.
 
-    This API is experimental, and is subject to change.
-    """
+        This API is experimental, and is subject to change.
+        """
         return self._sources_field.snapshot(scheduler=scheduler)
 
     @property
     def derived_from(self):
         """Returns the target this target was derived from.
 
-    If this target was not derived from another, returns itself.
+        If this target was not derived from another, returns itself.
 
-    :API: public
-    """
+        :API: public
+        """
         return self._build_graph.get_derived_from(self.address)
 
     @property
     def derived_from_chain(self):
         """Returns all targets that this target was derived from.
 
-    If this target was not derived from another, returns an empty sequence.
+        If this target was not derived from another, returns an empty sequence.
 
-    :API: public
-    """
+        :API: public
+        """
         cur = self
         while cur.derived_from is not cur:
             cur = cur.derived_from
@@ -648,11 +648,11 @@ class Target(AbstractTarget):
     def concrete_derived_from(self):
         """Returns the concrete target this target was (directly or indirectly) derived from.
 
-    The returned target is guaranteed to not have been derived from any other target, and is thus
-    guaranteed to be a 'real' target from a BUILD file, not a programmatically injected target.
+        The returned target is guaranteed to not have been derived from any other target, and is thus
+        guaranteed to be a 'real' target from a BUILD file, not a programmatically injected target.
 
-    :API: public
-    """
+        :API: public
+        """
         return self._build_graph.get_concrete_derived_from(self.address)
 
     @staticmethod
@@ -668,14 +668,14 @@ class Target(AbstractTarget):
     @classmethod
     def compute_injectable_specs(cls, kwargs=None, payload=None):
         """Given either pre-Target.__init__() kwargs or a post-Target.__init__() payload, compute the
-    specs to inject as non-dependencies in the same vein as the prior `traversable_specs`.
+        specs to inject as non-dependencies in the same vein as the prior `traversable_specs`.
 
-    :API: public
+        :API: public
 
-    :param dict kwargs: The pre-Target.__init__() kwargs dict.
-    :param Payload payload: The post-Target.__init__() Payload object.
-    :yields: Spec strings representing dependencies of this target.
-    """
+        :param dict kwargs: The pre-Target.__init__() kwargs dict.
+        :param Payload payload: The post-Target.__init__() Payload object.
+        :yields: Spec strings representing dependencies of this target.
+        """
         cls._validate_target_representation_args(kwargs, payload)
         # N.B. This pattern turns this method into a non-yielding generator, which is helpful for
         # subclassing.
@@ -685,20 +685,20 @@ class Target(AbstractTarget):
     @classmethod
     def compute_dependency_specs(cls, kwargs=None, payload=None):
         """Given either pre-Target.__init__() kwargs or a post-Target.__init__() payload, compute the
-    full set of dependency specs in the same vein as the prior `traversable_dependency_specs`.
+        full set of dependency specs in the same vein as the prior `traversable_dependency_specs`.
 
-    N.B. This is a temporary bridge to span the gap between v2 "Fields" products vs v1 `BuildGraph`
-    `Target` object representations. See:
+        N.B. This is a temporary bridge to span the gap between v2 "Fields" products vs v1 `BuildGraph`
+        `Target` object representations. See:
 
-      https://github.com/pantsbuild/pants/issues/3560
-      https://github.com/pantsbuild/pants/issues/3561
+          https://github.com/pantsbuild/pants/issues/3560
+          https://github.com/pantsbuild/pants/issues/3561
 
-    :API: public
+        :API: public
 
-    :param dict kwargs: The pre-Target.__init__() kwargs dict.
-    :param Payload payload: The post-Target.__init__() Payload object.
-    :yields: Spec strings representing dependencies of this target.
-    """
+        :param dict kwargs: The pre-Target.__init__() kwargs dict.
+        :param Payload payload: The post-Target.__init__() Payload object.
+        :yields: Spec strings representing dependencies of this target.
+        """
         cls._validate_target_representation_args(kwargs, payload)
         # N.B. This pattern turns this method into a non-yielding generator, which is helpful for
         # subclassing.
@@ -708,11 +708,11 @@ class Target(AbstractTarget):
     @property
     def dependencies(self):
         """
-    :API: public
+        :API: public
 
-    :return: targets that this target depends on
-    :rtype: list of Target
-    """
+        :return: targets that this target depends on
+        :rtype: list of Target
+        """
         return [
             self._build_graph.get_target(dep_address)
             for dep_address in self._build_graph.dependencies_of(self.address)
@@ -746,14 +746,14 @@ class Target(AbstractTarget):
 
     def strict_dependencies(self, dep_context):
         """
-    :param dep_context: A DependencyContext with configuration for the request.
-    :return: targets that this target "strictly" depends on. This set of dependencies contains
-      only directly declared dependencies, with two exceptions:
-        1) aliases are expanded transitively
-        2) the strict_dependencies of targets exported targets exported by
-      strict_dependencies (transitively).
-    :rtype: list of Target
-    """
+        :param dep_context: A DependencyContext with configuration for the request.
+        :return: targets that this target "strictly" depends on. This set of dependencies contains
+          only directly declared dependencies, with two exceptions:
+            1) aliases are expanded transitively
+            2) the strict_dependencies of targets exported targets exported by
+          strict_dependencies (transitively).
+        :rtype: list of Target
+        """
         strict_deps = self._cached_strict_dependencies_map.get(dep_context, None)
         if strict_deps is None:
             default_predicate = self._closure_dep_predicate(
@@ -807,11 +807,11 @@ class Target(AbstractTarget):
     @property
     def dependents(self):
         """
-    :API: public
+        :API: public
 
-    :return: targets that depend on this target
-    :rtype: list of Target
-    """
+        :return: targets that depend on this target
+        :rtype: list of Target
+        """
         return [
             self._build_graph.get_target(dep_address)
             for dep_address in self._build_graph.dependents_of(self.address)
@@ -820,53 +820,53 @@ class Target(AbstractTarget):
     @property
     def is_synthetic(self):
         """
-    :API: public
+        :API: public
 
-    :return: True if this target did not originate from a BUILD file.
-    """
+        :return: True if this target did not originate from a BUILD file.
+        """
         return self.address in self._build_graph.synthetic_addresses
 
     @property
     def is_original(self):
         """
-    :API: public
+        :API: public
 
-    Returns ``True`` if this target is derived from no other.
-    """
+        Returns ``True`` if this target is derived from no other.
+        """
         return self.derived_from == self
 
     @memoized_property
     def id(self):
         """A unique and unix safe identifier for the Target.
-    Since other classes use this id to generate new file names and unix system has 255 character
-    limitation on a file name, 200-character limit is chosen as a safe measure.
+        Since other classes use this id to generate new file names and unix system has 255 character
+        limitation on a file name, 200-character limit is chosen as a safe measure.
 
-    :API: public
-    """
+        :API: public
+        """
         return self.compute_target_id(self.address)
 
     @property
     def identifier(self):
         """
-    :API: public
-    """
+        :API: public
+        """
         return self.id
 
     def walk(self, work, predicate=None):
         """Walk of this target's dependency graph, DFS preorder traversal, visiting each node exactly
-    once.
+        once.
 
-    If a predicate is supplied it will be used to test each target before handing the target to
-    work and descending. Work can return targets in which case these will be added to the walk
-    candidate set if not already walked.
+        If a predicate is supplied it will be used to test each target before handing the target to
+        work and descending. Work can return targets in which case these will be added to the walk
+        candidate set if not already walked.
 
-    :API: public
+        :API: public
 
-    :param work: Callable that takes a :py:class:`pants.build_graph.target.Target`
-      as its single argument.
-    :param predicate: Callable that takes a :py:class:`pants.build_graph.target.Target`
-      as its single argument and returns True if the target should passed to ``work``.
-    """
+        :param work: Callable that takes a :py:class:`pants.build_graph.target.Target`
+          as its single argument.
+        :param predicate: Callable that takes a :py:class:`pants.build_graph.target.Target`
+          as its single argument and returns True if the target should passed to ``work``.
+        """
         if not callable(work):
             raise ValueError("work must be callable but was {}".format(work))
         if predicate and not callable(predicate):
@@ -876,12 +876,12 @@ class Target(AbstractTarget):
     def closure(self, *vargs, **kwargs):
         """Returns this target's transitive dependencies.
 
-    The walk will be depth-first in preorder, or breadth first if bfs=True is specified.
+        The walk will be depth-first in preorder, or breadth first if bfs=True is specified.
 
-    See Target.closure_for_targets().
+        See Target.closure_for_targets().
 
-    :API: public
-    """
+        :API: public
+        """
         return self.closure_for_targets([self], *vargs, **kwargs)
 
     def __lt__(self, other):
@@ -919,14 +919,14 @@ class Target(AbstractTarget):
     def create_sources_field(self, sources, sources_rel_path, key_arg=None):
         """Factory method to create a SourcesField appropriate for the type of the sources object.
 
-    Note that this method is called before the call to Target.__init__ so don't expect fields to
-    be populated!
+        Note that this method is called before the call to Target.__init__ so don't expect fields to
+        be populated!
 
-    :API: public
+        :API: public
 
-    :return: a payload field object representing the sources parameter
-    :rtype: SourcesField
-    """
+        :return: a payload field object representing the sources parameter
+        :rtype: SourcesField
+        """
         if not sources:
             sources = FilesetWithSpec.empty(sources_rel_path)
         elif not isinstance(sources, FilesetWithSpec):

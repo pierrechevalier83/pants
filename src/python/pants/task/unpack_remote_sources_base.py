@@ -39,8 +39,8 @@ class UnpackRemoteSourcesBase(Task, metaclass=ABCMeta):
     def source_target_constraint(cls):
         """Return a type constraint which is evaluated to determine "source" targets for this task.
 
-    :return: :class:`pants.util.objects.TypeConstraint`
-    """
+        :return: :class:`pants.util.objects.TypeConstraint`
+        """
 
     @abstractmethod
     def unpack_target(self, unpackable_target, unpack_dir):
@@ -98,9 +98,9 @@ class UnpackRemoteSourcesBase(Task, metaclass=ABCMeta):
     def _calculate_unpack_filter(cls, includes=None, excludes=None, spec=None):
         """Take regex patterns and return a filter function.
 
-    :param list includes: List of include patterns to pass to _file_filter.
-    :param list excludes: List of exclude patterns to pass to _file_filter.
-    """
+        :param list includes: List of include patterns to pass to _file_filter.
+        :param list excludes: List of exclude patterns to pass to _file_filter.
+        """
         include_patterns = cls.compile_patterns(
             includes or [], field_name="include_patterns", spec=spec
         )
@@ -115,9 +115,9 @@ class UnpackRemoteSourcesBase(Task, metaclass=ABCMeta):
     def get_unpack_filter(cls, unpackable_target):
         """Calculate a filter function from the include/exclude patterns of a Target.
 
-    :param ImportRemoteSourcesMixin unpackable_target: A target with include_patterns and
-                                                       exclude_patterns attributes.
-    """
+        :param ImportRemoteSourcesMixin unpackable_target: A target with include_patterns and
+                                                           exclude_patterns attributes.
+        """
         # TODO: we may be able to make use of glob matching in the engine to avoid doing this filtering.
         return cls._calculate_unpack_filter(
             includes=unpackable_target.payload.include_patterns,

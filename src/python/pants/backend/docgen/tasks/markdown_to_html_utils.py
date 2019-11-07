@@ -55,12 +55,12 @@ INCLUDE_PATTERN = r"!inc(\[(?P<params>[^]]*)\])?\((?P<path>[^" + "\n" + r"]*)\)"
 def choose_include_text(s, params, source_path):
     """Given the contents of a file and !inc[these params], return matching lines
 
-  If there was a problem matching parameters, return empty list.
+    If there was a problem matching parameters, return empty list.
 
-  :param s: file's text
-  :param params: string like "start-at=foo&end-at=bar"
-  :param source_path: path to source .md. Useful in error messages
-  """
+    :param s: file's text
+    :param params: string like "start-at=foo&end-at=bar"
+    :param source_path: path to source .md. Useful in error messages
+    """
     lines = s.splitlines()
     start_after = None
     start_at = None
@@ -117,8 +117,8 @@ def choose_include_text(s, params, source_path):
 class IncludeExcerptPattern(markdown.inlinepatterns.Pattern):
     def __init__(self, source_path=None):
         """
-    :param string source_path: Path to source `.md` file.
-    """
+        :param string source_path: Path to source `.md` file.
+        """
         # Old-style class, so we must invoke __init__ this way.
         markdown.inlinepatterns.Pattern.__init__(self, INCLUDE_PATTERN)
         self.source_path = source_path
@@ -183,10 +183,10 @@ def page_to_html_path(page):
 def rst_to_html(in_rst, stderr):
     """Renders HTML from an RST fragment.
 
-  :param string in_rst: An rst formatted string.
-  :param stderr: An open stream to use for docutils stderr output.
-  :returns: A tuple of (html rendered rst, return code)
-  """
+    :param string in_rst: An rst formatted string.
+    :param stderr: An open stream to use for docutils stderr output.
+    :returns: A tuple of (html rendered rst, return code)
+    """
     if not in_rst:
         return "", 0
 

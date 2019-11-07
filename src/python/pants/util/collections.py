@@ -22,12 +22,12 @@ _V = TypeVar("_V")
 def factory_dict(value_factory: Callable[[_K], _V], *args, **kwargs) -> DefaultDict:
     """A dict whose values are computed by `value_factory` when a `__getitem__` key is missing.
 
-  Note that values retrieved by any other method will not be lazily computed; eg: via `get`.
+    Note that values retrieved by any other method will not be lazily computed; eg: via `get`.
 
-  :param value_factory:
-  :param *args: Any positional args to pass through to `dict`.
-  :param **kwrags: Any kwargs to pass through to `dict`.
-  """
+    :param value_factory:
+    :param *args: Any positional args to pass through to `dict`.
+    :param **kwrags: Any kwargs to pass through to `dict`.
+    """
 
     class FactoryDict(collections.defaultdict):
         @staticmethod
@@ -63,9 +63,9 @@ _T = TypeVar("_T")
 def assert_single_element(iterable: Iterable[_T]) -> _T:
     """Get the single element of `iterable`, or raise an error.
 
-  :raise: :class:`StopIteration` if there is no element.
-  :raise: :class:`ValueError` if there is more than one element.
-  """
+    :raise: :class:`StopIteration` if there is no element.
+    :raise: :class:`ValueError` if there is more than one element.
+    """
     it = iter(iterable)
     first_item = next(it)
 

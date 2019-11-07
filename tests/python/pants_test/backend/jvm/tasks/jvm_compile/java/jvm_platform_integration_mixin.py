@@ -16,16 +16,16 @@ class JvmPlatformIntegrationMixin:
     def get_pants_compile_args(self):
         """List of arguments to pants that determine what compiler to use.
 
-    The compiling task must be the last argument (eg, compile.rsc).
-    """
+        The compiling task must be the last argument (eg, compile.rsc).
+        """
         raise NotImplementedError
 
     def determine_version(self, path):
         """Given the filepath to a class file, invokes the 'file' commandline to find its java version.
 
-    :param str path: filepath (eg, tempdir/Foo.class)
-    :return: A java version string (eg, '1.6').
-    """
+        :param str path: filepath (eg, tempdir/Foo.class)
+        :return: A java version string (eg, '1.6').
+        """
         # Map of target version numbers to their equivalent class file versions, which are different.
         version_map = {
             "50.0": "1.6",
@@ -131,11 +131,11 @@ class JvmPlatformIntegrationMixin:
                 f.write(
                     dedent(
                         """
-        java_library(name='{target_name}',
-          sources=['{class_name}.java'],
-          platform='{target_level}',
-        )
-        """.format(
+                        java_library(name='{target_name}',
+                          sources=['{class_name}.java'],
+                          platform='{target_level}',
+                        )
+                        """.format(
                             target_name=os.path.basename(tmpdir),
                             class_name=class_name,
                             target_level=target_level,
@@ -172,12 +172,12 @@ class JvmPlatformIntegrationMixin:
             "Diamond",
             dedent(
                 """
-      public class Diamond<T> {
-        public static void main(String[] args) {
-          Diamond<String> diamond = new Diamond<>();
-        }
-      }
-    """
+                public class Diamond<T> {
+                  public static void main(String[] args) {
+                    Diamond<String> diamond = new Diamond<>();
+                  }
+                }
+                """
             ),
         )
         self.assert_success(pants_run)
@@ -188,12 +188,12 @@ class JvmPlatformIntegrationMixin:
             "Diamond",
             dedent(
                 """
-      public class Diamond<T> {
-        public static void main(String[] args) {
-          Diamond<String> diamond = new Diamond<>();
-        }
-      }
-    """
+                public class Diamond<T> {
+                  public static void main(String[] args) {
+                    Diamond<String> diamond = new Diamond<>();
+                  }
+                }
+                """
             ),
         )
         self.assert_failure(pants_run)
@@ -204,12 +204,12 @@ class JvmPlatformIntegrationMixin:
             "LintyDiamond",
             dedent(
                 """
-      public class LintyDiamond<T> {
-        public static void main(String[] args) {
-          LintyDiamond<String> diamond = new LintyDiamond<>();
-        }
-      }
-    """
+                public class LintyDiamond<T> {
+                  public static void main(String[] args) {
+                    LintyDiamond<String> diamond = new LintyDiamond<>();
+                  }
+                }
+                """
             ),
             platform_args=["-C-Xlint:cast"],
         )
@@ -222,23 +222,23 @@ class JvmPlatformIntegrationMixin:
                 f.write(
                     dedent(
                         """
-        java_library(name='diamond',
-          sources=['Diamond.java'],
-        )
-        """
+                        java_library(name='diamond',
+                          sources=['Diamond.java'],
+                        )
+                        """
                     )
                 )
             with open(os.path.join(tmpdir, "Diamond.java"), "w") as f:
                 f.write(
                     dedent(
                         """
-          public class Diamond<T> {
-            public static void main(String[] args) {
-              // The diamond operator <> for generics was introduced in jdk7.
-              Diamond<String> shinyDiamond = new Diamond<>();
-            }
-          }
-        """
+                        public class Diamond<T> {
+                          public static void main(String[] args) {
+                            // The diamond operator <> for generics was introduced in jdk7.
+                            Diamond<String> shinyDiamond = new Diamond<>();
+                          }
+                        }
+                        """
                     )
                 )
             platforms = {

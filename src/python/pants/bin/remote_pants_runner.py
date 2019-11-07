@@ -71,14 +71,14 @@ class RemotePantsRunner:
         self, exiter, args, env, options_bootstrapper, stdin=None, stdout=None, stderr=None
     ):
         """
-    :param Exiter exiter: The Exiter instance to use for this run.
-    :param list args: The arguments (e.g. sys.argv) for this run.
-    :param dict env: The environment (e.g. os.environ) for this run.
-    :param OptionsBootstrapper options_bootstrapper: The bootstrap options.
-    :param file stdin: The stream representing stdin.
-    :param file stdout: The stream representing stdout.
-    :param file stderr: The stream representing stderr.
-    """
+        :param Exiter exiter: The Exiter instance to use for this run.
+        :param list args: The arguments (e.g. sys.argv) for this run.
+        :param dict env: The environment (e.g. os.environ) for this run.
+        :param OptionsBootstrapper options_bootstrapper: The bootstrap options.
+        :param file stdin: The stream representing stdin.
+        :param file stdout: The stream representing stdout.
+        :param file stderr: The stream representing stderr.
+        """
         self._start_time = time.time()
         self._exiter = exiter
         self._args = args
@@ -106,8 +106,8 @@ class RemotePantsRunner:
     def _run_pants_with_retry(self, pantsd_handle, retries=3):
         """Runs pants remotely with retry and recovery for nascent executions.
 
-    :param PantsDaemon.Handle pantsd_handle: A Handle for the daemon to connect to.
-    """
+        :param PantsDaemon.Handle pantsd_handle: A Handle for the daemon to connect to.
+        """
         attempt = 1
         while 1:
             logger.debug(
@@ -178,9 +178,9 @@ class RemotePantsRunner:
     def _extract_remote_exception(self, pantsd_pid, nailgun_error):
         """Given a NailgunError, returns a Terminated exception with additional info (where possible).
 
-    This method will include the entire exception log for either the `pid` in the NailgunError, or
-    failing that, the `pid` of the pantsd instance.
-    """
+        This method will include the entire exception log for either the `pid` in the NailgunError, or
+        failing that, the `pid` of the pantsd instance.
+        """
         sources = [pantsd_pid]
         if nailgun_error.pid is not None:
             sources = [abs(nailgun_error.pid)] + sources

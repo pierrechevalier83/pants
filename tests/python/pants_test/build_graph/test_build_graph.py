@@ -18,11 +18,11 @@ class BuildGraphTest(TestBase):
     def inject_graph(self, root_spec, graph_dict):
         """Given a root spec, injects relevant targets from the graph represented by graph_dict.
 
-    graph_dict should contain address specs, keyed by sources with lists of value destinations.
-    Each created target will be a simple `target` alias.
+        graph_dict should contain address specs, keyed by sources with lists of value destinations.
+        Each created target will be a simple `target` alias.
 
-    Returns the parsed Address for the root_spec.
-    """
+        Returns the parsed Address for the root_spec.
+        """
         for src, targets in graph_dict.items():
             src_path, src_name = parse_spec(src)
             if not src_path:

@@ -24,9 +24,9 @@ def banner(s):
 class PantsDaemonMonitor(ProcessManager):
     def __init__(self, runner_process_context, metadata_base_dir=None):
         """
-    :param runner_process_context: A TrackedProcessContext that can be used to inspect live
-      pantsd instances created in this context.
-    """
+        :param runner_process_context: A TrackedProcessContext that can be used to inspect live
+          pantsd instances created in this context.
+        """
         super().__init__(name="pantsd", metadata_base_dir=metadata_base_dir)
         self.runner_process_context = runner_process_context
 
@@ -57,8 +57,8 @@ class PantsDaemonMonitor(ProcessManager):
     def current_memory_usage(self):
         """Return the current memory usage of the pantsd process (which must be running)
 
-    :return: memory usage in bytes
-    """
+        :return: memory usage in bytes
+        """
         self.assert_running()
         return psutil.Process(self._pid).memory_info()[0]
 

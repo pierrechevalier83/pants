@@ -19,21 +19,21 @@ from pants.util.dirutil import safe_mkdir
 class JvmToolTaskTestBase(JvmTaskTestBase):
     """Prepares an ephemeral test build root that supports tasks that use jvm tool bootstrapping.
 
-  :API: public
-  """
+    :API: public
+    """
 
     @classmethod
     def alias_groups(cls):
         """
-    :API: public
-    """
+        :API: public
+        """
         # Aliases appearing in our real BUILD.tools.
         return build_file_aliases().merge(BuildFileAliases(targets={"target": Target}))
 
     def setUp(self):
         """
-    :API: public
-    """
+        :API: public
+        """
         super().setUp()
 
         # Use a synthetic subclass for proper isolation when bootstrapping within the test.
@@ -77,8 +77,8 @@ class JvmToolTaskTestBase(JvmTaskTestBase):
 
     def context(self, for_task_types=None, **kwargs):
         """
-    :API: public
-    """
+        :API: public
+        """
         # Add in the bootstrapper task type, so its options get registered and set.
         for_task_types = [self.bootstrap_task_type] + (for_task_types or [])
         return super().context(for_task_types=for_task_types, **kwargs)
@@ -86,13 +86,13 @@ class JvmToolTaskTestBase(JvmTaskTestBase):
     def prepare_execute(self, context):
         """Prepares a jvm tool-using task for execution, first bootstrapping any required jvm tools.
 
-    Note: Other task pre-requisites will not be ensured and tests must instead setup their own
-          product requirements if any.
+        Note: Other task pre-requisites will not be ensured and tests must instead setup their own
+              product requirements if any.
 
-    :API: public
+        :API: public
 
-    :returns: The prepared Task instance.
-    """
+        :returns: The prepared Task instance.
+        """
         # test_workdir is an @property
         workdir = self.test_workdir
 
@@ -111,13 +111,13 @@ class JvmToolTaskTestBase(JvmTaskTestBase):
     def execute(self, context):
         """Executes a jvm tool-using task, first bootstrapping any required jvm tools.
 
-    Note: Other task pre-requisites will not be ensured and tests must instead setup their own
-          product requirements if any.
+        Note: Other task pre-requisites will not be ensured and tests must instead setup their own
+              product requirements if any.
 
-    :API: public
+        :API: public
 
-    :returns: The Task instance that was executed.
-    """
+        :returns: The Task instance that was executed.
+        """
         task = self.prepare_execute(context)
         if not task.skip_execution:
             task.execute()

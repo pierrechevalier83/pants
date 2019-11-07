@@ -11,15 +11,15 @@ from pants.base.validation import assert_list
 class JavaWireLibrary(JvmTarget):
     """A Java library generated from Wire IDL files.
 
-  Supports Wire 1.x only.
+    Supports Wire 1.x only.
 
-  For an example Wire 2.x interface that generates service stubs see:
-  https://github.com/ericzundel/mvn2pants/tree/master/src/python/squarepants/plugins/sake_wire_codegen
+    For an example Wire 2.x interface that generates service stubs see:
+    https://github.com/ericzundel/mvn2pants/tree/master/src/python/squarepants/plugins/sake_wire_codegen
 
-  But note this requires you to write a custom wire code generator with a command line interface.
+    But note this requires you to write a custom wire code generator with a command line interface.
 
-  :API: public
-  """
+    :API: public
+    """
 
     def __init__(
         self,
@@ -34,19 +34,19 @@ class JavaWireLibrary(JvmTarget):
         **kwargs
     ):
         """
-    :param string service_writer: the name of the class to pass as the --service_writer option to
-    the Wire compiler (For wire 1.0 only)
-    :param list service_writer_options: A list of options to pass to the service writer (For
-    wire 1.x only)
-    :param list roots: passed through to the --roots option of the Wire compiler
-    :param string registry_class: fully qualified class name of RegistryClass to create. If in
-    doubt, specify com.squareup.wire.SimpleServiceWriter
-    :param list enum_options: list of enums to pass to as the --enum-enum_options option, # optional
-    :param boolean no_options: boolean that determines if --no_options flag is passed
-    :param boolean ordered_sources: boolean that declares whether the sources argument represents
-      literal ordered sources to be passed directly to the compiler. If false, no ordering is
-      guaranteed for the sources passed to an individual compiler invoke.
-    """
+        :param string service_writer: the name of the class to pass as the --service_writer option to
+        the Wire compiler (For wire 1.0 only)
+        :param list service_writer_options: A list of options to pass to the service writer (For
+        wire 1.x only)
+        :param list roots: passed through to the --roots option of the Wire compiler
+        :param string registry_class: fully qualified class name of RegistryClass to create. If in
+        doubt, specify com.squareup.wire.SimpleServiceWriter
+        :param list enum_options: list of enums to pass to as the --enum-enum_options option, # optional
+        :param boolean no_options: boolean that determines if --no_options flag is passed
+        :param boolean ordered_sources: boolean that declares whether the sources argument represents
+          literal ordered sources to be passed directly to the compiler. If false, no ordering is
+          guaranteed for the sources passed to an individual compiler invoke.
+        """
 
         if not service_writer and service_writer_options:
             raise TargetDefinitionException(

@@ -22,8 +22,8 @@ Pid = int
 
 def get_os_name(uname_result: Optional[posix.uname_result] = None) -> str:
     """
-  :API: public
-  """
+    :API: public
+    """
     if uname_result is None:
         uname_result = os.uname()
     return uname_result[0].lower()
@@ -31,8 +31,8 @@ def get_os_name(uname_result: Optional[posix.uname_result] = None) -> str:
 
 def normalize_os_name(os_name: str) -> str:
     """
-  :API: public
-  """
+    :API: public
+    """
     if os_name not in OS_ALIASES:
         for proper_name, aliases in OS_ALIASES.items():
             if os_name in aliases:

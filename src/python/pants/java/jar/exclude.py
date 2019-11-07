@@ -5,16 +5,16 @@
 class Exclude:
     """Represents a dependency exclude pattern to filter transitive dependencies against.
 
-  :API: public
-  """
+    :API: public
+    """
 
     def __init__(self, org, name=None):
         """
-    :param string org: Organization of the artifact to filter,
-      known as groupId in Maven parlance.
-    :param string name: Name of the artifact to filter in the org, or filter
-      everything if unspecified.
-    """
+        :param string org: Organization of the artifact to filter,
+          known as groupId in Maven parlance.
+        :param string name: Name of the artifact to filter in the org, or filter
+          everything if unspecified.
+        """
         self.org = org
         self._name = name
 

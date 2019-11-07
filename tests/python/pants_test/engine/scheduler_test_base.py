@@ -16,8 +16,8 @@ from pants_test.engine.util import init_native
 class SchedulerTestBase:
     """A mixin for classes (tests, presumably) which need to create temporary schedulers.
 
-  TODO: In the medium term, this should be part of pants_test.test_base.TestBase.
-  """
+    TODO: In the medium term, this should be part of pants_test.test_base.TestBase.
+    """
 
     _native = init_native()
 
@@ -29,9 +29,9 @@ class SchedulerTestBase:
     def mk_fs_tree(self, build_root_src=None, ignore_patterns=None, work_dir=None):
         """Create a temporary FilesystemProjectTree.
 
-    :param build_root_src: Optional directory to pre-populate from; otherwise, empty.
-    :returns: A FilesystemProjectTree.
-    """
+        :param build_root_src: Optional directory to pre-populate from; otherwise, empty.
+        :returns: A FilesystemProjectTree.
+        """
         work_dir = work_dir or self._create_work_dir()
         build_root = os.path.join(work_dir, "build_root")
         if build_root_src is not None:

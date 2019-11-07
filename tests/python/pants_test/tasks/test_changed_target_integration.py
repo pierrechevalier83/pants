@@ -25,12 +25,12 @@ class ChangedTargetGoalsIntegrationTest(PantsRunIntegrationTest):
                     fp.write(
                         dedent(
                             """
-          package org.pantsbuild;
+                            package org.pantsbuild;
 
-          class Class {
-            static final int MEANING_OF_LIFE = 42;
-          }
-          """
+                            class Class {
+                              static final int MEANING_OF_LIFE = 42;
+                            }
+                            """
                         )
                     )
 
@@ -46,17 +46,17 @@ class ChangedTargetGoalsIntegrationTest(PantsRunIntegrationTest):
                     fp.write(
                         dedent(
                             """
-          package org.pantsbuild;
+                            package org.pantsbuild;
 
-          import org.junit.Assert;
-          import org.junit.Test;
+                            import org.junit.Assert;
+                            import org.junit.Test;
 
-          public class ClassTest {
-            @Test public void test() {
-              Assert.assertEquals(42, Class.MEANING_OF_LIFE);
-            }
-          }
-          """
+                            public class ClassTest {
+                              @Test public void test() {
+                                Assert.assertEquals(42, Class.MEANING_OF_LIFE);
+                              }
+                            }
+                            """
                         )
                     )
 
@@ -65,17 +65,17 @@ class ChangedTargetGoalsIntegrationTest(PantsRunIntegrationTest):
                     fp.write(
                         dedent(
                             f"""
-          jar_library(name='junit', jars=[jar('junit', 'junit', '4.12')])
+                            jar_library(name='junit', jars=[jar('junit', 'junit', '4.12')])
 
-          junit_tests(
-            name='pantsbuild',
-            sources=['ClassTest.java'],
-            dependencies=[
-              ':junit',
-              '{os.path.relpath(os.path.dirname(src_build_file), get_buildroot())}'
-            ]
-          )
-          """
+                            junit_tests(
+                              name='pantsbuild',
+                              sources=['ClassTest.java'],
+                              dependencies=[
+                                ':junit',
+                                '{os.path.relpath(os.path.dirname(src_build_file), get_buildroot())}'
+                              ]
+                            )
+                            """
                         )
                     )
 

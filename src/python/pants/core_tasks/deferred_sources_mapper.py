@@ -20,9 +20,9 @@ logger = logging.getLogger(__name__)
 class DeferredSourcesMapper(Task):
     """Map `remote_sources()` to files that produce the product `UnpackedArchives`.
 
-  If you want a task to be able to map sources like this, make it require the 'deferred_sources'
-  product.
-  """
+    If you want a task to be able to map sources like this, make it require the 'deferred_sources'
+    product.
+    """
 
     class SourcesTargetLookupError(AddressLookupError):
         """Raised when the referenced target cannot be found in the build graph"""
@@ -37,12 +37,12 @@ class DeferredSourcesMapper(Task):
     @classmethod
     def product_types(cls):
         """
-    Declare product produced by this task
+        Declare product produced by this task
 
-    deferred_sources does not have any data associated with it. Downstream tasks can
-    depend on it just make sure that this task completes first.
-    :return:
-    """
+        deferred_sources does not have any data associated with it. Downstream tasks can
+        depend on it just make sure that this task completes first.
+        :return:
+        """
         return ["deferred_sources"]
 
     @classmethod

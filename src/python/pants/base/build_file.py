@@ -50,12 +50,12 @@ class BuildFile(ABC):
     @staticmethod
     def scan_build_files(project_tree, base_relpath, build_ignore_patterns=None):
         """Looks for all BUILD files
-    :param project_tree: Project tree to scan in.
-    :type project_tree: :class:`pants.base.project_tree.ProjectTree`
-    :param base_relpath: Directory under root_dir to scan.
-    :param build_ignore_patterns: .gitignore like patterns to exclude from BUILD files scan.
-    :type build_ignore_patterns: pathspec.pathspec.PathSpec
-    """
+        :param project_tree: Project tree to scan in.
+        :type project_tree: :class:`pants.base.project_tree.ProjectTree`
+        :param base_relpath: Directory under root_dir to scan.
+        :param build_ignore_patterns: .gitignore like patterns to exclude from BUILD files scan.
+        :type build_ignore_patterns: pathspec.pathspec.PathSpec
+        """
         if base_relpath and os.path.isabs(base_relpath):
             raise BuildFile.BadPathError(
                 "base_relpath parameter ({}) should be a relative path.".format(base_relpath)
@@ -107,12 +107,12 @@ class BuildFile(ABC):
     def __init__(self, project_tree, relpath):
         """Creates a BuildFile object representing the BUILD file family at the specified path.
 
-    :param project_tree: Project tree the BUILD file exist in.
-    :type project_tree: :class:`pants.base.project_tree.ProjectTree`
-    :param string relpath: The path relative to root_dir where the BUILD file is located.
-    :raises IOError: if the root_dir path is not absolute.
-    :raises MissingBuildFileError: if the path does not house a BUILD file.
-    """
+        :param project_tree: Project tree the BUILD file exist in.
+        :type project_tree: :class:`pants.base.project_tree.ProjectTree`
+        :param string relpath: The path relative to root_dir where the BUILD file is located.
+        :raises IOError: if the root_dir path is not absolute.
+        :raises MissingBuildFileError: if the path does not house a BUILD file.
+        """
         if relpath is None:
             raise self.BuildFileError("BuildFile's relpath parameter cannot be None.")
         if os.path.isabs(relpath):

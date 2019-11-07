@@ -168,11 +168,11 @@ class PythonSetup(Subsystem):
 
     def compatibility_or_constraints(self, compatibility):
         """
-    Return either the given compatibility, or the interpreter constraints. If interpreter
-    constraints are supplied by the CLI flag, return those only.
+        Return either the given compatibility, or the interpreter constraints. If interpreter
+        constraints are supplied by the CLI flag, return those only.
 
-    :param compatibility: Optional[List[str]], e.g. None or ['CPython>3'].
-    """
+        :param compatibility: Optional[List[str]], e.g. None or ['CPython>3'].
+        """
         if self.get_options().is_flagged("interpreter_constraints"):
             return tuple(self.interpreter_constraints)
         return tuple(compatibility or self.interpreter_constraints)
@@ -215,10 +215,10 @@ class PythonSetup(Subsystem):
     def get_pex_python_paths():
         """Returns a list of paths to Python interpreters as defined in a pexrc file.
 
-    These are provided by a PEX_PYTHON_PATH in either of '/etc/pexrc', '~/.pexrc'.
-    PEX_PYTHON_PATH defines a colon-separated list of paths to interpreters
-    that a pex can be built and run against.
-    """
+        These are provided by a PEX_PYTHON_PATH in either of '/etc/pexrc', '~/.pexrc'.
+        PEX_PYTHON_PATH defines a colon-separated list of paths to interpreters
+        that a pex can be built and run against.
+        """
         ppp = Variables.from_rc().get("PEX_PYTHON_PATH")
         if ppp:
             return ppp.split(os.pathsep)
@@ -229,9 +229,9 @@ class PythonSetup(Subsystem):
     def get_pyenv_paths(pyenv_root_func=None):
         """Returns a list of paths to Python interpreters managed by pyenv.
 
-    :param pyenv_root_func: A no-arg function that returns the pyenv root. Defaults to
-                            running `pyenv root`, but can be overridden for testing.
-    """
+        :param pyenv_root_func: A no-arg function that returns the pyenv root. Defaults to
+                                running `pyenv root`, but can be overridden for testing.
+        """
         pyenv_root_func = pyenv_root_func or get_pyenv_root
         pyenv_root = pyenv_root_func()
         if pyenv_root is None:

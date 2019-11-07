@@ -178,9 +178,9 @@ class BinaryUtilTest(TestBase):
     def test_support_url_fallback(self):
         """Tests fallback behavior with multiple support baseurls.
 
-    Mocks up some dummy baseurls and then swaps out the URL reader to make sure urls are accessed
-    and others are not.
-    """
+        Mocks up some dummy baseurls and then swaps out the URL reader to make sure urls are accessed
+        and others are not.
+        """
         fake_base, fake_url = self._fake_base, self._fake_url
         bases = [fake_base("apple"), fake_base("orange"), fake_base("banana")]
 
@@ -388,10 +388,10 @@ class BinaryUtilTest(TestBase):
             safe_file_dump(
                 config_file_loc,
                 payload="""\
-[GLOBAL]
-allow_external_binary_tool_downloads: True
-pants_bootstrapdir: {}
-""".format(
+                        [GLOBAL]
+                        allow_external_binary_tool_downloads: True
+                        pants_bootstrapdir: {}
+                        """.format(
                     tmp_dir
                 ),
             )

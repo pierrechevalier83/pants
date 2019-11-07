@@ -45,12 +45,13 @@ class BinaryLocation:
 @dataclass(frozen=True)
 class ShellCat:
     """Wrapper class to show an example of using an auxiliary class (which wraps
-  an executable) to generate an argv instead of doing it all in
-  CatExecutionRequest. This can be used to encapsulate operations such as
-  sanitizing command-line arguments which are specific to the executable, which
-  can reduce boilerplate for generating ExecuteProcessRequest instances if the
-  executable is used in different ways across multiple different types of
-  process execution requests."""
+    an executable) to generate an argv instead of doing it all in
+    CatExecutionRequest. This can be used to encapsulate operations such as
+    sanitizing command-line arguments which are specific to the executable, which
+    can reduce boilerplate for generating ExecuteProcessRequest instances if the
+    executable is used in different ways across multiple different types of
+    process execution requests.
+    """
 
     binary_location: BinaryLocation
 
@@ -139,12 +140,12 @@ def get_javac_version_output(
 class JavacSources:
     """Wrapper for the paths to include for Java source files.
 
-  This shows an example of making a custom type to wrap generic types such as str to add usage
-  context.
+    This shows an example of making a custom type to wrap generic types such as str to add usage
+    context.
 
-  See CatExecutionRequest and rules above for an example of using PathGlobs
-  which does not introduce this additional layer of indirection.
-  """
+    See CatExecutionRequest and rules above for an example of using PathGlobs
+    which does not introduce this additional layer of indirection.
+    """
 
     java_files: Tuple[str, ...]
 
@@ -377,10 +378,11 @@ class IsolatedProcessTest(TestBase, unittest.TestCase):
         self.create_file(
             "simple/Simple.java",
             """package simple;
-// Valid java. Totally complies.
-class Simple {
+            // Valid java. Totally complies.
+            class Simple {
 
-}""",
+            }
+            """,
         )
 
         request = JavacCompileRequest(
@@ -404,9 +406,10 @@ class Simple {
         self.create_file(
             "simple/Broken.java",
             """package simple;
-class Broken {
-  NOT VALID JAVA!
-}""",
+            class Broken {
+              NOT VALID JAVA!
+            }
+            """,
         )
 
         request = JavacCompileRequest(

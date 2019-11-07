@@ -19,16 +19,16 @@ class ExceptionSinkIntegrationTest(PantsRunIntegrationTest):
         self.assertRegex(
             file_contents,
             """\
-timestamp: ([^\n]+)
-process title: ([^\n]+)
-sys\\.argv: ([^\n]+)
-pid: {pid}
-Exception caught: \\([^)]*\\)
-(.|\n)*
+            timestamp: ([^\n]+)
+            process title: ([^\n]+)
+            sys\\.argv: ([^\n]+)
+            pid: {pid}
+            Exception caught: \\([^)]*\\)
+            (.|\n)*
 
-Exception message:.* 1 Exception encountered:
-  ResolveError: "this-target-does-not-exist" was not found in namespace ""\\. Did you mean one of:
-""".format(
+            Exception message:.* 1 Exception encountered:
+              ResolveError: "this-target-does-not-exist" was not found in namespace ""\\. Did you mean one of:
+            """.format(
                 pid=pid
             ),
         )
@@ -59,13 +59,13 @@ Exception message:.* 1 Exception encountered:
                 self.assertIn(
                     dedent(
                         """\
-          KeyboardInterrupt: ctrl-c interrupted execution of a cffi method!
+                        KeyboardInterrupt: ctrl-c interrupted execution of a cffi method!
 
 
-          The engine execution request raised this error, which is probably due to the errors in the
-          CFFI extern methods listed above, as CFFI externs return None upon error:
-          Traceback (most recent call last):
-          """
+                        The engine execution request raised this error, which is probably due to the errors in the
+                        CFFI extern methods listed above, as CFFI externs return None upon error:
+                        Traceback (most recent call last):
+                        """
                     ),
                     pants_run.stderr_data,
                 )
@@ -93,9 +93,9 @@ Exception message:.* 1 Exception encountered:
                 self.assertIn(
                     dedent(
                         """\
-        Interrupted by user:
-        ctrl-c during import!
-        """
+                        Interrupted by user:
+                        ctrl-c during import!
+                        """
                     ),
                     pants_run.stderr_data,
                 )
@@ -117,8 +117,8 @@ Exception message:.* 1 Exception encountered:
             self.assertRegex(
                 pants_run.stderr_data,
                 """\
-ERROR: "this-target-does-not-exist" was not found in namespace ""\\. Did you mean one of:
-""",
+                ERROR: "this-target-does-not-exist" was not found in namespace ""\\. Did you mean one of:
+                """,
             )
             pid_specific_log_file, shared_log_file = self._get_log_file_paths(tmpdir, pants_run)
             self._assert_unhandled_exception_log_matches(
@@ -130,12 +130,12 @@ ERROR: "this-target-does-not-exist" was not found in namespace ""\\. Did you mea
         self.assertRegex(
             contents,
             """\
-timestamp: ([^\n]+)
-process title: ([^\n]+)
-sys\\.argv: ([^\n]+)
-pid: {pid}
-Signal {signum} \\({signame}\\) was raised\\. Exiting with failure\\.
-""".format(
+            timestamp: ([^\n]+)
+            process title: ([^\n]+)
+            sys\\.argv: ([^\n]+)
+            pid: {pid}
+            Signal {signum} \\({signame}\\) was raised\\. Exiting with failure\\.
+            """.format(
                 pid=pid, signum=signum, signame=signame
             ),
         )
@@ -194,9 +194,9 @@ Signal {signum} \\({signame}\\) was raised\\. Exiting with failure\\.
                 self.assertRegex(
                     waiter_run.stderr_data,
                     """\
-timestamp: ([^\n]+)
-Signal {signum} \\({signame}\\) was raised\\. Exiting with failure\\.
-""".format(
+                    timestamp: ([^\n]+)
+                    Signal {signum} \\({signame}\\) was raised\\. Exiting with failure\\.
+                    """.format(
                         signum=signum, signame=signame
                     ),
                 )
@@ -220,10 +220,10 @@ Signal {signum} \\({signame}\\) was raised\\. Exiting with failure\\.
             self.assertRegex(
                 read_file(pid_specific_log_file),
                 """\
-Fatal Python error: Aborted
+                Fatal Python error: Aborted
 
-Thread [^\n]+ \\(most recent call first\\):
-""",
+                Thread [^\n]+ \\(most recent call first\\):
+                """,
             )
             # faulthandler.enable() only allows use of a single logging file at once for fatal tracebacks.
             self.assertEqual("", read_file(shared_log_file))
@@ -239,8 +239,8 @@ Thread [^\n]+ \\(most recent call first\\):
             self.assertRegex(
                 waiter_run.stderr_data,
                 """\
-Current thread [^\n]+ \\(most recent call first\\):
-""",
+                Current thread [^\n]+ \\(most recent call first\\):
+                """,
             )
 
     def test_keyboardinterrupt(self):

@@ -166,12 +166,12 @@ class TestNativeToolchain(TestBase, SchedulerTestBase):
             GCCCToolchain,
             "hello.c",
             contents="""
-#include "stdio.h"
+                     #include "stdio.h"
 
-int main() {
-  printf("%s\\n", "I C the world!");
-}
-""",
+                     int main() {
+                       printf("%s\\n", "I C the world!");
+                     }
+                     """,
         ) as gcc_c_toolchain:
 
             c_toolchain = gcc_c_toolchain.c_toolchain
@@ -185,12 +185,12 @@ int main() {
             LLVMCToolchain,
             "hello.c",
             contents="""
-#include "stdio.h"
+                     #include "stdio.h"
 
-int main() {
-  printf("%s\\n", "I C the world!");
-}
-""",
+                     int main() {
+                       printf("%s\\n", "I C the world!");
+                     }
+                     """,
         ) as llvm_c_toolchain:
 
             c_toolchain = llvm_c_toolchain.c_toolchain
@@ -204,12 +204,12 @@ int main() {
             GCCCppToolchain,
             "hello.cpp",
             contents="""
-#include <iostream>
+                     #include <iostream>
 
-int main() {
-  std::cout << "I C the world, ++ more!" << std::endl;
-}
-""",
+                     int main() {
+                       std::cout << "I C the world, ++ more!" << std::endl;
+                     }
+                     """,
         ) as gcc_cpp_toolchain:
 
             cpp_toolchain = gcc_cpp_toolchain.cpp_toolchain
@@ -225,12 +225,12 @@ int main() {
             LLVMCppToolchain,
             "hello.cpp",
             contents="""
-#include <iostream>
+                     #include <iostream>
 
-int main() {
-  std::cout << "I C the world, ++ more!" << std::endl;
-}
-""",
+                     int main() {
+                       std::cout << "I C the world, ++ more!" << std::endl;
+                     }
+                     """,
         ) as llvm_cpp_toolchain:
 
             cpp_toolchain = llvm_cpp_toolchain.cpp_toolchain

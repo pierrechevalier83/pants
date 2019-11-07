@@ -21,18 +21,18 @@ class JavaAgent(JavaLibrary):
         **kwargs
     ):
         """
-    :param string premain: When an agent is specified at JVM launch time this attribute specifies
-      the agent class. Exactly one of ``premain`` or ``agent_class`` must be specified.
-    :param string agent_class: If an implementation supports a mechanism to start agents sometime
-      after the VM has started then this attribute specifies the agent class. Exactly one of
-      ``premain`` or ``agent_class`` must be specified.
-    :param bool can_redefine: `True` if the ability to redefine classes is needed by this agent;
-      `False` by default.
-    :param bool can_retransform: `True` if the ability to retransform classes is needed by this
-      agent; `False` by default.
-    :param bool can_set_native_method_prefix: `True` if the ability to set he native method prefix
-      is needed by this agent; `False` by default.
-    """
+        :param string premain: When an agent is specified at JVM launch time this attribute specifies
+          the agent class. Exactly one of ``premain`` or ``agent_class`` must be specified.
+        :param string agent_class: If an implementation supports a mechanism to start agents sometime
+          after the VM has started then this attribute specifies the agent class. Exactly one of
+          ``premain`` or ``agent_class`` must be specified.
+        :param bool can_redefine: `True` if the ability to redefine classes is needed by this agent;
+          `False` by default.
+        :param bool can_retransform: `True` if the ability to retransform classes is needed by this
+          agent; `False` by default.
+        :param bool can_set_native_method_prefix: `True` if the ability to set he native method prefix
+          is needed by this agent; `False` by default.
+        """
 
         super().__init__(
             name=name,
@@ -70,16 +70,16 @@ class JavaAgent(JavaLibrary):
     def premain(self):
         """The launch time agent fully qualified class name.
 
-    Either ``agent_class`` or ``premain`` will be defined and the other will be `None`.
-    """
+        Either ``agent_class`` or ``premain`` will be defined and the other will be `None`.
+        """
         return self._premain
 
     @property
     def agent_class(self):
         """The post-launch-time agent fully qualified class name.
 
-    Either ``agent_class`` or ``premain`` will be defined and the other will be `None`.
-    """
+        Either ``agent_class`` or ``premain`` will be defined and the other will be `None`.
+        """
         return self._agent_class
 
     @property

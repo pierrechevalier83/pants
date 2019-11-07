@@ -57,12 +57,12 @@ class PythonInterpreterCache(Subsystem):
     def partition_targets_by_compatibility(self, targets):
         """Partition targets by their compatibility constraints.
 
-    :param targets: a list of `PythonTarget` objects
-    :returns: (tgts_by_compatibilities, filters): a dict that maps compatibility constraints
-      to a list of matching targets, the aggregate set of compatibility constraints imposed
-      by the target set
-    :rtype: (dict(str, list), set)
-    """
+        :param targets: a list of `PythonTarget` objects
+        :returns: (tgts_by_compatibilities, filters): a dict that maps compatibility constraints
+          to a list of matching targets, the aggregate set of compatibility constraints imposed
+          by the target set
+        :rtype: (dict(str, list), set)
+        """
         tgts_by_compatibilities = defaultdict(list)
         filters = set()
 
@@ -103,14 +103,15 @@ class PythonInterpreterCache(Subsystem):
             raise self.UnsatisfiableInterpreterConstraintsError(
                 dedent(
                     """\
-        Unable to detect a suitable interpreter for compatibilities: {} (Conflicting targets: {})
+                    Unable to detect a suitable interpreter for compatibilities: {} (Conflicting targets: {})
 
-        Pants detected these interpreter versions on your system: {}
+                    Pants detected these interpreter versions on your system: {}
 
-        Possible ways to fix this:
-        * Modify your Python interpreter constraints by following https://www.pantsbuild.org/python_readme.html#configure-the-python-version.
-        * Ensure the targeted Python version is installed and discoverable.
-        * Modify Pants' interpreter search paths via --pants-setup-interpreter-search-paths.""".format(
+                    Possible ways to fix this:
+                    * Modify your Python interpreter constraints by following https://www.pantsbuild.org/python_readme.html#configure-the-python-version.
+                    * Ensure the targeted Python version is installed and discoverable.
+                    * Modify Pants' interpreter search paths via --pants-setup-interpreter-search-paths.
+                    """.format(
                         " && ".join(sorted(unique_compatibilities_strs)),
                         ", ".join(tgts_by_compatibilities_strs),
                         ", ".join(all_interpreter_version_strings),
@@ -165,12 +166,12 @@ class PythonInterpreterCache(Subsystem):
     def setup(self, filters=()):
         """Sets up a cache of python interpreters.
 
-    :param filters: A sequence of strings that constrain the interpreter compatibility for this
-      cache, using the Requirement-style format, e.g. ``'CPython>=3', or just ['>=2.7','<3']``
-      for requirements agnostic to interpreter class.
-    :returns: A list of cached interpreters
-    :rtype: list of :class:`pex.interpreter.PythonInterpreter`
-    """
+        :param filters: A sequence of strings that constrain the interpreter compatibility for this
+          cache, using the Requirement-style format, e.g. ``'CPython>=3', or just ['>=2.7','<3']``
+          for requirements agnostic to interpreter class.
+        :returns: A list of cached interpreters
+        :rtype: list of :class:`pex.interpreter.PythonInterpreter`
+        """
         # We filter the interpreter cache itself (and not just the interpreters we pull from it)
         # because setting up some python versions (e.g., 3<=python<3.3) crashes, and this gives us
         # an escape hatch.

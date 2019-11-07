@@ -38,11 +38,11 @@ class SelectInterpreterTest(TaskTestBase):
                 fp.write(
                     dedent(
                         """
-        #!{}
-        from __future__ import print_function
+                        #!{}
+                        from __future__ import print_function
 
-        print({!r})
-        """.format(
+                        print({!r})
+                        """.format(
                             PythonInterpreter.get().binary, id_str
                         )
                     ).strip()

@@ -70,15 +70,15 @@ class Scoverage(CoverageEngine):
 
         def create(self, settings, targets, execute_java_for_targets):
             """
-      :param settings: Generic code coverage settings.
-      :type settings: :class:`CodeCoverageSettings`
-      :param list targets: A list of targets to instrument and record code coverage for.
-      :param execute_java_for_targets: A function that accepts a list of targets whose JVM platform
-                                       constraints are used to pick a JVM `Distribution`. The
-                                       function should also accept `*args` and `**kwargs` compatible
-                                       with the remaining parameters accepted by
-                                       `pants.java.util.execute_java`.
-      """
+            :param settings: Generic code coverage settings.
+            :type settings: :class:`CodeCoverageSettings`
+            :param list targets: A list of targets to instrument and record code coverage for.
+            :param execute_java_for_targets: A function that accepts a list of targets whose JVM platform
+                                             constraints are used to pick a JVM `Distribution`. The
+                                             function should also accept `*args` and `**kwargs` compatible
+                                             with the remaining parameters accepted by
+                                             `pants.java.util.execute_java`.
+            """
 
             report_path = self.tool_classpath_from_products(
                 settings.context.products, "scoverage-report", scope="scoverage-report"
@@ -92,15 +92,15 @@ class Scoverage(CoverageEngine):
 
     def __init__(self, report_path, target_filters, settings, targets, execute_java_for_targets):
         """
-    :param settings: Generic code coverage settings.
-    :type settings: :class:`CodeCoverageSettings`
-    :param list targets: A list of targets to instrument and record code coverage for.
-    :param execute_java_for_targets: A function that accepts a list of targets whose JVM platform
-                                     constraints are used to pick a JVM `Distribution`. The function
-                                     should also accept `*args` and `**kwargs` compatible with the
-                                     remaining parameters accepted by
-                                     `pants.java.util.execute_java`.
-    """
+        :param settings: Generic code coverage settings.
+        :type settings: :class:`CodeCoverageSettings`
+        :param list targets: A list of targets to instrument and record code coverage for.
+        :param execute_java_for_targets: A function that accepts a list of targets whose JVM platform
+                                         constraints are used to pick a JVM `Distribution`. The function
+                                         should also accept `*args` and `**kwargs` compatible with the
+                                         remaining parameters accepted by
+                                         `pants.java.util.execute_java`.
+        """
         self._settings = settings
         self._context = settings.context
         self._targets = targets
@@ -112,11 +112,11 @@ class Scoverage(CoverageEngine):
     #
     def _iter_datafiles(self, output_dir):
         """
-    All scoverage instrument files have the name "scoverage.coverage" and
-    all measurement files are called "scoverage.measurements.<Thread ID>".
-    This function is used in [instrument(output_dir)] function below to clean up
-    all pre-existing scoverage files before generating new ones.
-    """
+        All scoverage instrument files have the name "scoverage.coverage" and
+        all measurement files are called "scoverage.measurements.<Thread ID>".
+        This function is used in [instrument(output_dir)] function below to clean up
+        all pre-existing scoverage files before generating new ones.
+        """
         for root, _, files in safe_walk(output_dir):
             for f in files:
                 if f.startswith("scoverage"):
@@ -125,11 +125,11 @@ class Scoverage(CoverageEngine):
     #
     def _iter_datadirs(self, output_dir):
         """
-    Used below for target filtering. Returns the parent directories
-    under which all the scoverage data (for all targets) is stored.
-    Currently, since all scoverage data for a test target is stored under
-    `scoverage/measurements`, path to `scoverage/measurements` is returned.
-    """
+        Used below for target filtering. Returns the parent directories
+        under which all the scoverage data (for all targets) is stored.
+        Currently, since all scoverage data for a test target is stored under
+        `scoverage/measurements`, path to `scoverage/measurements` is returned.
+        """
         for root, dirs, _ in safe_walk(output_dir):
             for d in dirs:
                 if d.startswith("measurements"):

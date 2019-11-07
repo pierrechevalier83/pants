@@ -41,8 +41,8 @@ class JarRule(FingerprintedMixin, metaclass=ABCMeta):
     def apply_pattern(self):
         """The pattern that matches jar entry paths this rule applies to.
 
-    :rtype: re.RegexObject
-    """
+        :rtype: re.RegexObject
+        """
         return self._apply_pattern
 
 
@@ -62,8 +62,8 @@ class Duplicate(JarRule):
         def __init__(self, path):
             """Creates a duplicate entry error for the given path.
 
-      :param string path: The path of the duplicate entry.
-      """
+            :param string path: The path of the duplicate entry.
+            """
             assert path and isinstance(path, str), "A non-empty path must be supplied."
             super(Duplicate.Error, self).__init__(
                 "Duplicate entry encountered for path {}".format(path)
@@ -86,13 +86,13 @@ class Duplicate(JarRule):
 
     CONCAT_TEXT = "CONCAT_TEXT"
     """Concatenates the contents of all duplicate entries encountered in the order encountered,
-  separating entries with newlines if needed.
-  """
+    separating entries with newlines if needed.
+    """
 
     FAIL = "FAIL"
     """Raises a :class:``Duplicate.Error`` when a duplicate entry is
-  encountered.
-  """
+    encountered.
+    """
 
     _VALID_ACTIONS = frozenset({SKIP, REPLACE, CONCAT, CONCAT_TEXT, FAIL})
 
@@ -100,9 +100,9 @@ class Duplicate(JarRule):
     def validate_action(cls, action):
         """Verifies the given action is a valid duplicate jar rule action.
 
-    :returns: The action if it is valid.
-    :raises: ``ValueError`` if the action is invalid.
-    """
+        :returns: The action if it is valid.
+        :raises: ``ValueError`` if the action is invalid.
+        """
         if action not in cls._VALID_ACTIONS:
             raise ValueError(
                 "The supplied action must be one of {valid}, given: {given}".format(
@@ -114,12 +114,12 @@ class Duplicate(JarRule):
     def __init__(self, apply_pattern, action):
         """Creates a rule for handling duplicate jar entries.
 
-    :param string apply_pattern: A regular expression that matches duplicate jar entries this rule
-      applies to.
-    :param action: An action to take to handle one or more duplicate entries.  Must be one of:
-      ``Duplicate.SKIP``, ``Duplicate.REPLACE``, ``Duplicate.CONCAT``, ``Duplicate.CONCAT_TEXT``,
-      or ``Duplicate.FAIL``.
-    """
+        :param string apply_pattern: A regular expression that matches duplicate jar entries this rule
+          applies to.
+        :param action: An action to take to handle one or more duplicate entries.  Must be one of:
+          ``Duplicate.SKIP``, ``Duplicate.REPLACE``, ``Duplicate.CONCAT``, ``Duplicate.CONCAT_TEXT``,
+          or ``Duplicate.FAIL``.
+        """
         payload = Payload()
         payload.add_fields(
             {"action": PrimitiveField(self.validate_action(action)),}
@@ -143,23 +143,23 @@ class Duplicate(JarRule):
 class JarRules(FingerprintedMixin):
     """A set of rules for packaging up a deploy jar.
 
-  Deploy jars are executable jars with fully self-contained classpaths and as such, assembling them
-  presents problems given jar semantics.
+    Deploy jars are executable jars with fully self-contained classpaths and as such, assembling them
+    presents problems given jar semantics.
 
-  One issue is signed jars that must be included on the
-  classpath.  These have a signature that depends on the jar contents and assembly of the deploy jar
-  changes the content of the jar, breaking the signatures.  For cases like these the signed jars
-  must be verified and then the signature information thrown away.  The `Skip <#Skip>`_
-  rule supports this sort of issue by allowing outright entry exclusion in the final deploy jar.
+    One issue is signed jars that must be included on the
+    classpath.  These have a signature that depends on the jar contents and assembly of the deploy jar
+    changes the content of the jar, breaking the signatures.  For cases like these the signed jars
+    must be verified and then the signature information thrown away.  The `Skip <#Skip>`_
+    rule supports this sort of issue by allowing outright entry exclusion in the final deploy jar.
 
-  Another issue is duplicate jar entries.  Although the underlying zip format supports these, the
-  java jar tool and libraries do not.  As such some action must be taken for each duplicate entry
-  such that there are no duplicates in the final deploy jar.  The four
-  `Duplicate <#Duplicate>`_ rules support resolution of these cases by allowing 1st wins,
-  last wins, concatenation of the duplicate entry contents or raising an exception.
+    Another issue is duplicate jar entries.  Although the underlying zip format supports these, the
+    java jar tool and libraries do not.  As such some action must be taken for each duplicate entry
+    such that there are no duplicates in the final deploy jar.  The four
+    `Duplicate <#Duplicate>`_ rules support resolution of these cases by allowing 1st wins,
+    last wins, concatenation of the duplicate entry contents or raising an exception.
 
-  :API: public
-  """
+    :API: public
+    """
 
     @classmethod
     def skip_signatures_and_duplicates_concat_well_known_metadata(
@@ -167,19 +167,19 @@ class JarRules(FingerprintedMixin):
     ):
         """Produces a rule set useful in many deploy jar creation contexts.
 
-    The rule set skips duplicate entries by default, retaining the 1st encountered.  In addition it
-    has the following special handling:
+        The rule set skips duplicate entries by default, retaining the 1st encountered.  In addition it
+        has the following special handling:
 
-    - jar signature metadata is dropped
-    - jar indexing files INDEX.LIST are dropped
-    - ``java.util.ServiceLoader`` provider-configuration files are concatenated in the order
-      encountered
+        - jar signature metadata is dropped
+        - jar indexing files INDEX.LIST are dropped
+        - ``java.util.ServiceLoader`` provider-configuration files are concatenated in the order
+          encountered
 
-    :param default_dup_action: An optional default action to take for duplicates.  Defaults to
-      `Duplicate.SKIP` if not specified.
-    :param additional_rules: Optionally one or more jar rules to add to those described above.
-    :returns: JarRules
-    """
+        :param default_dup_action: An optional default action to take for duplicates.  Defaults to
+          `Duplicate.SKIP` if not specified.
+        :param additional_rules: Optionally one or more jar rules to add to those described above.
+        :returns: JarRules
+        """
         default_dup_action = Duplicate.validate_action(default_dup_action or Duplicate.SKIP)
         additional_rules = assert_list(additional_rules, expected_type=(Duplicate, Skip))
 
@@ -199,11 +199,11 @@ class JarRules(FingerprintedMixin):
     def default(cls):
         """Returns the default set of jar rules.
 
-    Can be set with `set_default` but otherwise defaults to
-    `skip_signatures_and_duplicates_concat_well_known_metadata`.
+        Can be set with `set_default` but otherwise defaults to
+        `skip_signatures_and_duplicates_concat_well_known_metadata`.
 
-    :API: public
-    """
+        :API: public
+        """
         if cls._DEFAULT is None:
             cls._DEFAULT = cls.skip_signatures_and_duplicates_concat_well_known_metadata()
         return cls._DEFAULT
@@ -218,11 +218,11 @@ class JarRules(FingerprintedMixin):
     def __init__(self, rules=None, default_dup_action=Duplicate.SKIP):
         """Creates a new set of jar rules with the default duplicate action of ``Duplicate.SKIP``.
 
-    :param rules: One or more rules that will be applied in order to jar entries being packaged in
-      a deploy jar. `Skip <#Skip>`_ rules can go here.
-    :param default_dup_action: The default action to take when a duplicate entry is encountered and
-      no explicit rules apply to the entry.
-    """
+        :param rules: One or more rules that will be applied in order to jar entries being packaged in
+          a deploy jar. `Skip <#Skip>`_ rules can go here.
+        :param default_dup_action: The default action to take when a duplicate entry is encountered and
+          no explicit rules apply to the entry.
+        """
         self.payload = Payload()
         self.payload.add_fields(
             {"default_dup_action": PrimitiveField(Duplicate.validate_action(default_dup_action))}
@@ -233,8 +233,8 @@ class JarRules(FingerprintedMixin):
     def default_dup_action(self):
         """The default action to take when a duplicate jar entry is encountered.
 
-    :API: public
-    """
+        :API: public
+        """
         return self.payload.default_dup_action
 
     @property
@@ -262,10 +262,10 @@ class ManifestEntries(FingerprintedMixin):
 
     def __init__(self, entries=None):
         """
-    :param entries: Additional headers, value pairs to add to the MANIFEST.MF.
-      You can just add fixed string header / value pairs.
-    :type entries: dictionary of string : string
-    """
+        :param entries: Additional headers, value pairs to add to the MANIFEST.MF.
+          You can just add fixed string header / value pairs.
+        :type entries: dictionary of string : string
+        """
         self.payload = Payload()
         if entries:
             if not isinstance(entries, dict):
@@ -292,16 +292,16 @@ class ManifestEntries(FingerprintedMixin):
 class JvmBinary(JvmTarget):
     """A JVM binary.
 
-  Below are a summary of how key goals affect targets of this type:
+    Below are a summary of how key goals affect targets of this type:
 
-  * ``bundle`` - Creates a self-contained directory with the binary and all
-    its dependencies, optionally archived, suitable for deployment.
-  * ``binary`` - Create an executable jar of the binary. On the JVM
-    this means the jar has a manifest specifying the main class.
-  * ``run`` - Executes the main class of this binary locally.
+    * ``bundle`` - Creates a self-contained directory with the binary and all
+      its dependencies, optionally archived, suitable for deployment.
+    * ``binary`` - Create an executable jar of the binary. On the JVM
+      this means the jar has a manifest specifying the main class.
+    * ``run`` - Executes the main class of this binary locally.
 
-  :API: public
-  """
+    :API: public
+    """
 
     def __init__(
         self,
@@ -319,36 +319,36 @@ class JvmBinary(JvmTarget):
         **kwargs,
     ):
         """
-    :API: public
+        :API: public
 
-    :param string main: The name of the ``main`` class, e.g.,
-      ``'org.pantsbuild.example.hello.main.HelloMain'``. This class may be
-      present as the source of this target or depended-upon library.
-    :param string basename: Base name for the generated ``.jar`` file, e.g.,
-      ``'hello'``. (By default, uses ``name`` param)  Note this is unsafe
-      because of the possible conflict when multiple binaries are built.
-    :param EagerFilesetWithSpec sources: Zero or one source files. If more than one source is
-      required, they should be put in a library target which should be added to dependencies.
-    :param dependencies: Targets (probably ``java_library`` and
-     ``scala_library`` targets) to "link" in.
-    :type dependencies: list of target specs
-    :param deploy_excludes: List of `exclude <#exclude>`_\\s to apply
-      at deploy time.
-      If you, for example, deploy a java servlet that has one version of
-      ``servlet.jar`` onto a Tomcat environment that provides another version,
-      they might conflict. ``deploy_excludes`` gives you a way to build your
-      code but exclude the conflicting ``jar`` when deploying.
-    :param deploy_jar_rules: `Jar rules <#jar_rules>`_ for packaging this binary in a
-      deploy jar.
-    :param manifest_entries: dict that specifies entries for `ManifestEntries <#manifest_entries>`_
-      for adding to MANIFEST.MF when packaging this binary.
-    :param list shading_rules: Optional list of shading rules to apply when building a shaded
-      (aka monolithic aka fat) binary jar. The order of the rules matters: the first rule which
-      matches a fully-qualified class name is used to shade it. See shading_relocate(),
-      shading_exclude(), shading_relocate_package(), and shading_exclude_package().
-    :param list extra_jvm_options: A list of options to be passed to the jvm when running the
-      binary. Example: ['-Dexample.property=1', '-DMyFlag', '-Xmx4G'] If unspecified, no extra jvm options will be added.
-    """
+        :param string main: The name of the ``main`` class, e.g.,
+          ``'org.pantsbuild.example.hello.main.HelloMain'``. This class may be
+          present as the source of this target or depended-upon library.
+        :param string basename: Base name for the generated ``.jar`` file, e.g.,
+          ``'hello'``. (By default, uses ``name`` param)  Note this is unsafe
+          because of the possible conflict when multiple binaries are built.
+        :param EagerFilesetWithSpec sources: Zero or one source files. If more than one source is
+          required, they should be put in a library target which should be added to dependencies.
+        :param dependencies: Targets (probably ``java_library`` and
+         ``scala_library`` targets) to "link" in.
+        :type dependencies: list of target specs
+        :param deploy_excludes: List of `exclude <#exclude>`_\\s to apply
+          at deploy time.
+          If you, for example, deploy a java servlet that has one version of
+          ``servlet.jar`` onto a Tomcat environment that provides another version,
+          they might conflict. ``deploy_excludes`` gives you a way to build your
+          code but exclude the conflicting ``jar`` when deploying.
+        :param deploy_jar_rules: `Jar rules <#jar_rules>`_ for packaging this binary in a
+          deploy jar.
+        :param manifest_entries: dict that specifies entries for `ManifestEntries <#manifest_entries>`_
+          for adding to MANIFEST.MF when packaging this binary.
+        :param list shading_rules: Optional list of shading rules to apply when building a shaded
+          (aka monolithic aka fat) binary jar. The order of the rules matters: the first rule which
+          matches a fully-qualified class name is used to shade it. See shading_relocate(),
+          shading_exclude(), shading_relocate_package(), and shading_exclude_package().
+        :param list extra_jvm_options: A list of options to be passed to the jvm when running the
+          binary. Example: ['-Dexample.property=1', '-DMyFlag', '-Xmx4G'] If unspecified, no extra jvm options will be added.
+        """
         self.address = address  # Set in case a TargetDefinitionException is thrown early
         if main and not isinstance(main, str):
             raise TargetDefinitionException(self, "main must be a fully qualified classname")

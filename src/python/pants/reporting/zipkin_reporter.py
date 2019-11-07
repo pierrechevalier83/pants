@@ -87,7 +87,7 @@ class AsyncHTTPTransportHandler(BaseTransportHandler):
 class ZipkinReporter(Reporter):
     """
     Reporter that implements Zipkin tracing.
-  """
+    """
 
     def __init__(
         self,
@@ -101,21 +101,21 @@ class ZipkinReporter(Reporter):
         max_span_batch_size,
     ):
         """
-    When trace_id and parent_id are set a Zipkin trace will be created with given trace_id
-    and parent_id. If trace_id and parent_id are set to None, a trace_id will be randomly
-    generated for a Zipkin trace. trace-id and parent-id must both either be set or not set.
+        When trace_id and parent_id are set a Zipkin trace will be created with given trace_id
+        and parent_id. If trace_id and parent_id are set to None, a trace_id will be randomly
+        generated for a Zipkin trace. trace-id and parent-id must both either be set or not set.
 
-    :param RunTracker run_tracker: Tracks and times the execution of a pants run.
-    :param Settings settings: Generic reporting settings.
-    :param string endpoint: The full HTTP URL of a zipkin server to which traces should be posted.
-    :param string trace_id: The overall 64 or 128-bit ID of the trace. May be None.
-    :param string parent_id: The 64-bit ID for a parent span that invokes Pants. May be None.
-    :param float sample_rate: Rate at which to sample Zipkin traces. Value 0.0 - 100.0.
-    :param string service_name_prefix: Prefix for service name.
-    :param int max_span_batch_size: Spans in a trace are sent in batches,
-           max_span_batch_size defines max size of one batch.
+        :param RunTracker run_tracker: Tracks and times the execution of a pants run.
+        :param Settings settings: Generic reporting settings.
+        :param string endpoint: The full HTTP URL of a zipkin server to which traces should be posted.
+        :param string trace_id: The overall 64 or 128-bit ID of the trace. May be None.
+        :param string parent_id: The 64-bit ID for a parent span that invokes Pants. May be None.
+        :param float sample_rate: Rate at which to sample Zipkin traces. Value 0.0 - 100.0.
+        :param string service_name_prefix: Prefix for service name.
+        :param int max_span_batch_size: Spans in a trace are sent in batches,
+               max_span_batch_size defines max size of one batch.
 
-    """
+        """
         super().__init__(run_tracker, settings)
         # Create a transport handler
         self.trace_id = trace_id

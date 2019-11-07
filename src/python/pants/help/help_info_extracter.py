@@ -27,22 +27,22 @@ class OptionHelpInfo(
 ):
     """A container for help information for a single option.
 
-  registering_class: The type that registered the option.
-  display_args: Arg strings suitable for display in help text, including value examples
-                (e.g., [-f, --[no]-foo-bar, --baz=<metavar>].)
-  scoped_cmd_line_args: The explicitly scoped raw flag names allowed anywhere on the cmd line,
-                        (e.g., [--scope-baz, --no-scope-baz, --scope-qux])
-  unscoped_cmd_line_args: The unscoped raw flag names allowed on the cmd line in this option's
-                          scope context (e.g., [--baz, --no-baz, --qux])
-  typ: The type of the option.
-  default: The value of this option if no flags are specified (derived from config and env vars).
-  help: The help message registered for this option.
-  deprecated_message: If deprecated: A message explaining that this option is deprecated at
-                      removal_version.
-  removal_version: If deprecated: The version at which this option is to be removed.
-  removal_hint: If deprecated: The removal hint message registered for this option.
-  choices: If this option has a constrained list of choices, a csv list of the choices.
-  """
+    registering_class: The type that registered the option.
+    display_args: Arg strings suitable for display in help text, including value examples
+                  (e.g., [-f, --[no]-foo-bar, --baz=<metavar>].)
+    scoped_cmd_line_args: The explicitly scoped raw flag names allowed anywhere on the cmd line,
+                          (e.g., [--scope-baz, --no-scope-baz, --scope-qux])
+    unscoped_cmd_line_args: The unscoped raw flag names allowed on the cmd line in this option's
+                            scope context (e.g., [--baz, --no-baz, --qux])
+    typ: The type of the option.
+    default: The value of this option if no flags are specified (derived from config and env vars).
+    help: The help message registered for this option.
+    deprecated_message: If deprecated: A message explaining that this option is deprecated at
+                        removal_version.
+    removal_version: If deprecated: The version at which this option is to be removed.
+    removal_hint: If deprecated: The removal hint message registered for this option.
+    choices: If this option has a constrained list of choices, a csv list of the choices.
+    """
 
     def comma_separated_display_args(self):
         return ", ".join(self.display_args)
@@ -53,9 +53,9 @@ class OptionScopeHelpInfo(
 ):
     """A container for help information for a scope of options.
 
-  scope: The scope of the described options.
-  basic|recursive|advanced: A list of OptionHelpInfo for the options in that group.
-  """
+    scope: The scope of the described options.
+    basic|recursive|advanced: A list of OptionHelpInfo for the options in that group.
+    """
 
     pass
 
@@ -67,8 +67,8 @@ class HelpInfoExtracter:
     def get_option_scope_help_info_from_parser(cls, parser):
         """Returns a dict of help information for the options registered on the given parser.
 
-    Callers can format this dict into cmd-line help, HTML or whatever.
-    """
+        Callers can format this dict into cmd-line help, HTML or whatever.
+        """
         return cls(parser.scope).get_option_scope_help_info(parser.option_registrations_iter())
 
     @staticmethod

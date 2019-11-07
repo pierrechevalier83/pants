@@ -11,8 +11,8 @@ from pants_test.pants_run_integration_test import PantsRunIntegrationTest
 
 class BaseCompileIT(PantsRunIntegrationTest):
     """
-  :API: public
-  """
+    :API: public
+    """
 
     _EXTRA_TASK_ARGS = []
 
@@ -28,10 +28,10 @@ class BaseCompileIT(PantsRunIntegrationTest):
     ):
         """Runs a configurable number of iterations of compilation for the given target.
 
-    :API: public
+        :API: public
 
-    By default, runs twice to shake out errors related to noops.
-    """
+        By default, runs twice to shake out errors related to noops.
+        """
         if not workdir_outside_of_buildroot:
             workdir_generator = self.temporary_workdir()
         else:
@@ -71,8 +71,8 @@ class BaseCompileIT(PantsRunIntegrationTest):
         self, workdir, cacheurl, target, clean_all=False, extra_args=None, test=False
     ):
         """
-    :API: public
-    """
+        :API: public
+        """
         config = {
             "cache": {"write": True, "write_to": [cacheurl],},
         }
@@ -91,8 +91,8 @@ class BaseCompileIT(PantsRunIntegrationTest):
     def do_test_success_and_failure(self, target, success_args, failure_args, shared_args=None):
         """Ensure that a target fails to build when one arg set is passed, and succeeds for another.
 
-    :API: public
-    """
+        :API: public
+        """
         shared_args = shared_args if shared_args else []
 
         # Check that success_args succeed.

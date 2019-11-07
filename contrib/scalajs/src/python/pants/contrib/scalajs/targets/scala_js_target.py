@@ -42,10 +42,10 @@ class ScalaJSTarget:
     @property
     def compiler_option_sets(self):
         """For every element in this list, enable the corresponding flags on compilation
-    of targets.
-    :return: See constructor.
-    :rtype: list
-    """
+        of targets.
+        :return: See constructor.
+        :rtype: list
+        """
         return self.payload.compiler_option_sets
 
     @property

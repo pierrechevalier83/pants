@@ -22,9 +22,10 @@ class JavaAntlrLibraryTest(TestBase):
                 "BUILD",
                 dedent(
                     """
-        java_antlr_library(name='foo',
-          sources=[],
-        )"""
+                    java_antlr_library(name='foo',
+                      sources=[],
+                    )
+                    """
                 ),
             )
             self.foo = self.target("//:foo")
@@ -35,9 +36,10 @@ class JavaAntlrLibraryTest(TestBase):
             "BUILD",
             dedent(
                 """
-      java_antlr_library(name='foo',
-        sources=['something.txt'],
-      )"""
+                java_antlr_library(name='foo',
+                  sources=['something.txt'],
+                )
+                """
             ),
         )
         self.foo = self.target("//:foo")
@@ -49,10 +51,11 @@ class JavaAntlrLibraryTest(TestBase):
                 "BUILD",
                 dedent(
                     """
-        java_antlr_library(name='foo',
-          sources=['foo'],
-          compiler='antlr9'
-        )"""
+                    java_antlr_library(name='foo',
+                      sources=['foo'],
+                      compiler='antlr9'
+                    )
+                    """
                 ),
             )
             self.foo = self.target("//:foo")

@@ -10,78 +10,78 @@ from internal_backend.sitegen.tasks import sitegen
 
 
 CONFIG_JSON = """
-{
-  "sources": {
-    "index": "fake0/README.html",
-    "subdir/page1": "fake1/p1.html",
-    "subdir/page2": "fake1/p2.html",
-    "subdir/page2_no_toc": "fake1/p2.html"
-  },
-  "show_toc": {
-    "subdir/page2_no_toc": false
-  },
-  "extras": {
-  },
-  "tree": [
-    { "page": "index",
-      "children": [
-        {"heading": "non_collapse"},
-        { "pages": ["subdir/page1"] },
-        {"collapsible_heading" : "collapse",
-          "pages": ["subdir/page2",
-                    "index"
-                  ]
-        }
-      ]
-    }
-  ],
-  "template": "fake/fake.mustache"
-}
-"""
+              {
+                "sources": {
+                  "index": "fake0/README.html",
+                  "subdir/page1": "fake1/p1.html",
+                  "subdir/page2": "fake1/p2.html",
+                  "subdir/page2_no_toc": "fake1/p2.html"
+                },
+                "show_toc": {
+                  "subdir/page2_no_toc": false
+                },
+                "extras": {
+                },
+                "tree": [
+                  { "page": "index",
+                    "children": [
+                      {"heading": "non_collapse"},
+                      { "pages": ["subdir/page1"] },
+                      {"collapsible_heading" : "collapse",
+                        "pages": ["subdir/page2",
+                                  "index"
+                                ]
+                      }
+                    ]
+                  }
+                ],
+                "template": "fake/fake.mustache"
+              }
+              """
 
 INDEX_HTML = """
-<h1 id="pants-build-system">Pants Build System</h1>
+             <h1 id="pants-build-system">Pants Build System</h1>
 
-<p>Pants is a build system.</p>
+             <p>Pants is a build system.</p>
 
-<a pantsmark="pantsmark_index"></a>
+             <a pantsmark="pantsmark_index"></a>
 
-<p>See also:
-<a href="../fake1/p1.html">another page</a>.</p>
-"""
+             <p>See also:
+             <a href="../fake1/p1.html">another page</a>.</p>
+             """
 
 P1_HTML = """
-<h1>東京 is Tokyo</h1>
+          <h1>東京 is Tokyo</h1>
 
-<a id="an_pantsmark" pantsmark="pantsmark_p1"></a>
+          <a id="an_pantsmark" pantsmark="pantsmark_p1"></a>
 
-<p>Fascinating description. <a pantsref="pantsmark_index">to index</a>
-"""
+          <p>Fascinating description. <a pantsref="pantsmark_index">to index</a>
+          """
 
 P2_HTML = """
-<head>
-  <title>Page 2: Electric Boogaloo</title>
-</head>
-<body>
+          <head>
+            <title>Page 2: Electric Boogaloo</title>
+          </head>
+          <body>
 
-<h1>Page 2</h1>
+          <h1>Page 2</h1>
 
-<p>Some text <a pantsref="pantsmark_p1">to p1</a></p>
+          <p>Some text <a pantsref="pantsmark_p1">to p1</a></p>
 
-<h2 id="one">Section One</h2>
+          <h2 id="one">Section One</h2>
 
-<p>Some more text</p>
+          <p>Some more text</p>
 
-<h2 id="two">Section Two</h2>
+          <h2 id="two">Section Two</h2>
 
-<p>Some more text</p>
+          <p>Some more text</p>
 
-</body>
-"""
+          </body>
+          """
 
 TEMPLATE_MUSTACHE = """
-{{{body_html}}}
-"""
+                    {{{body_html}}}
+                    """
 
 
 class AllTheThingsTestCase(unittest.TestCase):
@@ -137,10 +137,10 @@ class AllTheThingsTestCase(unittest.TestCase):
             self.soups,
             self.precomputed,
             """
-                                   {{#page_toc}}
-                                   DEPTH={{depth}} LINK={{link}} TEXT={{text}}
-                                   {{/page_toc}}
-                                   """,
+            {{#page_toc}}
+            DEPTH={{depth}} LINK={{link}} TEXT={{text}}
+            {{/page_toc}}
+            """,
         )
         self.assertIn("DEPTH=1 LINK=one TEXT=Section One", rendered)
         self.assertIn("DEPTH=1 LINK=two TEXT=Section Two", rendered)
@@ -153,10 +153,10 @@ class AllTheThingsTestCase(unittest.TestCase):
             self.soups,
             self.precomputed,
             """
-                                   {{#page_toc}}
-                                   DEPTH={{depth}} LINK={{link}} TEXT={{text}}
-                                   {{/page_toc}}
-                                   """,
+            {{#page_toc}}
+            DEPTH={{depth}} LINK={{link}} TEXT={{text}}
+            {{/page_toc}}
+            """,
         )
         self.assertNotIn("DEPTH=1 LINK=one TEXT=Section One", rendered)
         self.assertNotIn("DEPTH=1 LINK=two TEXT=Section Two", rendered)
@@ -171,10 +171,10 @@ class AllTheThingsTestCase(unittest.TestCase):
             self.soups,
             self.precomputed,
             """
-                                   {{#page_toc}}
-                                   DEPTH={{depth}} LINK={{link}} TEXT={{text}}
-                                   {{/page_toc}}
-                                   """,
+            {{#page_toc}}
+            DEPTH={{depth}} LINK={{link}} TEXT={{text}}
+            {{/page_toc}}
+            """,
         )
         self.assertIn("DEPTH=1 LINK=one TEXT=Section One", rendered)
         self.assertIn("DEPTH=1 LINK=two TEXT=Section Two", rendered)
@@ -189,10 +189,10 @@ class AllTheThingsTestCase(unittest.TestCase):
             self.soups,
             self.precomputed,
             """
-                                   {{#site_toc}}
-                                   DEPTH={{depth}} LINK={{links}} HEADING={{heading}} 
-                                   {{/site_toc}}
-                                   """,
+            {{#site_toc}}
+            DEPTH={{depth}} LINK={{links}} HEADING={{heading}}
+            {{/site_toc}}
+            """,
         )
         self.assertIn("DEPTH=1 LINK=None HEADING=non_collapse", rendered)
         escaped_single_quote = "&#x27;"

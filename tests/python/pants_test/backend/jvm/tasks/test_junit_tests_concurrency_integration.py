@@ -6,8 +6,7 @@ from pants_test.pants_run_integration_test import PantsRunIntegrationTest
 
 def ensure_experimental(test_fn):
     """Decorator for running once with and once without the --use-experimental-runner flag.
-
-  """
+    """
 
     def wrapper(self, *args, **kwargs):
         JunitTestsConcurrencyIntegrationTest.USE_EXPERIMENTAL_RUNNER = True
@@ -21,9 +20,9 @@ def ensure_experimental(test_fn):
 class JunitTestsConcurrencyIntegrationTest(PantsRunIntegrationTest):
     """Run tests with different concurrency settings.
 
-  Note that each of these tests is intended to be annotated with @ensure_experimental and run twice,
-  once with the experimental runner enabled and once with it off.
-  """
+    Note that each of these tests is intended to be annotated with @ensure_experimental and run twice,
+    once with the experimental runner enabled and once with it off.
+    """
 
     USE_EXPERIMENTAL_RUNNER = False
 

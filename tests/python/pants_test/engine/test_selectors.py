@@ -29,15 +29,15 @@ class GetTest(unittest.TestCase):
             Get(AClass, BClass)
         self.assertEqual(
             """\
-The two-argument form of Get does not accept a type as its second argument.
+            The two-argument form of Get does not accept a type as its second argument.
 
-args were: Get(({a!r}, {b!r}))
+            args were: Get(({a!r}, {b!r}))
 
-Get.create_statically_for_rule_graph() should be used to generate a Get() for
-the `input_gets` field of a rule. If you are using a `yield Get(...)` in a rule
-and a type was intended, use the 3-argument version:
-Get({a!r}, {t!r}, {b!r})
-""".format(
+            Get.create_statically_for_rule_graph() should be used to generate a Get() for
+            the `input_gets` field of a rule. If you are using a `yield Get(...)` in a rule
+            and a type was intended, use the 3-argument version:
+            Get({a!r}, {t!r}, {b!r})
+            """.format(
                 a=AClass, t=type(BClass), b=BClass
             ),
             str(cm.exception),
@@ -61,7 +61,8 @@ Get({a!r}, {t!r}, {b!r})
         self.assertEqual(
             str(cm.exception),
             """\
-Two arg form of Get expected (product_type, subject_type(subject)), but got: (Num, Num)""",
+            Two arg form of Get expected (product_type, subject_type(subject)), but got: (Num, Num)
+            """,
         )
 
         parsed_three_arg_call = self._get_call_node("Get(A, B, C(x))")
@@ -72,7 +73,8 @@ Two arg form of Get expected (product_type, subject_type(subject)), but got: (Nu
         self.assertEqual(
             str(cm.exception),
             """\
-Three arg form of Get expected (product_type, subject_declared_type, subject), but got: (A, Str, Call)""",
+            Three arg form of Get expected (product_type, subject_declared_type, subject), but got: (A, Str, Call)
+            """,
         )
 
     def test_create_statically_for_rule_graph(self):

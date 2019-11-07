@@ -8,12 +8,12 @@ from pants.contrib.python.checks.checker.common import Nit
 
 
 BAD_CLASS = """
-class Distiller(object):
-  CONSTANT = "foo"
+            class Distiller(object):
+              CONSTANT = "foo"
 
-  def foo(self, value):
-    return os.path.join(Distiller.CONSTANT, value)
-"""
+              def foo(self, value):
+                return os.path.join(Distiller.CONSTANT, value)
+            """
 
 
 class ClassFactoringTest(CheckstylePluginTestBase):

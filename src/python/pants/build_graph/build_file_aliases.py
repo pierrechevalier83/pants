@@ -13,11 +13,11 @@ from pants.util.memo import memoized_property
 class TargetMacro:
     """A specialized context aware object factory responsible for instantiating a set of target types.
 
-  The macro acts to expand arguments to its alias in a BUILD file into one or more target
-  addressable instances.  This is primarily useful for hiding true target type constructors from
-  BUILD file authors and providing an extra layer of control over core target parameters like `name`
-  and `dependencies`.
-  """
+    The macro acts to expand arguments to its alias in a BUILD file into one or more target
+    addressable instances.  This is primarily useful for hiding true target type constructors from
+    BUILD file authors and providing an extra layer of control over core target parameters like `name`
+    and `dependencies`.
+    """
 
     class Factory(BuildFileTargetFactory):
         """Creates new target macros specialized for a particular BUILD file parse context."""
@@ -26,11 +26,11 @@ class TargetMacro:
         def wrap(cls, context_aware_object_factory, *target_types):
             """Wraps an existing context aware object factory into a target macro factory.
 
-      :param context_aware_object_factory: The existing context aware object factory.
-      :param *target_types: One or more target types the context aware object factory creates.
-      :returns: A new target macro factory.
-      :rtype: :class:`TargetMacro.Factory`
-      """
+            :param context_aware_object_factory: The existing context aware object factory.
+            :param *target_types: One or more target types the context aware object factory creates.
+            :returns: A new target macro factory.
+            :rtype: :class:`TargetMacro.Factory`
+            """
             if not target_types:
                 raise ValueError(
                     "The given `context_aware_object_factory` {} must expand 1 produced "
@@ -55,21 +55,21 @@ class TargetMacro:
         def macro(self, parse_context):
             """Returns a new target macro that can create targets in the given parse context.
 
-      :param parse_context: The parse context the target macro will expand targets in.
-      :type parse_context: :class:`pants.base.parse_context.ParseContext`
-      :rtype: :class:`TargetMacro`
-      """
+            :param parse_context: The parse context the target macro will expand targets in.
+            :type parse_context: :class:`pants.base.parse_context.ParseContext`
+            :rtype: :class:`TargetMacro`
+            """
 
         def target_macro(self, parse_context):
             """Returns a new target macro that can create targets in the given parse context.
 
-      The target macro will also act as a build file target factory and report the target types it
-      creates.
+            The target macro will also act as a build file target factory and report the target types it
+            creates.
 
-      :param parse_context: The parse context the target macro will expand targets in.
-      :type parse_context: :class:`pants.base.parse_context.ParseContext`
-      :rtype: :class:`BuildFileTargetFactory` & :class:`TargetMacro`
-      """
+            :param parse_context: The parse context the target macro will expand targets in.
+            :type parse_context: :class:`pants.base.parse_context.ParseContext`
+            :rtype: :class:`BuildFileTargetFactory` & :class:`TargetMacro`
+            """
             macro = self.macro(parse_context)
 
             return _BuildFileTargetFactoryMacro(macro.expand, self.target_types)
@@ -85,19 +85,19 @@ class TargetMacro:
 class BuildFileAliases:
     """A structure containing sets of symbols to be exposed in BUILD files.
 
-  There are three types of symbols that can be directly exposed:
+    There are three types of symbols that can be directly exposed:
 
-  :API: public
+    :API: public
 
-  - targets: These are Target subclasses or TargetMacro.Factory instances.
-  - objects: These are any python object, from constants to types.
-  - context_aware_object_factories: These are object factories that are passed a ParseContext and
-    produce one or more objects that use data from the context to enable some feature or utility;
-    you might call them a BUILD file "macro" since they expand parameters to some final, "real"
-    BUILD file object.  Common uses include creating objects that must be aware of the current
-    BUILD file path or functions that need to be able to create targets or objects from within the
-    BUILD file parse.
-  """
+    - targets: These are Target subclasses or TargetMacro.Factory instances.
+    - objects: These are any python object, from constants to types.
+    - context_aware_object_factories: These are object factories that are passed a ParseContext and
+      produce one or more objects that use data from the context to enable some feature or utility;
+      you might call them a BUILD file "macro" since they expand parameters to some final, "real"
+      BUILD file object.  Common uses include creating objects that must be aware of the current
+      BUILD file path or functions that need to be able to create targets or objects from within the
+      BUILD file parse.
+    """
 
     @staticmethod
     def _is_target_type(obj):
@@ -183,14 +183,14 @@ class BuildFileAliases:
 
     def __init__(self, targets=None, objects=None, context_aware_object_factories=None):
         """
-    :API: public
+        :API: public
 
-    :param dict targets: A mapping from string aliases to Target subclasses or TargetMacro.Factory
-                         instances
-    :param dict objects: A mapping from string aliases to arbitrary objects.
-    :param dict context_aware_object_factories: A mapping from string aliases to context aware
-                                                object factory callables.
-    """
+        :param dict targets: A mapping from string aliases to Target subclasses or TargetMacro.Factory
+                             instances
+        :param dict objects: A mapping from string aliases to arbitrary objects.
+        :param dict context_aware_object_factories: A mapping from string aliases to context aware
+                                                    object factory callables.
+        """
         self._target_types, self._target_macro_factories = self._validate_targets(targets)
         self._objects = self._validate_objects(objects)
         self._context_aware_object_factories = self._validate_context_aware_object_factories(
@@ -201,53 +201,53 @@ class BuildFileAliases:
     def target_types(self):
         """Returns a mapping from string aliases to Target subclasses.
 
-    :API: public
+        :API: public
 
-    :rtype: dict
-    """
+        :rtype: dict
+        """
         return self._target_types
 
     @property
     def target_macro_factories(self):
         """Returns a mapping from string aliases to TargetMacro.Factory instances.
 
-    :API: public
+        :API: public
 
-    :rtype: dict
-    """
+        :rtype: dict
+        """
         return self._target_macro_factories
 
     @property
     def objects(self):
         """Returns a mapping from string aliases to arbitrary objects.
 
-    :API: public
+        :API: public
 
-    :rtype: dict
-    """
+        :rtype: dict
+        """
         return self._objects
 
     @property
     def context_aware_object_factories(self):
         """Returns a mapping from string aliases to context aware object factory callables.
 
-    :API: public
+        :API: public
 
-    :rtype: dict
-    """
+        :rtype: dict
+        """
         return self._context_aware_object_factories
 
     @memoized_property
     def target_types_by_alias(self):
         """Returns a mapping from target alias to the target types produced for that alias.
 
-    Normally there is 1 target type per alias, but macros can expand a single alias to several
-    target types.
+        Normally there is 1 target type per alias, but macros can expand a single alias to several
+        target types.
 
-    :API: public
+        :API: public
 
-    :rtype: dict
-    """
+        :rtype: dict
+        """
         target_types_by_alias = defaultdict(set)
         for alias, target_type in self.target_types.items():
             target_types_by_alias[alias].add(target_type)
@@ -258,15 +258,15 @@ class BuildFileAliases:
     def merge(self, other):
         """Merges a set of build file aliases and returns a new set of aliases containing both.
 
-    Any duplicate aliases from `other` will trump.
+        Any duplicate aliases from `other` will trump.
 
-    :API: public
+        :API: public
 
-    :param other: The BuildFileAliases to merge in.
-    :type other: :class:`BuildFileAliases`
-    :returns: A new BuildFileAliases containing `other`'s aliases merged into ours.
-    :rtype: :class:`BuildFileAliases`
-    """
+        :param other: The BuildFileAliases to merge in.
+        :type other: :class:`BuildFileAliases`
+        :returns: A new BuildFileAliases containing `other`'s aliases merged into ours.
+        :rtype: :class:`BuildFileAliases`
+        """
         if not isinstance(other, BuildFileAliases):
             raise TypeError("Can only merge other BuildFileAliases, given {0}".format(other))
 

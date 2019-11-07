@@ -28,16 +28,16 @@ class PytestPrep(PythonExecutionTaskBase):
         def coverage_plugin_module(cls):
             """Return the name of the coverage plugin module embedded in this pytest binary.
 
-      :rtype: str
-      """
+            :rtype: str
+            """
             return cls.make_plugin_name("coverage")
 
         @memoized_classproperty
         def pytest_plugin_module(cls):
             """Return the name of the pytest plugin module embedded in this pytest binary.
 
-      :rtype: str
-      """
+            :rtype: str
+            """
             return cls.make_plugin_name("pytest")
 
         def __init__(self, interpreter, pex):
@@ -57,16 +57,16 @@ class PytestPrep(PythonExecutionTaskBase):
         def pex(self):
             """Return the loose-source py.test binary PEX.
 
-      :rtype: :class:`pex.pex.PEX`
-      """
+            :rtype: :class:`pex.pex.PEX`
+            """
             return self._pex
 
         @property
         def interpreter(self):
             """Return the interpreter used to build this PEX.
 
-      :rtype: :class:`pex.interpreter.PythonInterpreter`
-      """
+            :rtype: :class:`pex.interpreter.PythonInterpreter`
+            """
             return self._interpreter
 
     @classmethod

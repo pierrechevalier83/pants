@@ -133,9 +133,9 @@ class CoursierResolveTest(NailgunTaskTestBase):
 
     def test_resolve_ignores_jars_with_rev_left_off(self):
         """If a resolve jar leaves off the rev, we're supposed to get the latest version,
-       but coursier doesn't currently support that.
-       https://github.com/coursier/coursier/issues/209
-    """
+        but coursier doesn't currently support that.
+        https://github.com/coursier/coursier/issues/209
+        """
         with self.assertRaises(TaskError) as cm:
             jar = JarDependency("com.google.guava", "guava")
             lib = self.make_target("//:b", JarLibrary, jars=[jar])
@@ -204,8 +204,8 @@ class CoursierResolveTest(NailgunTaskTestBase):
 
         def get_coord_in_classpath(cp, targets):
             """
-      Get the simple coords that are going to be on the classpath
-      """
+            Get the simple coords that are going to be on the classpath
+            """
             conf_art_tuples_ex = cp.get_classpath_entries_for_targets(targets)
             simple_coords = {x[1].coordinate.simple_coord for x in conf_art_tuples_ex}
             return simple_coords

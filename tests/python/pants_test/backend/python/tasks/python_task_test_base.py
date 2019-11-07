@@ -36,14 +36,14 @@ def normalized_current_platform():
 
 class PythonTaskTestBase(TaskTestBase):
     """
-  :API: public
-  """
+    :API: public
+    """
 
     @classmethod
     def alias_groups(cls):
         """
-    :API: public
-    """
+        :API: public
+        """
         return register_python()
 
     def setUp(self):
@@ -54,8 +54,8 @@ class PythonTaskTestBase(TaskTestBase):
         self, relpath, name, source_contents_map=None, dependencies=(), provides=None
     ):
         """
-    :API: public
-    """
+        :API: public
+        """
         sources = (
             None
             if source_contents_map is None
@@ -66,15 +66,15 @@ class PythonTaskTestBase(TaskTestBase):
             relpath=relpath,
             target=dedent(
                 """
-    python_library(
-      name='{name}',
-      {sources_clause}
-      dependencies=[
-        {dependencies}
-      ],
-      {provides_clause}
-    )
-    """
+                python_library(
+                  name='{name}',
+                  {sources_clause}
+                  dependencies=[
+                    {dependencies}
+                  ],
+                  {provides_clause}
+                )
+                """
             ).format(
                 name=name,
                 sources_clause="sources=[{0}],".format(",".join(sources_strs))
@@ -94,22 +94,22 @@ class PythonTaskTestBase(TaskTestBase):
         self, relpath, name, entry_point, dependencies=(), provides=None, shebang=None
     ):
         """
-    :API: public
-    """
+        :API: public
+        """
         self.add_to_build_file(
             relpath=relpath,
             target=dedent(
                 """
-    python_binary(
-      name='{name}',
-      entry_point='{entry_point}',
-      dependencies=[
-        {dependencies}
-      ],
-      {provides_clause}
-      {shebang_clause}
-    )
-    """
+                python_binary(
+                  name='{name}',
+                  entry_point='{entry_point}',
+                  dependencies=[
+                    {dependencies}
+                  ],
+                  {provides_clause}
+                  {shebang_clause}
+                )
+                """
             ).format(
                 name=name,
                 entry_point=entry_point,
@@ -122,8 +122,8 @@ class PythonTaskTestBase(TaskTestBase):
 
     def create_python_requirement_library(self, relpath, name, requirements):
         """
-    :API: public
-    """
+        :API: public
+        """
 
         def make_requirement(req):
             return 'python_requirement("{}")'.format(req)
@@ -132,13 +132,13 @@ class PythonTaskTestBase(TaskTestBase):
             relpath=relpath,
             target=dedent(
                 """
-    python_requirement_library(
-      name='{name}',
-      requirements=[
-        {requirements}
-      ]
-    )
-    """
+                python_requirement_library(
+                  name='{name}',
+                  requirements=[
+                    {requirements}
+                  ]
+                )
+                """
             ).format(name=name, requirements=",".join(map(make_requirement, requirements))),
         )
         return self.target(Address(relpath, name).spec)

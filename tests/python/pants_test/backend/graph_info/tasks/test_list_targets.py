@@ -50,12 +50,12 @@ class ListTargetsTest(ConsoleRuleTestBase):
                 self.provides = (
                     dedent(
                         """
-            artifact(
-              org='com.example',
-              name='{0}',
-              repo=public
-            )
-            """.format(
+                        artifact(
+                          org='com.example',
+                          name='{0}',
+                          repo=public
+                        )
+                        """.format(
                             name
                         )
                     ).strip()
@@ -87,9 +87,9 @@ class ListTargetsTest(ConsoleRuleTestBase):
             'a/b/d:d',
           ],
           description = """
-        Exercises alias resolution.
-        Further description.
-          """,
+                Exercises alias resolution.
+                Further description.
+                """,
         )
         '''
             ),

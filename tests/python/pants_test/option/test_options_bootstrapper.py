@@ -121,12 +121,12 @@ class BootstrapOptionsTest(unittest.TestCase):
             fp.write(
                 dedent(
                     """
-      [foo]
-      bar: %(pants_workdir)s/baz
+                    [foo]
+                    bar: %(pants_workdir)s/baz
 
-      [fruit]
-      apple: %(pants_supportdir)s/banana
-      """
+                    [fruit]
+                    apple: %(pants_supportdir)s/banana
+                    """
                 )
             )
             fp.close()
@@ -162,12 +162,12 @@ class BootstrapOptionsTest(unittest.TestCase):
             fp.write(
                 dedent(
                     """
-      [compile.apt]
-      worker_count: 1
+                    [compile.apt]
+                    worker_count: 1
 
-      [fruit]
-      apple: red
-      """
+                    [fruit]
+                    apple: red
+                    """
                 )
             )
             fp.close()
@@ -195,9 +195,9 @@ class BootstrapOptionsTest(unittest.TestCase):
                 fp2.write(
                     dedent(
                         """
-        [compile.apt]
-        worker_count: 2
-        """
+                        [compile.apt]
+                        worker_count: 2
+                        """
                     )
                 )
                 fp2.close()
@@ -238,9 +238,9 @@ class BootstrapOptionsTest(unittest.TestCase):
             fp.write(
                 dedent(
                     """
-      [resolver]
-      resolver: coursier
-      """
+                    [resolver]
+                    resolver: coursier
+                    """
                 )
             )
             fp.close()

@@ -73,8 +73,8 @@ class NailgunTaskBase(JvmToolTaskMixin, TaskBase):
 
     def __init__(self, *args, **kwargs):
         """
-    :API: public
-    """
+        :API: public
+        """
         super().__init__(*args, **kwargs)
 
         id_tuple = (self.ID_PREFIX, self.__class__.__name__)
@@ -87,8 +87,8 @@ class NailgunTaskBase(JvmToolTaskMixin, TaskBase):
     def create_java_executor(self, dist=None, force_subprocess=False):
         """Create java executor that uses this task's ng daemon, if allowed.
 
-    Call only in execute() or later. TODO: Enforce this.
-    """
+        Call only in execute() or later. TODO: Enforce this.
+        """
         dist = dist or self.dist
         if self.execution_strategy == self.ExecutionStrategy.nailgun and not force_subprocess:
             classpath = os.pathsep.join(self.tool_classpath("nailgun-server"))
@@ -118,12 +118,12 @@ class NailgunTaskBase(JvmToolTaskMixin, TaskBase):
     ):
         """Runs the java main using the given classpath and args.
 
-    If --execution-strategy=subprocess is specified then the java main is run in a freshly spawned
-    subprocess, otherwise a persistent nailgun server dedicated to this Task subclass is used to
-    speed up amortized run times.
+        If --execution-strategy=subprocess is specified then the java main is run in a freshly spawned
+        subprocess, otherwise a persistent nailgun server dedicated to this Task subclass is used to
+        speed up amortized run times.
 
-    :API: public
-    """
+        :API: public
+        """
         executor = self.create_java_executor(dist=dist, force_subprocess=force_subprocess)
 
         # Creating synthetic jar to work around system arg length limit is not necessary
@@ -154,8 +154,8 @@ class NailgunTaskBase(JvmToolTaskMixin, TaskBase):
 # TODO(John Sirois): This just prevents ripple - maybe inline
 class NailgunTask(NailgunTaskBase, Task):
     """
-  :API: public
-  """
+    :API: public
+    """
 
     pass
 

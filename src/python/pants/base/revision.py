@@ -9,10 +9,10 @@ from itertools import zip_longest
 @total_ordering
 class Revision:
     """Represents a software revision that is comparable to another revision describing the same
-  software.
+    software.
 
-  :API: public
-  """
+    :API: public
+    """
 
     class BadRevision(Exception):
         """Indicates a problem parsing a revision."""
@@ -28,10 +28,10 @@ class Revision:
     def semver(cls, rev):
         """Attempts to parse a Revision from a semantic version.
 
-    See http://semver.org/ for the full specification.
+        See http://semver.org/ for the full specification.
 
-    :API: public
-    """
+        :API: public
+        """
 
         def parse_extra(delimiter, value):
             if not value:
@@ -68,10 +68,10 @@ class Revision:
     @classmethod
     def lenient(cls, rev):
         """A lenient revision parser that tries to split the version into logical components with
-    heuristics inspired by PHP's version_compare.
+        heuristics inspired by PHP's version_compare.
 
-    :API: public
-    """
+        :API: public
+        """
         rev = re.sub(r"(\d)([a-zA-Z])", r"\1.\2", rev)
         rev = re.sub(r"([a-zA-Z])(\d)", r"\1.\2", rev)
         return cls(*list(map(cls._parse_atom, re.split(r"[.+_\-]", rev))))
@@ -83,8 +83,8 @@ class Revision:
     def components(self):
         """Returns a list of this revision's components from most major to most minor.
 
-    :API: public
-    """
+        :API: public
+        """
         return list(self._components)
 
     def _is_valid_operand(self, other):

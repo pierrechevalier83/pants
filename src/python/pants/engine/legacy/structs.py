@@ -26,18 +26,18 @@ logger = logging.getLogger(__name__)
 class TargetAdaptor(StructWithDeps):
     """A Struct to imitate the existing Target.
 
-  Extends StructWithDeps to add a `dependencies` field marked Addressable.
-  """
+    Extends StructWithDeps to add a `dependencies` field marked Addressable.
+    """
 
     def get_sources(self):
         """Returns target's non-deferred sources if exists or the default sources if defined.
 
-    :rtype: :class:`GlobsWithConjunction`
+        :rtype: :class:`GlobsWithConjunction`
 
-    NB: once ivy is implemented in the engine, we can fetch sources natively here, and/or
-    refactor how deferred sources are implemented.
-      see: https://github.com/pantsbuild/pants/issues/2997
-    """
+        NB: once ivy is implemented in the engine, we can fetch sources natively here, and/or
+        refactor how deferred sources are implemented.
+          see: https://github.com/pantsbuild/pants/issues/2997
+        """
         source = getattr(self, "source", None)
         sources = getattr(self, "sources", None)
 
@@ -112,16 +112,16 @@ class TargetAdaptor(StructWithDeps):
 
     def validate_sources(self, sources):
         """"
-    Validate that the sources argument is allowed.
+        Validate that the sources argument is allowed.
 
-    Examples may be to check that the number of sources is correct, that file extensions are as
-    expected, etc.
+        Examples may be to check that the number of sources is correct, that file extensions are as
+        expected, etc.
 
-    TODO: Replace this with some kind of field subclassing, as per
-    https://github.com/pantsbuild/pants/issues/4535
+        TODO: Replace this with some kind of field subclassing, as per
+        https://github.com/pantsbuild/pants/issues/4535
 
-    :param sources EagerFilesetWithSpec resolved sources.
-    """
+        :param sources EagerFilesetWithSpec resolved sources.
+        """
         pass
 
 
@@ -134,19 +134,19 @@ class HydrateableField:
 class SourcesField:
     """Represents the `sources` argument for a particular Target.
 
-  Sources are currently eagerly computed in-engine in order to provide the `BuildGraph`
-  API efficiently; once tasks are explicitly requesting particular Products for Targets,
-  lazy construction will be more natural.
-    see https://github.com/pantsbuild/pants/issues/3560
+    Sources are currently eagerly computed in-engine in order to provide the `BuildGraph`
+    API efficiently; once tasks are explicitly requesting particular Products for Targets,
+    lazy construction will be more natural.
+      see https://github.com/pantsbuild/pants/issues/3560
 
-  :param address: The Address of the TargetAdaptor for which this field is an argument.
-  :param arg: The name of this argument: usually 'sources', but occasionally also 'resources' in the
-    case of python resource globs.
-  :param filespecs: The merged filespecs dict the describes the paths captured by this field.
-  :param path_globs: A PathGlobs describing included files.
-  :param validate_fn: A function which takes an EagerFilesetWithSpec and throws if it's not
-    acceptable. This API will almost certainly change in the near future.
-  """
+    :param address: The Address of the TargetAdaptor for which this field is an argument.
+    :param arg: The name of this argument: usually 'sources', but occasionally also 'resources' in the
+      case of python resource globs.
+    :param filespecs: The merged filespecs dict the describes the paths captured by this field.
+    :param path_globs: A PathGlobs describing included files.
+    :param validate_fn: A function which takes an EagerFilesetWithSpec and throws if it's not
+      acceptable. This API will almost certainly change in the near future.
+    """
 
     address: Any
     arg: Any
@@ -203,18 +203,18 @@ class BundlesField:
 class BundleAdaptor(Struct):
     """A Struct to capture the args for the `bundle` object.
 
-  Bundles have filesets which we need to capture in order to execute them in the engine.
+    Bundles have filesets which we need to capture in order to execute them in the engine.
 
-  TODO: Bundles should arguably be Targets, but that distinction blurs in the `exp` examples
-  package, where a Target is just a collection of configuration.
-  """
+    TODO: Bundles should arguably be Targets, but that distinction blurs in the `exp` examples
+    package, where a Target is just a collection of configuration.
+    """
 
 
 class AppAdaptor(TargetAdaptor):
     def __init__(self, bundles=None, **kwargs):
         """
-    :param list bundles: A list of `BundleAdaptor` objects
-    """
+        :param list bundles: A list of `BundleAdaptor` objects
+        """
         super().__init__(**kwargs)
         self.bundles = bundles
 
@@ -263,8 +263,8 @@ class PythonAppAdaptor(AppAdaptor):
 class RemoteSourcesAdaptor(TargetAdaptor):
     def __init__(self, dest=None, **kwargs):
         """
-    :param dest: A target constructor.
-    """
+        :param dest: A target constructor.
+        """
         if not isinstance(dest, str):
             dest = dest._type_alias
         super().__init__(dest=dest, **kwargs)
@@ -320,8 +320,8 @@ class BaseGlobs(Locatable, metaclass=ABCMeta):
     def from_sources_field(sources, spec_path):
         """Return a BaseGlobs for the given sources field.
 
-    `sources` may be None, a list/tuple/set, a string or a BaseGlobs instance.
-    """
+        `sources` may be None, a list/tuple/set, a string or a BaseGlobs instance.
+        """
         if sources is None:
             return Files(spec_path=spec_path)
         elif isinstance(sources, BaseGlobs):

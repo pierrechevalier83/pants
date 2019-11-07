@@ -32,8 +32,8 @@ class GoTargetGenerator:
     class WrongLocalSourceTargetTypeError(GenerationError):
         """Indicates a local source target was defined with the wrong type.
 
-    For example, a Go main package was defined as a GoLibrary instead of a GoBinary.
-    """
+        For example, a Go main package was defined as a GoLibrary instead of a GoBinary.
+        """
 
     class NewRemoteEncounteredButRemotesNotAllowedError(GenerationError):
         """Indicates a new remote library dependency was found but --remote was not enabled."""
@@ -57,9 +57,9 @@ class GoTargetGenerator:
     def generate(self, local_go_targets):
         """Automatically generates a Go target graph for the given local go targets.
 
-    :param iter local_go_targets: The target roots to fill in a target graph for.
-    :raises: :class:`GoTargetGenerator.GenerationError` if any missing targets cannot be generated.
-    """
+        :param iter local_go_targets: The target roots to fill in a target graph for.
+        :raises: :class:`GoTargetGenerator.GenerationError` if any missing targets cannot be generated.
+        """
         visited = {l.import_path: l.address for l in local_go_targets}
         with temporary_dir() as gopath:
             for local_go_target in local_go_targets:
@@ -140,33 +140,33 @@ class GoBuildgen(GoTask):
     def _default_template(cls):
         return dedent(
             """\
-    {{#target.parameters?}}
-    {{target.type}}(
-      {{#target.parameters}}
-      {{#deps?}}
-      dependencies=[
-        {{#deps}}
-        '{{.}}',
-        {{/deps}}
-      ]
-      {{/deps?}}
-      {{#rev}}
-      rev='{{.}}',
-      {{/rev}}
-      {{#pkgs?}}
-      packages=[
-        {{#pkgs}}
-        '{{.}}',
-        {{/pkgs}}
-      ]
-      {{/pkgs?}}
-      {{/target.parameters}}
-    )
-    {{/target.parameters?}}
-    {{^target.parameters?}}
-    {{target.type}}()
-    {{/target.parameters?}}
-    """
+            {{#target.parameters?}}
+            {{target.type}}(
+              {{#target.parameters}}
+              {{#deps?}}
+              dependencies=[
+                {{#deps}}
+                '{{.}}',
+                {{/deps}}
+              ]
+              {{/deps?}}
+              {{#rev}}
+              rev='{{.}}',
+              {{/rev}}
+              {{#pkgs?}}
+              packages=[
+                {{#pkgs}}
+                '{{.}}',
+                {{/pkgs}}
+              ]
+              {{/pkgs?}}
+              {{/target.parameters}}
+            )
+            {{/target.parameters?}}
+            {{^target.parameters?}}
+            {{target.type}}()
+            {{/target.parameters?}}
+            """
         )
 
     @classmethod
@@ -283,9 +283,9 @@ class GoBuildgen(GoTask):
         def log(self, logger):
             """Log information about the generated target including its BUILD file and import paths.
 
-      :param logger: The logger to log with.
-      :type logger: A :class:`logging.Logger` compatible object.
-      """
+            :param logger: The logger to log with.
+            :type logger: A :class:`logging.Logger` compatible object.
+            """
             log = logger.info if self.local or self.rev else logger.warn
             log("\t{}".format(self))
 
@@ -293,8 +293,8 @@ class GoBuildgen(GoTask):
         def failed(self):
             """Return `True` if the generated target should be considered a failed generation.
 
-      :rtype: bool
-      """
+            :rtype: bool
+            """
             return self.fail_floating and not self.rev
 
         def __str__(self):
@@ -394,13 +394,13 @@ class GoBuildgen(GoTask):
     def generate_targets(self, local_go_targets=None):
         """Generate Go targets in memory to form a complete Go graph.
 
-    :param local_go_targets: The local Go targets to fill in a complete target graph for.  If
-                             `None`, then all local Go targets under the Go source root are used.
-    :type local_go_targets: :class:`collections.Iterable` of
-                            :class:`pants.contrib.go.targets.go_local_source import GoLocalSource`
-    :returns: A generation result if targets were generated, else `None`.
-    :rtype: :class:`GoBuildgen.GenerationResult`
-    """
+        :param local_go_targets: The local Go targets to fill in a complete target graph for.  If
+                                 `None`, then all local Go targets under the Go source root are used.
+        :type local_go_targets: :class:`collections.Iterable` of
+                                :class:`pants.contrib.go.targets.go_local_source import GoLocalSource`
+        :returns: A generation result if targets were generated, else `None`.
+        :rtype: :class:`GoBuildgen.GenerationResult`
+        """
         # TODO(John Sirois): support multiple source roots like GOPATH does?
         # The GOPATH's 1st element is read-write, the rest are read-only; ie: their sources build to
         # the 1st element's pkg/ and bin/ dirs.
@@ -481,10 +481,10 @@ class GoBuildgen(GoTask):
             flags += " --remote"
         template_header = dedent(
             """\
-      # Auto-generated by pants!
-      # To re-generate run: `pants {goal_name} {flags}`
+            # Auto-generated by pants!
+            # To re-generate run: `pants {goal_name} {flags}`
 
-      """
+            """
         ).format(goal_name=goal_name, flags=flags)
         template_text = template_header + self.get_options().template
         build_file_basename = "BUILD" + self.get_options().extension

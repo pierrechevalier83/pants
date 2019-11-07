@@ -11,10 +11,10 @@ from pants.pantsd.watchman import Watchman
 class FSEventService(PantsService):
     """Filesystem Event Service.
 
-  This is the primary service coupling to watchman and is responsible for subscribing to and
-  reading events from watchman's UNIX socket and firing callbacks in pantsd. Callbacks are
-  executed in a configurable threadpool but are generally expected to be short-lived.
-  """
+    This is the primary service coupling to watchman and is responsible for subscribing to and
+    reading events from watchman's UNIX socket and firing callbacks in pantsd. Callbacks are
+    executed in a configurable threadpool but are generally expected to be short-lived.
+    """
 
     ZERO_DEPTH = ["depth", "eq", 0]
 
@@ -23,9 +23,9 @@ class FSEventService(PantsService):
 
     def __init__(self, watchman, build_root):
         """
-    :param Watchman watchman: The Watchman instance as provided by the WatchmanLauncher subsystem.
-    :param str build_root: The current build root.
-    """
+        :param Watchman watchman: The Watchman instance as provided by the WatchmanLauncher subsystem.
+        :param str build_root: The current build root.
+        """
         super().__init__()
         self._logger = logging.getLogger(__name__)
         self._watchman = watchman
@@ -35,9 +35,9 @@ class FSEventService(PantsService):
     def register_all_files_handler(self, callback, name):
         """Registers a subscription for all files under a given watch path.
 
-    :param func callback: the callback to execute on each filesystem event
-    :param str name:      the subscription name as used by watchman
-    """
+        :param func callback: the callback to execute on each filesystem event
+        :param str name:      the subscription name as used by watchman
+        """
         self.register_handler(
             name,
             dict(
@@ -67,10 +67,10 @@ class FSEventService(PantsService):
     def register_pidfile_handler(self, pidfile_path, callback):
         """
 
-    :param pidfile_path: Path to the pidfile, relative to the build root
-    :param callback:
-    :return:
-    """
+        :param pidfile_path: Path to the pidfile, relative to the build root
+        :param callback:
+        :return:
+        """
         self.register_handler(
             self.PANTS_PID_SUBSCRIPTION_NAME,
             dict(
@@ -87,12 +87,12 @@ class FSEventService(PantsService):
     def register_handler(self, name, metadata, callback):
         """Register subscriptions and their event handlers.
 
-    :param str name:      the subscription name as used by watchman
-    :param dict metadata: a dictionary of metadata to be serialized and passed to the watchman
-                          subscribe command. this should include the match expression as well
-                          as any required callback fields.
-    :param func callback: the callback to execute on each matching filesystem event
-    """
+        :param str name:      the subscription name as used by watchman
+        :param dict metadata: a dictionary of metadata to be serialized and passed to the watchman
+                              subscribe command. this should include the match expression as well
+                              as any required callback fields.
+        :param func callback: the callback to execute on each matching filesystem event
+        """
         assert name not in self._handlers, "duplicate handler name: {}".format(name)
         assert (
             isinstance(metadata, dict) and "fields" in metadata and "expression" in metadata

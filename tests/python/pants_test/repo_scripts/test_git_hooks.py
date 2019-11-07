@@ -62,11 +62,11 @@ class PreCommitHookTest(unittest.TestCase):
                 worktree,
                 [package_check_script, "subdir"],
                 """\
-ERROR: All '__init__.py' files should be empty or else only contain a namespace
-declaration, but the following contain code:
----
-subdir/__init__.py
-""",
+                ERROR: All '__init__.py' files should be empty or else only contain a namespace
+                declaration, but the following contain code:
+                ---
+                subdir/__init__.py
+                """,
             )
 
             # Check that a valid empty __init__.py succeeds.
@@ -134,10 +134,10 @@ subdir/__init__.py
                 new_py_path,
                 dedent(
                     f"""\
-        # Copyright {cur_year} Pants project contributors (see CONTRIBUTORS.md).
-        # Licensed under the MIT License, Version 3.3 (see LICENSE).
+                    # Copyright {cur_year} Pants project contributors (see CONTRIBUTORS.md).
+                    # Licensed under the MIT License, Version 3.3 (see LICENSE).
 
-        """
+                    """
                 ),
             )
             assert_header_check(
@@ -150,10 +150,10 @@ subdir/__init__.py
                 new_py_path,
                 dedent(
                     """\
-        # Copyright YYYY Pants project contributors (see CONTRIBUTORS.md).
-        # Licensed under the Apache License, Version 2.0 (see LICENSE).
+                    # Copyright YYYY Pants project contributors (see CONTRIBUTORS.md).
+                    # Licensed under the Apache License, Version 2.0 (see LICENSE).
 
-        """
+                    """
                 ),
             )
             assert_header_check(
@@ -170,10 +170,10 @@ subdir/__init__.py
                 new_py_path,
                 dedent(
                     f"""\
-        # Copyright {last_year} Pants project contributors (see CONTRIBUTORS.md).
-        # Licensed under the Apache License, Version 2.0 (see LICENSE).
+                    # Copyright {last_year} Pants project contributors (see CONTRIBUTORS.md).
+                    # Licensed under the Apache License, Version 2.0 (see LICENSE).
 
-        """
+                    """
                 ),
             )
             rel_new_py_path = os.path.relpath(new_py_path, worktree)

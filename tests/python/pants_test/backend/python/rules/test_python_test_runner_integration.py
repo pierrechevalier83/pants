@@ -64,20 +64,20 @@ class TestPythonTestRunnerIntegration(PantsRunIntegrationTest):
             pants_run.stdout_data,
             dedent(
                 """\
-        testprojects/tests/python/pants/dummies:passing_target stdout:
-        ============================= test session starts ==============================
-        platform SOME_TEXT
-        rootdir: SOME_TEXT
-        plugins: SOME_TEXT
-        collected 1 item
+                testprojects/tests/python/pants/dummies:passing_target stdout:
+                ============================= test session starts ==============================
+                platform SOME_TEXT
+                rootdir: SOME_TEXT
+                plugins: SOME_TEXT
+                collected 1 item
 
-        pants/dummies/test_pass.py .                                             [100%]
+                pants/dummies/test_pass.py .                                             [100%]
 
-        =========================== 1 passed in SOME_TEXT ===========================
+                =========================== 1 passed in SOME_TEXT ===========================
 
 
-        testprojects/tests/python/pants/dummies:passing_target                          .....   SUCCESS
-        """
+                testprojects/tests/python/pants/dummies:passing_target                          .....   SUCCESS
+                """
             ),
         )
 
@@ -89,28 +89,28 @@ class TestPythonTestRunnerIntegration(PantsRunIntegrationTest):
             pants_run.stdout_data,
             dedent(
                 """\
-        testprojects/tests/python/pants/dummies:failing_target stdout:
-        ============================= test session starts ==============================
-        platform SOME_TEXT
-        rootdir: SOME_TEXT
-        plugins: SOME_TEXT
-        collected 1 item
+                testprojects/tests/python/pants/dummies:failing_target stdout:
+                ============================= test session starts ==============================
+                platform SOME_TEXT
+                rootdir: SOME_TEXT
+                plugins: SOME_TEXT
+                collected 1 item
 
-        pants/dummies/test_fail.py F                                             [100%]
+                pants/dummies/test_fail.py F                                             [100%]
 
-        =================================== FAILURES ===================================
-        __________________________________ test_fail ___________________________________
+                =================================== FAILURES ===================================
+                __________________________________ test_fail ___________________________________
 
-            def test_fail():
-        >       assert False
-        E       assert False
+                    def test_fail():
+                >       assert False
+                E       assert False
 
-        pants/dummies/test_fail.py:2: AssertionError
-        =========================== 1 failed in SOME_TEXT ===========================
+                pants/dummies/test_fail.py:2: AssertionError
+                =========================== 1 failed in SOME_TEXT ===========================
 
 
-        testprojects/tests/python/pants/dummies:failing_target                          .....   FAILURE
-        """
+                testprojects/tests/python/pants/dummies:failing_target                          .....   FAILURE
+                """
             ),
         )
 
@@ -125,40 +125,40 @@ class TestPythonTestRunnerIntegration(PantsRunIntegrationTest):
             pants_run.stdout_data,
             dedent(
                 """\
-        testprojects/tests/python/pants/dummies:failing_target stdout:
-        ============================= test session starts ==============================
-        platform SOME_TEXT
-        rootdir: SOME_TEXT
-        plugins: SOME_TEXT
-        collected 1 item
+                testprojects/tests/python/pants/dummies:failing_target stdout:
+                ============================= test session starts ==============================
+                platform SOME_TEXT
+                rootdir: SOME_TEXT
+                plugins: SOME_TEXT
+                collected 1 item
 
-        pants/dummies/test_fail.py F                                             [100%]
+                pants/dummies/test_fail.py F                                             [100%]
 
-        =================================== FAILURES ===================================
-        __________________________________ test_fail ___________________________________
+                =================================== FAILURES ===================================
+                __________________________________ test_fail ___________________________________
 
-            def test_fail():
-        >       assert False
-        E       assert False
+                    def test_fail():
+                >       assert False
+                E       assert False
 
-        pants/dummies/test_fail.py:2: AssertionError
-        =========================== 1 failed in SOME_TEXT ===========================
+                pants/dummies/test_fail.py:2: AssertionError
+                =========================== 1 failed in SOME_TEXT ===========================
 
-        testprojects/tests/python/pants/dummies:passing_target stdout:
-        ============================= test session starts ==============================
-        platform SOME_TEXT
-        rootdir: SOME_TEXT
-        plugins: SOME_TEXT
-        collected 1 item
+                testprojects/tests/python/pants/dummies:passing_target stdout:
+                ============================= test session starts ==============================
+                platform SOME_TEXT
+                rootdir: SOME_TEXT
+                plugins: SOME_TEXT
+                collected 1 item
 
-        pants/dummies/test_pass.py .                                             [100%]
+                pants/dummies/test_pass.py .                                             [100%]
 
-        =========================== 1 passed in SOME_TEXT ===========================
+                =========================== 1 passed in SOME_TEXT ===========================
 
 
-        testprojects/tests/python/pants/dummies:failing_target                          .....   FAILURE
-        testprojects/tests/python/pants/dummies:passing_target                          .....   SUCCESS
-        """
+                testprojects/tests/python/pants/dummies:failing_target                          .....   FAILURE
+                testprojects/tests/python/pants/dummies:passing_target                          .....   SUCCESS
+                """
             ),
         )
 
@@ -170,20 +170,20 @@ class TestPythonTestRunnerIntegration(PantsRunIntegrationTest):
             pants_run.stdout_data,
             dedent(
                 """\
-        testprojects/tests/python/pants/dummies:target_with_source_dep_absolute_import stdout:
-        ============================= test session starts ==============================
-        platform SOME_TEXT
-        rootdir: SOME_TEXT
-        plugins: SOME_TEXT
-        collected 1 item
+                testprojects/tests/python/pants/dummies:target_with_source_dep_absolute_import stdout:
+                ============================= test session starts ==============================
+                platform SOME_TEXT
+                rootdir: SOME_TEXT
+                plugins: SOME_TEXT
+                collected 1 item
 
-        pants/dummies/test_with_source_dep_absolute_import.py .                  [100%]
+                pants/dummies/test_with_source_dep_absolute_import.py .                  [100%]
 
-        =========================== 1 passed in SOME_TEXT ===========================
+                =========================== 1 passed in SOME_TEXT ===========================
 
 
-        testprojects/tests/python/pants/dummies:target_with_source_dep_absolute_import  .....   SUCCESS
-        """
+                testprojects/tests/python/pants/dummies:target_with_source_dep_absolute_import  .....   SUCCESS
+                """
             ),
         )
 
@@ -195,20 +195,20 @@ class TestPythonTestRunnerIntegration(PantsRunIntegrationTest):
             pants_run.stdout_data,
             dedent(
                 """\
-        testprojects/tests/python/pants/dummies:target_with_source_dep_relative_import stdout:
-        ============================= test session starts ==============================
-        platform SOME_TEXT
-        rootdir: SOME_TEXT
-        plugins: SOME_TEXT
-        collected 1 item
+                testprojects/tests/python/pants/dummies:target_with_source_dep_relative_import stdout:
+                ============================= test session starts ==============================
+                platform SOME_TEXT
+                rootdir: SOME_TEXT
+                plugins: SOME_TEXT
+                collected 1 item
 
-        pants/dummies/test_with_source_dep_relative_import.py .                  [100%]
+                pants/dummies/test_with_source_dep_relative_import.py .                  [100%]
 
-        =========================== 1 passed in SOME_TEXT ===========================
+                =========================== 1 passed in SOME_TEXT ===========================
 
 
-        testprojects/tests/python/pants/dummies:target_with_source_dep_relative_import  .....   SUCCESS
-        """
+                testprojects/tests/python/pants/dummies:target_with_source_dep_relative_import  .....   SUCCESS
+                """
             ),
         )
 
@@ -220,20 +220,20 @@ class TestPythonTestRunnerIntegration(PantsRunIntegrationTest):
             pants_run.stdout_data,
             dedent(
                 """\
-        testprojects/tests/python/pants/dummies:target_with_thirdparty_dep stdout:
-        ============================= test session starts ==============================
-        platform SOME_TEXT
-        rootdir: SOME_TEXT
-        plugins: SOME_TEXT
-        collected 1 item
+                testprojects/tests/python/pants/dummies:target_with_thirdparty_dep stdout:
+                ============================= test session starts ==============================
+                platform SOME_TEXT
+                rootdir: SOME_TEXT
+                plugins: SOME_TEXT
+                collected 1 item
 
-        pants/dummies/test_with_thirdparty_dep.py .                              [100%]
+                pants/dummies/test_with_thirdparty_dep.py .                              [100%]
 
-        =========================== 1 passed in SOME_TEXT ===========================
+                =========================== 1 passed in SOME_TEXT ===========================
 
 
-        testprojects/tests/python/pants/dummies:target_with_thirdparty_dep              .....   SUCCESS
-        """
+                testprojects/tests/python/pants/dummies:target_with_thirdparty_dep              .....   SUCCESS
+                """
             ),
         )
 
@@ -245,19 +245,19 @@ class TestPythonTestRunnerIntegration(PantsRunIntegrationTest):
             pants_run.stdout_data,
             dedent(
                 """\
-        testprojects/tests/python/pants/dummies:target_with_transitive_dep stdout:
-        ============================= test session starts ==============================
-        platform SOME_TEXT
-        rootdir: SOME_TEXT
-        plugins: SOME_TEXT
-        collected 1 item
+                testprojects/tests/python/pants/dummies:target_with_transitive_dep stdout:
+                ============================= test session starts ==============================
+                platform SOME_TEXT
+                rootdir: SOME_TEXT
+                plugins: SOME_TEXT
+                collected 1 item
 
-        pants/dummies/test_with_transitive_dep.py .                              [100%]
+                pants/dummies/test_with_transitive_dep.py .                              [100%]
 
-        =========================== 1 passed in SOME_TEXT ===========================
+                =========================== 1 passed in SOME_TEXT ===========================
 
 
-        testprojects/tests/python/pants/dummies:target_with_transitive_dep              .....   SUCCESS
-        """
+                testprojects/tests/python/pants/dummies:target_with_transitive_dep              .....   SUCCESS
+                """
             ),
         )

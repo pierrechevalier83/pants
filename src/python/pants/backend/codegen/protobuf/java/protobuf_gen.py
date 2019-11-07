@@ -171,8 +171,8 @@ class ProtobufGen(SimpleCodegenTask):
     def _jars_to_directories(self, target):
         """Extracts and maps jars to directories containing their contents.
 
-    :returns: a set of filepaths to directories containing the contents of jar.
-    """
+        :returns: a set of filepaths to directories containing the contents of jar.
+        """
         files = set()
         jar_import_products = self.context.products.get_data(JarImportProducts)
         imports = jar_import_products.imports(target)

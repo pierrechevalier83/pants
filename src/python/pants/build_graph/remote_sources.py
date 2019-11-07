@@ -11,24 +11,24 @@ from pants.build_graph.target import Target
 class RemoteSources(Target):
     """A target that generates a synthetic target using deferred sources.
 
-  This provides a mechanism for using the contents of a jar as sources for another target. The jar
-  where the sources are specified from is given via the `sources_target` parameter, and the type for
-  the target that should be created with those sources is given via the `dest` parameter. Any
-  additional arguments for the new target go into the `args` parameter.
-  """
+    This provides a mechanism for using the contents of a jar as sources for another target. The jar
+    where the sources are specified from is given via the `sources_target` parameter, and the type for
+    the target that should be created with those sources is given via the `dest` parameter. Any
+    additional arguments for the new target go into the `args` parameter.
+    """
 
     def __init__(
         self, address=None, payload=None, sources_target=None, dest=None, args=None, **kwargs
     ):
         """
-    :API: public
+        :API: public
 
-    :param string sources_target: The address of the (typically unpacked_jars) target to get sources
-      from.
-    :param dest: The target type of the synthetic target to generate (eg, java_library).
-    :param dict args: Any additional arguments necessary to construct the synthetic destination
-      target (sources and dependencies are supplied automatically).
-    """
+        :param string sources_target: The address of the (typically unpacked_jars) target to get sources
+          from.
+        :param dest: The target type of the synthetic target to generate (eg, java_library).
+        :param dict args: Any additional arguments necessary to construct the synthetic destination
+          target (sources and dependencies are supplied automatically).
+        """
         self.address = address
         if not sources_target:
             raise TargetDefinitionException(

@@ -53,11 +53,11 @@ class TestTest(TestBase):
             ),
             expected_console_output=dedent(
                 """\
-        some/target stdout:
-        Here is some output from a test
+                some/target stdout:
+                Here is some output from a test
 
-        some/target                                                                     .....   SUCCESS
-      """
+                some/target                                                                     .....   SUCCESS
+                """
             ),
         )
 
@@ -68,11 +68,11 @@ class TestTest(TestBase):
             ),
             expected_console_output=dedent(
                 """\
-        some/target stdout:
-        Here is some output from a test
+                some/target stdout:
+                Here is some output from a test
 
-        some/target                                                                     .....   FAILURE
-        """
+                some/target                                                                     .....   FAILURE
+                """
             ),
             success=False,
         )
@@ -100,16 +100,16 @@ class TestTest(TestBase):
             console.stdout.getvalue(),
             dedent(
                 """\
-      testprojects/tests/python/pants/passes stdout:
-      I passed
+                testprojects/tests/python/pants/passes stdout:
+                I passed
 
-      testprojects/tests/python/pants/fails stdout:
-      I failed
+                testprojects/tests/python/pants/fails stdout:
+                I failed
 
 
-      testprojects/tests/python/pants/passes                                          .....   SUCCESS
-      testprojects/tests/python/pants/fails                                           .....   FAILURE
-      """
+                testprojects/tests/python/pants/passes                                          .....   SUCCESS
+                testprojects/tests/python/pants/fails                                           .....   FAILURE
+                """
             ),
         )
 
@@ -120,11 +120,11 @@ class TestTest(TestBase):
             ),
             expected_console_output=dedent(
                 """\
-        some/target stderr:
-        Failure running the tests!
+                some/target stderr:
+                Failure running the tests!
 
-        some/target                                                                     .....   FAILURE
-        """
+                some/target                                                                     .....   FAILURE
+                """
             ),
             success=False,
         )

@@ -62,9 +62,9 @@ _PROCESSOR_INFO_FILE = "META-INF/services/javax.annotation.processing.Processor"
 class JvmCompile(CompilerOptionSetsMixin, NailgunTaskBase):
     """A common framework for JVM compilation.
 
-  To subclass for a specific JVM language, implement the static values and methods
-  mentioned below under "Subclasses must implement".
-  """
+    To subclass for a specific JVM language, implement the static values and methods
+    mentioned below under "Subclasses must implement".
+    """
 
     size_estimators = create_size_estimators()
 
@@ -276,11 +276,11 @@ class JvmCompile(CompilerOptionSetsMixin, NailgunTaskBase):
     def get_args_default(cls, bootstrap_option_values):
         """Override to set default for --args option.
 
-    :param bootstrap_option_values: The values of the "bootstrap options" (e.g., pants_workdir).
-                                    Implementations can use these when generating the default.
-                                    See src/python/pants/options/options_bootstrapper.py for
-                                    details.
-    """
+        :param bootstrap_option_values: The values of the "bootstrap options" (e.g., pants_workdir).
+                                        Implementations can use these when generating the default.
+                                        See src/python/pants/options/options_bootstrapper.py for
+                                        details.
+        """
         return ()
 
     @classmethod
@@ -331,20 +331,20 @@ class JvmCompile(CompilerOptionSetsMixin, NailgunTaskBase):
     ):
         """Invoke the compiler.
 
-    Subclasses must implement. Must raise TaskError on compile failure.
+        Subclasses must implement. Must raise TaskError on compile failure.
 
-    :param CompileContext ctx: A CompileContext for the target to compile.
-    :param list args: Arguments to the compiler (such as javac or zinc).
-    :param list dependency_classpath: List of classpath entries of type ClasspathEntry for
-      dependencies.
-    :param upstream_analysis: A map from classpath entry to analysis file for dependencies.
-    :param JvmPlatformSettings settings: platform settings determining the -source, -target, etc for
-      javac to use.
-    :param list compiler_option_sets: The compiler_option_sets flags for the target.
-    :param zinc_file_manager: whether to use zinc provided file manager.
-    :param javac_plugin_map: Map of names of javac plugins to use to their arguments.
-    :param scalac_plugin_map: Map of names of scalac plugins to use to their arguments.
-    """
+        :param CompileContext ctx: A CompileContext for the target to compile.
+        :param list args: Arguments to the compiler (such as javac or zinc).
+        :param list dependency_classpath: List of classpath entries of type ClasspathEntry for
+          dependencies.
+        :param upstream_analysis: A map from classpath entry to analysis file for dependencies.
+        :param JvmPlatformSettings settings: platform settings determining the -source, -target, etc for
+          javac to use.
+        :param list compiler_option_sets: The compiler_option_sets flags for the target.
+        :param zinc_file_manager: whether to use zinc provided file manager.
+        :param javac_plugin_map: Map of names of javac plugins to use to their arguments.
+        :param scalac_plugin_map: Map of names of scalac plugins to use to their arguments.
+        """
         raise NotImplementedError()
 
     # Subclasses may override.
@@ -352,15 +352,15 @@ class JvmCompile(CompilerOptionSetsMixin, NailgunTaskBase):
     def extra_compile_time_classpath_elements(self):
         """Extra classpath elements common to all compiler invocations.
 
-    These should be of type ClasspathEntry, but strings are also supported for backwards
-    compatibility.
+        These should be of type ClasspathEntry, but strings are also supported for backwards
+        compatibility.
 
-    E.g., jars for compiler plugins.
+        E.g., jars for compiler plugins.
 
-    These are added at the end of the classpath, after any dependencies, so that if they
-    overlap with any explicit dependencies, the compiler sees those first.  This makes
-    missing dependency accounting much simpler.
-    """
+        These are added at the end of the classpath, after any dependencies, so that if they
+        overlap with any explicit dependencies, the compiler sees those first.  This makes
+        missing dependency accounting much simpler.
+        """
         return []
 
     def scalac_plugin_classpath_elements(self):
@@ -370,10 +370,10 @@ class JvmCompile(CompilerOptionSetsMixin, NailgunTaskBase):
     def post_compile_extra_resources(self, compile_context):
         """Produces a dictionary of any extra, out-of-band resources for a target.
 
-    E.g., targets that produce scala compiler plugins or annotation processor files
-    produce an info file. The resources will be added to the runtime_classpath.
-    :return: A dict from classpath-relative filename to file content.
-    """
+        E.g., targets that produce scala compiler plugins or annotation processor files
+        produce an info file. The resources will be added to the runtime_classpath.
+        :return: A dict from classpath-relative filename to file content.
+        """
         result = {}
         target = compile_context.target
 
@@ -429,20 +429,21 @@ class JvmCompile(CompilerOptionSetsMixin, NailgunTaskBase):
     def create_empty_extra_products(self):
         """Create any products the subclass task supports in addition to the runtime_classpath.
 
-    The runtime_classpath is constructed by default.
-    """
+        The runtime_classpath is constructed by default.
+        """
 
     def register_extra_products_from_contexts(self, targets, compile_contexts):
         """Allows subclasses to register additional products for targets.
 
-    It is called for valid targets at start, then for each completed invalid target,
-    separately, during compilation.
-    """
+        It is called for valid targets at start, then for each completed invalid target,
+        separately, during compilation.
+        """
 
     def select_runtime_context(self, ccs):
         """Select the context that contains the paths for runtime classpath artifacts.
 
-    Subclasses may have more than one type of context."""
+        Subclasses may have more than one type of context.
+        """
         return ccs
 
     def __init__(self, *args, **kwargs):
@@ -682,15 +683,15 @@ class JvmCompile(CompilerOptionSetsMixin, NailgunTaskBase):
     ):
         """Compiles sources for the given vts into the given output dir.
 
-    :param vts: VersionedTargetSet with one entry for the target.
-    :param ctx: - A CompileContext instance for the target.
-    :param dependency_classpath: A list of classpath entries of type ClasspathEntry for dependencies
+        :param vts: VersionedTargetSet with one entry for the target.
+        :param ctx: - A CompileContext instance for the target.
+        :param dependency_classpath: A list of classpath entries of type ClasspathEntry for dependencies
 
-    May be invoked concurrently on independent target sets.
+        May be invoked concurrently on independent target sets.
 
-    Postcondition: The individual targets in vts are up-to-date, as if each were
-                   compiled individually.
-    """
+        Postcondition: The individual targets in vts are up-to-date, as if each were
+                       compiled individually.
+        """
         if not ctx.sources:
             self.context.log.warn(
                 "Skipping {} compile for targets with no sources:\n  {}".format(
@@ -747,25 +748,25 @@ class JvmCompile(CompilerOptionSetsMixin, NailgunTaskBase):
     def _get_plugin_map(self, compiler, options_src, target):
         """Returns a map of plugin to args, for the given compiler.
 
-    Only plugins that must actually be activated will be present as keys in the map.
-    Plugins with no arguments will have an empty list as a value.
+        Only plugins that must actually be activated will be present as keys in the map.
+        Plugins with no arguments will have an empty list as a value.
 
-    Active plugins and their args will be gathered from (in order of precedence):
-    - The <compiler>_plugins and <compiler>_plugin_args fields of the target, if it has them.
-    - The <compiler>_plugins and <compiler>_plugin_args options of this task, if it has them.
-    - The <compiler>_plugins and <compiler>_plugin_args fields of this task, if it has them.
+        Active plugins and their args will be gathered from (in order of precedence):
+        - The <compiler>_plugins and <compiler>_plugin_args fields of the target, if it has them.
+        - The <compiler>_plugins and <compiler>_plugin_args options of this task, if it has them.
+        - The <compiler>_plugins and <compiler>_plugin_args fields of this task, if it has them.
 
-    Note that in-repo plugins will not be returned, even if requested, when building
-    themselves.  Use published versions of those plugins for that.
+        Note that in-repo plugins will not be returned, even if requested, when building
+        themselves.  Use published versions of those plugins for that.
 
-    See:
-    - examples/src/java/org/pantsbuild/example/javac/plugin/README.md.
-    - examples/src/scala/org/pantsbuild/example/scalac/plugin/README.md
+        See:
+        - examples/src/java/org/pantsbuild/example/javac/plugin/README.md.
+        - examples/src/scala/org/pantsbuild/example/scalac/plugin/README.md
 
-    :param compiler: one of 'javac', 'scalac'.
-    :param options_src: A JvmToolMixin instance providing plugin options.
-    :param target: The target whose plugins we compute.
-    """
+        :param compiler: one of 'javac', 'scalac'.
+        :param options_src: A JvmToolMixin instance providing plugin options.
+        :param target: The target whose plugins we compute.
+        """
         # Note that we get() options and getattr() target fields and task methods,
         # so we're robust when those don't exist (or are None).
         plugins_key = "{}_plugins".format(compiler)
@@ -980,8 +981,8 @@ class JvmCompile(CompilerOptionSetsMixin, NailgunTaskBase):
     def check_cache(self, vts):
         """Manually checks the artifact cache (usually immediately before compilation.)
 
-    Returns true if the cache was hit successfully, indicating that no compilation is necessary.
-    """
+        Returns true if the cache was hit successfully, indicating that no compilation is necessary.
+        """
         if not self.artifact_cache_reads_enabled():
             return False
         cached_vts, _, _ = self.check_artifact_cache([vts])
@@ -1001,8 +1002,8 @@ class JvmCompile(CompilerOptionSetsMixin, NailgunTaskBase):
     def should_compile_incrementally(self, vts, ctx):
         """Check to see if the compile should try to re-use the existing analysis.
 
-    Returns true if we should try to compile the target incrementally.
-    """
+        Returns true if we should try to compile the target incrementally.
+        """
         if not vts.is_incremental:
             return False
         if not self._clear_invalid_analysis:

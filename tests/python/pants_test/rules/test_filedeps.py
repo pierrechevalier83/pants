@@ -63,9 +63,9 @@ class FileDepsTest(TestBase):
             transitive_targets,
             dedent(
                 """\
-        some/target/BUILD
-        some/file.py
-        """
+                some/target/BUILD
+                some/file.py
+                """
             ),
         )
 
@@ -84,10 +84,10 @@ class FileDepsTest(TestBase):
             transitive_targets,
             dedent(
                 """\
-        some/target/BUILD
-        dep/target/BUILD
-        dep/file.py
-        """
+                some/target/BUILD
+                dep/target/BUILD
+                dep/file.py
+                """
             ),
         )
 
@@ -108,11 +108,11 @@ class FileDepsTest(TestBase):
             transitive_targets,
             dedent(
                 """\
-        some/target/BUILD
-        some/file.py
-        dep/target/BUILD
-        dep/file.py
-        """
+                some/target/BUILD
+                some/file.py
+                dep/target/BUILD
+                dep/file.py
+                """
             ),
         )
 
@@ -131,11 +131,11 @@ class FileDepsTest(TestBase):
             transitive_targets,
             dedent(
                 """\
-        some/target/BUILD
-        some/file.py
-        other/target/BUILD
-        other/file.py
-        """
+                some/target/BUILD
+                some/file.py
+                other/target/BUILD
+                other/file.py
+                """
             ),
         )
 
@@ -169,15 +169,15 @@ class FileDepsTest(TestBase):
             transitive_targets,
             dedent(
                 """\
-        some/target/BUILD
-        some/file.py
-        other/target/BUILD
-        other/file.py
-        dep1/target/BUILD
-        dep1/file.py
-        dep2/target/BUILD
-        dep2/file.py
-        """
+                some/target/BUILD
+                some/file.py
+                other/target/BUILD
+                other/file.py
+                dep1/target/BUILD
+                dep1/file.py
+                dep2/target/BUILD
+                dep2/file.py
+                """
             ),
         )
 
@@ -208,11 +208,11 @@ class FileDepsTest(TestBase):
             transitive_targets,
             dedent(
                 """\
-        some/target/BUILD
-        some/file.py
-        dep/target/BUILD
-        dep/file.py
-        """
+                some/target/BUILD
+                some/file.py
+                dep/target/BUILD
+                dep/file.py
+                """
             ),
         )
 
@@ -228,10 +228,10 @@ class FileDepsTest(TestBase):
             transitive_targets,
             dedent(
                 """\
-        some/target/BUILD
-        some/file1.py
-        some/file2.py
-        """
+                some/target/BUILD
+                some/file1.py
+                some/file2.py
+                """
             ),
         )
 

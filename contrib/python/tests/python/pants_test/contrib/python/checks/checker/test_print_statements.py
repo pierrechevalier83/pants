@@ -13,25 +13,25 @@ class PrintStatementsTest(CheckstylePluginTestBase):
 
     def test_print_override(self):
         statement = """
-      from __future__ import print_function
-      print("I do what I want")
+                    from __future__ import print_function
+                    print("I do what I want")
 
-      class Foo(object):
-        def print(self):
-          "I can do this because it's not a reserved word."
-    """
+                    class Foo(object):
+                      def print(self):
+                        "I can do this because it's not a reserved word."
+                    """
         self.assertNoNits(statement)
 
     def test_print_function(self):
         statement = """
-      print("I do what I want")
-    """
+                    print("I do what I want")
+                    """
         self.assertNoNits(statement)
 
     # TODO(#7979): Rework tests so that we can run this with Python 2.
     @unittest.skip
     def test_print_statement(self):
         statement = """
-      print["I do what I want"]
-    """
+                    print["I do what I want"]
+                    """
         self.assertNit(statement, "T607")

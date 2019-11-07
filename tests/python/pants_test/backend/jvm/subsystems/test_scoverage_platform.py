@@ -76,13 +76,13 @@ class ScoveragePlatformTest(TestBase):
             relpath="a/scala/pass.scala",
             contents=dedent(
                 """
-        import java.util
-        object HelloWorld {
-           def main(args: Array[String]) {
-              println("Hello, world!")
-           }
-        }
-      """
+                import java.util
+                object HelloWorld {
+                   def main(args: Array[String]) {
+                      println("Hello, world!")
+                   }
+                }
+                """
             ),
         )
 
@@ -103,13 +103,13 @@ class ScoveragePlatformTest(TestBase):
             relpath="a/scala/pass.scala",
             contents=dedent(
                 """
-        import java.util
-        object HelloWorld {
-           def main(args: Array[String]) {
-              println("Hello, world!")
-           }
-        }
-      """
+                import java.util
+                object HelloWorld {
+                   def main(args: Array[String]) {
+                      println("Hello, world!")
+                   }
+                }
+                """
             ),
         )
 
@@ -126,12 +126,12 @@ class ScoveragePlatformTest(TestBase):
 
     def test_blacklist(self):
         """
-    When a target is blacklisted, we do not instrument it. For achieving that, we only
-    want `scalac_plugins` to not contain `scoverage`. Thus, the target may still have
-    `scoverage` in `scalac_plugin_args` and in `dependencies` but it will not be
-    instrumented as long as `scalac_plugins` do not contain `scoverage`.
-    :return:
-    """
+        When a target is blacklisted, we do not instrument it. For achieving that, we only
+        want `scalac_plugins` to not contain `scoverage`. Thus, the target may still have
+        `scoverage` in `scalac_plugin_args` and in `dependencies` but it will not be
+        instrumented as long as `scalac_plugins` do not contain `scoverage`.
+        :return:
+        """
         self.setup_scoverage_platform()
         ScoveragePlatform.global_instance().get_options().enable_scoverage = True
         ScoveragePlatform.global_instance().get_options().blacklist_targets = ["blacked"]
@@ -140,13 +140,13 @@ class ScoveragePlatformTest(TestBase):
             relpath="a/scala/pass.scala",
             contents=dedent(
                 """
-        import java.util
-        object HelloWorld {
-           def main(args: Array[String]) {
-              println("Hello, world!")
-           }
-        }
-      """
+                import java.util
+                object HelloWorld {
+                   def main(args: Array[String]) {
+                      println("Hello, world!")
+                   }
+                }
+                """
             ),
         )
 

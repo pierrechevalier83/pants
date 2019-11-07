@@ -8,11 +8,11 @@ from pants.contrib.python.checks.checker.except_statements import ExceptStatemen
 
 
 EXCEPT_TEMPLATE = """
-  try:                  # 001
-    1 / 0
-  {}
-    pass
-  """
+                  try:                  # 001
+                    1 / 0
+                  {}
+                    pass
+                  """
 
 
 class ExceptStatementsTest(CheckstylePluginTestBase):

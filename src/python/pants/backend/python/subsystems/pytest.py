@@ -42,8 +42,8 @@ class PyTest(Subsystem):
     def get_requirement_strings(self) -> Tuple[str, ...]:
         """Returns a tuple of requirements-style strings for pytest and related libraries.
 
-    Make sure the requirements are satisfied in any environment used for running tests.
-    """
+        Make sure the requirements are satisfied in any environment used for running tests.
+        """
         opts = self.get_options()
         # TODO(6282): once we can upgrade Pytest to 4.2.1+, we can remove the more-itertools requirement
         return (

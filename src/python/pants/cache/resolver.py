@@ -16,55 +16,55 @@ logger = logging.getLogger(__name__)
 class Resolver(ABC):
     """An abstract class base for resolving service urls.
 
-  :API: public
-  """
+    :API: public
+    """
 
     class ResolverError(Exception):
         """Indicate an error resolving service urls.
 
-    :API: public
-    """
+        :API: public
+        """
 
     @abstractmethod
     def resolve(self, resolve_from):
         """Query resolve_from for a list of service urls.
 
-    :param resolve_from: The discovery endpoint that may be on different protocols.
-    :return: A non-empty list of URLs. URL is the same format as remote artifact cache.
-    :rtype: list of strings
-    :raises :class:`Resolver.ResolverError` if there is an error resolving service urls.
-    """
+        :param resolve_from: The discovery endpoint that may be on different protocols.
+        :return: A non-empty list of URLs. URL is the same format as remote artifact cache.
+        :rtype: list of strings
+        :raises :class:`Resolver.ResolverError` if there is an error resolving service urls.
+        """
 
 
 class NoopResolver(Resolver):
     """A resolver that always yields nothing
 
-  :API: public
-  """
+    :API: public
+    """
 
     def resolve(self, resolve_from):
         """
-    :API: public
-    """
+        :API: public
+        """
         return []
 
 
 class ResponseParser:
     """Resolver response parser utility class.
 
-  :API: public
-  """
+    :API: public
+    """
 
     class ResponseParserError(Exception):
         """Indicates an error parsing response from resolver.
 
-    :API: public
-    """
+        :API: public
+        """
 
     def __init__(self, format="json_map", encoding="utf-8", index="hostlist"):
         """
-    :API: public
-    """
+        :API: public
+        """
         self.format = format
         self.encoding = encoding
         self.index = index
@@ -72,8 +72,8 @@ class ResponseParser:
     def parse(self, content):
         """Parse raw response content for a list of remote artifact cache URLs.
 
-    :API: public
-    """
+        :API: public
+        """
         if self.format == "json_map":
             try:
                 return assert_list(json.loads(content.decode(self.encoding))[self.index])
@@ -89,18 +89,18 @@ class ResponseParser:
 class RESTfulResolver(Resolver):
     """Query a resolver on RESTful interface.
 
-  :API: public
-  """
+    :API: public
+    """
 
     def __init__(self, timeout, tries, response_parser=None):
         """
-    :API: public
+        :API: public
 
-    :param float timeout: Timeout for GET in seconds.
-    :param int tries: Max number of retries. See docstring on `requests.adapters.HTTPAdapter`
-                      for details.
-    :param response_parser: Parser to extract the resolved URLS from response.
-    """
+        :param float timeout: Timeout for GET in seconds.
+        :param int tries: Max number of retries. See docstring on `requests.adapters.HTTPAdapter`
+                          for details.
+        :param response_parser: Parser to extract the resolved URLS from response.
+        """
         self._timeout = timeout
         self._tries = tries
         self._response_parser = response_parser or ResponseParser()
@@ -116,8 +116,8 @@ class RESTfulResolver(Resolver):
 
     def resolve(self, resolve_from):
         """
-    :API: public
-    """
+        :API: public
+        """
         session = requests.Session()
         session.mount(resolve_from, requests.adapters.HTTPAdapter(max_retries=self._tries))
         content = self._safe_get_content(session, resolve_from)

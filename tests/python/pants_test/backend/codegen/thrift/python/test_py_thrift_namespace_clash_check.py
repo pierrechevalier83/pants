@@ -21,14 +21,14 @@ class PyThriftNamespaceClashCheckTest(TaskTestBase, DeclarativeTaskTestMixin):
             "sources": ["with-header.thrift"],
             "filemap": {
                 "with-header.thrift": """\
-// Copyright 2019 Pants project contributors (see CONTRIBUTORS.md).
-// Licensed under the Apache License, Version 2.0 (see LICENSE).
+                                      // Copyright 2019 Pants project contributors (see CONTRIBUTORS.md).
+                                      // Licensed under the Apache License, Version 2.0 (see LICENSE).
 
-namespace java org.pantsbuild.whatever
-namespace py org.pantsbuild.py_whatever
+                                      namespace java org.pantsbuild.whatever
+                                      namespace py org.pantsbuild.py_whatever
 
-struct A {}
-""",
+                                      struct A {}
+                                      """,
             },
         },
         "src/py-thrift:no-py-namespace": {
@@ -36,11 +36,11 @@ struct A {}
             "sources": ["bad.thrift"],
             "filemap": {
                 "bad.thrift": """\
-#@namespace scala org.pantsbuild.whatever
-namespace java org.pantsbuild.whatever
+                              #@namespace scala org.pantsbuild.whatever
+                              namespace java org.pantsbuild.whatever
 
-struct A {}
-""",
+                              struct A {}
+                              """,
             },
         },
         "src/py-thrift:clashing-namespace": {
@@ -48,15 +48,15 @@ struct A {}
             "sources": ["a.thrift", "b.thrift"],
             "filemap": {
                 "a.thrift": """\
-namespace py org.pantsbuild.namespace
+                            namespace py org.pantsbuild.namespace
 
-struct A {}
-""",
+                            struct A {}
+                            """,
                 "b.thrift": """\
-namespace py org.pantsbuild.namespace
+                            namespace py org.pantsbuild.namespace
 
-struct B {}
-""",
+                            struct B {}
+                            """,
             },
         },
         "src/py-thrift-clashing:clashingA": {
@@ -64,10 +64,10 @@ struct B {}
             "sources": ["a.thrift"],
             "filemap": {
                 "a.thrift": """\
-namespace py org.pantsbuild.namespace
+                            namespace py org.pantsbuild.namespace
 
-struct A {}
-""",
+                            struct A {}
+                            """,
             },
         },
         "src/py-thrift-clashing:clashingB": {
@@ -75,10 +75,10 @@ struct A {}
             "sources": ["b.thrift"],
             "filemap": {
                 "b.thrift": """\
-namespace py org.pantsbuild.namespace
+                            namespace py org.pantsbuild.namespace
 
-struct B {}
-""",
+                            struct B {}
+                            """,
             },
         },
     }
@@ -91,11 +91,12 @@ struct B {}
         return self.invoke_tasks(target_roots=target_roots)
 
     _exception_prelude = """\
-Clashing namespaces for python thrift library sources detected in build graph. This will silently
-overwrite previously generated python sources with generated sources from thrift files declaring the
-same python namespace. This is an upstream WONTFIX in thrift, see:
-      https://issues.apache.org/jira/browse/THRIFT-515
-Errors:"""
+                         Clashing namespaces for python thrift library sources detected in build graph. This will silently
+                         overwrite previously generated python sources with generated sources from thrift files declaring the
+                         same python namespace. This is an upstream WONTFIX in thrift, see:
+                               https://issues.apache.org/jira/browse/THRIFT-515
+                         Errors:
+                         """
 
     def test_no_py_namespace(self):
         no_py_namespace_target = self._target_dict()["no-py-namespace"]
@@ -104,12 +105,12 @@ Errors:"""
         self.assertEqual(
             str(cm.exception),
             """\
-Python namespaces could not be extracted from some thrift sources. Declaring a `namespace py` in
-thrift sources for python thrift library targets will soon become required.
+            Python namespaces could not be extracted from some thrift sources. Declaring a `namespace py` in
+            thrift sources for python thrift library targets will soon become required.
 
-1 python library target(s) contained thrift sources not declaring a python namespace. The targets
-and/or files which need to be edited will be dumped to: {}
-""".format(
+            1 python library target(s) contained thrift sources not declaring a python namespace. The targets
+            and/or files which need to be edited will be dumped to: {}
+            """.format(
                 cm.exception.output_file
             ),
         )
@@ -123,8 +124,8 @@ and/or files which need to be edited will be dumped to: {}
         with self.assertRaisesWithMessage(
             PyThriftNamespaceClashCheck.ClashingNamespaceError,
             """{}
-org.pantsbuild.namespace: [(src/py-thrift:clashing-namespace, src/py-thrift/a.thrift), (src/py-thrift:clashing-namespace, src/py-thrift/b.thrift)]
-""".format(
+            org.pantsbuild.namespace: [(src/py-thrift:clashing-namespace, src/py-thrift/a.thrift), (src/py-thrift:clashing-namespace, src/py-thrift/b.thrift)]
+            """.format(
                 self._exception_prelude
             ),
         ):
@@ -136,8 +137,8 @@ org.pantsbuild.namespace: [(src/py-thrift:clashing-namespace, src/py-thrift/a.th
         with self.assertRaisesWithMessage(
             PyThriftNamespaceClashCheck.ClashingNamespaceError,
             """{}
-org.pantsbuild.namespace: [(src/py-thrift-clashing:clashingA, src/py-thrift-clashing/a.thrift), (src/py-thrift-clashing:clashingB, src/py-thrift-clashing/b.thrift)]
-""".format(
+            org.pantsbuild.namespace: [(src/py-thrift-clashing:clashingA, src/py-thrift-clashing/a.thrift), (src/py-thrift-clashing:clashingB, src/py-thrift-clashing/b.thrift)]
+            """.format(
                 self._exception_prelude
             ),
         ):

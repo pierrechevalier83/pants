@@ -110,10 +110,10 @@ class RewriteBase(NailgunTask, metaclass=ABCMeta):
     def invoke_tool(self, absolute_root, target_sources):
         """Invoke the tool on the given (target, absolute source) tuples.
 
-    Sources are guaranteed to be located below the given root.
+        Sources are guaranteed to be located below the given root.
 
-    Returns the UNIX return code of the tool.
-    """
+        Returns the UNIX return code of the tool.
+        """
 
     @property
     @abstractmethod
@@ -124,9 +124,9 @@ class RewriteBase(NailgunTask, metaclass=ABCMeta):
     def process_result(self, return_code):
         """Given a return code, process the result of the tool.
 
-    No return value is expected. If an error occurred while running the tool, raising a TaskError
-    with a useful error message is required.
-    """
+        No return value is expected. If an error occurred while running the tool, raising a TaskError
+        with a useful error message is required.
+        """
 
     def _get_non_synthetic_targets(self, targets):
         return [

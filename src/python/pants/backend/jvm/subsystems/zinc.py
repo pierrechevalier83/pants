@@ -202,11 +202,11 @@ class Zinc:
         def create(self, products, execution_strategy):
             """Create a Zinc instance from products active in the current Pants run.
 
-      :param products: The active Pants run products to pluck classpaths from.
-      :type products: :class:`pants.goal.products.Products`
-      :returns: A Zinc instance with access to relevant Zinc compiler wrapper jars and classpaths.
-      :rtype: :class:`Zinc`
-      """
+            :param products: The active Pants run products to pluck classpaths from.
+            :type products: :class:`pants.goal.products.Products`
+            :returns: A Zinc instance with access to relevant Zinc compiler wrapper jars and classpaths.
+            :rtype: :class:`Zinc`
+            """
             return Zinc(self, products, execution_strategy)
 
     def __init__(self, zinc_factory, products, execution_strategy):
@@ -218,8 +218,8 @@ class Zinc:
     def zinc(self):
         """Return the Zinc wrapper compiler classpath.
 
-    :rtype: list of str
-    """
+        :rtype: list of str
+        """
         return self._zinc_factory._zinc(self._products)
 
     @property
@@ -263,40 +263,40 @@ class Zinc:
     def _compiler_bridge(self):
         """Return a ClasspathEntry for the Zinc compiler-bridge jar.
 
-    :rtype: ClasspathEntry
-    """
+        :rtype: ClasspathEntry
+        """
         return self._zinc_factory._compiler_bridge(self._products)
 
     @memoized_property
     def _compiler_interface(self):
         """Return a ClasspathEntry for the Zinc compiler-interface jar.
 
-    :rtype: ClasspathEntry
-    """
+        :rtype: ClasspathEntry
+        """
         return self._zinc_factory._compiler_interface(self._products)
 
     @memoized_property
     def scala_compiler(self):
         """Return a ClasspathEntry for the scala compiler jar.
 
-    :rtype: ClasspathEntry
-    """
+        :rtype: ClasspathEntry
+        """
         return self._zinc_factory._scala_compiler(self._products)
 
     @memoized_property
     def scala_library(self):
         """Return a ClasspathEntry for the scala library jar (runtime).
 
-    :rtype: ClasspathEntry
-    """
+        :rtype: ClasspathEntry
+        """
         return self._zinc_factory._scala_library(self._products)
 
     @memoized_property
     def scala_reflect(self):
         """Return a ClasspathEntry for the scala library jar (runtime).
 
-    :rtype: ClasspathEntry
-    """
+        :rtype: ClasspathEntry
+        """
         return self._zinc_factory._scala_reflect(self._products)
 
     def _workdir(self):
@@ -306,12 +306,12 @@ class Zinc:
     def _compiler_bridge_cache_dir(self):
         """A directory where we can store compiled copies of the `compiler-bridge`.
 
-    The compiler-bridge is specific to each scala version.
-    Currently we compile the `compiler-bridge` only once, while bootstrapping.
-    Then, we store it in the working directory under .pants.d/zinc/<cachekey>, where
-    <cachekey> is calculated using the locations of zinc, the compiler interface,
-    and the compiler bridge.
-    """
+        The compiler-bridge is specific to each scala version.
+        Currently we compile the `compiler-bridge` only once, while bootstrapping.
+        Then, we store it in the working directory under .pants.d/zinc/<cachekey>, where
+        <cachekey> is calculated using the locations of zinc, the compiler interface,
+        and the compiler bridge.
+        """
         hasher = sha1()
         for cp_entry in [self.zinc, self._compiler_interface, self._compiler_bridge]:
             hasher.update(cp_entry.directory_digest.fingerprint.encode())
@@ -374,12 +374,12 @@ class Zinc:
 
     def _compile_compiler_bridge(self, context):
         """Compile the compiler bridge to be used by zinc, using our scala bootstrapper.
-    It will compile and cache the jar, and materialize it if not already there.
+        It will compile and cache the jar, and materialize it if not already there.
 
-    :param context: The context of the task trying to compile the bridge.
-                    This is mostly needed to use its scheduler to create digests of the relevant jars.
-    :return: The absolute path to the compiled scala-compiler-bridge jar.
-    """
+        :param context: The context of the task trying to compile the bridge.
+                        This is mostly needed to use its scheduler to create digests of the relevant jars.
+        :return: The absolute path to the compiled scala-compiler-bridge jar.
+        """
         bridge_jar_name = "scala-compiler-bridge.jar"
         bridge_jar = os.path.join(self._compiler_bridge_cache_dir, bridge_jar_name)
         global_bridge_cache_dir = os.path.join(

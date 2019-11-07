@@ -61,17 +61,17 @@ class GoTestIntegrationTest(PantsRunIntegrationTest):
                 fp.write(
                     dedent(
                         """
-            package libUnstyle
+                        package libUnstyle
 
-            func Speak() {
-              println("Hello from libUnstyle!")
-              println("Bye from libUnstyle!")
-            }
+                        func Speak() {
+                          println("Hello from libUnstyle!")
+                          println("Bye from libUnstyle!")
+                        }
 
-            func Add(a int, b int) int {
-            return a + b
-            }
-            """
+                        func Add(a int, b int) int {
+                        return a + b
+                        }
+                        """
                     ).strip()
                 )
             with safe_open(os.path.join(lib_unstyle_dir, "BUILD"), "w") as fp:

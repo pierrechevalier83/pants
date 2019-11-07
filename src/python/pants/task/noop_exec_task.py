@@ -13,7 +13,7 @@ class NoopExecTask(Task):
     Generally tasks depend on a specific product or products, as opposed to a given goal, and do
     not need this, but some tasks, eg "compile changed targets" just know they want the "compile"
     goal to be run, rather than a specific product, eg jvm classfiles.
-  """
+    """
 
     def execute(self):
         pass

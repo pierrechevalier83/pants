@@ -17,9 +17,9 @@ class GeneratePantsIni(ConsoleTask):
         pants_ini_path = Path(get_default_pants_config_file())
         pants_ini_content = dedent(
             f"""\
-      [GLOBAL]
-      pants_version: {pants_version}
-      """
+            [GLOBAL]
+            pants_version: {pants_version}
+            """
         )
 
         if pants_ini_path.exists():
@@ -30,9 +30,9 @@ class GeneratePantsIni(ConsoleTask):
 
         yield dedent(
             f"""\
-      Adding sensible defaults to {pants_ini_path}:
-      * Pinning `pants_version` to `{pants_version}`.
-      """
+            Adding sensible defaults to {pants_ini_path}:
+            * Pinning `pants_version` to `{pants_version}`.
+            """
         )
 
         pants_ini_path.write_text(pants_ini_content)

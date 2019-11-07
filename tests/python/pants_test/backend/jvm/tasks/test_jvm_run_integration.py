@@ -6,11 +6,11 @@ from pants_test.pants_run_integration_test import PantsRunIntegrationTest
 
 class JvmRunIntegrationTest(PantsRunIntegrationTest):
     def _exec_run(self, target, *args):
-        """ invokes pants goal run <target>
-    :param target: target name to compile
-    :param args: list of arguments to append to the command
-    :return: stdout as a string on success, raises an Exception on error
-    """
+        """invokes pants goal run <target>
+        :param target: target name to compile
+        :param args: list of arguments to append to the command
+        :return: stdout as a string on success, raises an Exception on error
+        """
         # Avoid some known-to-choke-on interpreters.
         command = [
             "run",
@@ -24,9 +24,9 @@ class JvmRunIntegrationTest(PantsRunIntegrationTest):
 
     def test_run_colliding_resources(self):
         """
-    Tests that the proper resource is bundled with each of these bundled targets when
-    each project has a different resource with the same path.
-    """
+        Tests that the proper resource is bundled with each of these bundled targets when
+        each project has a different resource with the same path.
+        """
         for name in ["a", "b", "c"]:
             target = (
                 "testprojects/maven_layout/resource_collision/example_{name}"
@@ -97,9 +97,10 @@ class JvmRunIntegrationTest(PantsRunIntegrationTest):
         ).stdout_data
         self.assertIn(
             """Property property.color is null
-Property property.size is null
-Flag -DMyFlag is NOT set
-Max Heap Size: 119013376""",
+            Property property.size is null
+            Flag -DMyFlag is NOT set
+            Max Heap Size: 119013376
+            """,
             output,
         )
 
@@ -108,9 +109,10 @@ Max Heap Size: 119013376""",
         ).stdout_data
         self.assertIn(
             """Property property.color is null
-Property property.size is null
-Flag -DMyFlag is NOT set
-Max Heap Size: 119013376""",
+            Property property.size is null
+            Flag -DMyFlag is NOT set
+            Max Heap Size: 119013376
+            """,
             output,
         )
 
@@ -119,8 +121,9 @@ Max Heap Size: 119013376""",
         ).stdout_data
         self.assertIn(
             """Property property.color is orange
-Property property.size is 2
-Flag -DMyFlag is set
-Max Heap Size: 1572864""",
+            Property property.size is 2
+            Flag -DMyFlag is set
+            Max Heap Size: 1572864
+            """,
             output,
         )

@@ -118,9 +118,9 @@ def error_msg_test_rule(union_wrapper: UnionWrapper) -> UnionX:
 
 class TypeCheckFailWrapper:
     """
-  This object wraps another object which will be used to demonstrate a type check failure when the
-  engine processes a `yield Get(...)` statement.
-  """
+    This object wraps another object which will be used to demonstrate a type check failure when the
+    engine processes a `yield Get(...)` statement.
+    """
 
     def __init__(self, inner):
         self.inner = inner
@@ -233,8 +233,8 @@ class SchedulerTest(TestBase):
         self.assertTrue(isinstance(a, A))
         # Fails due to no union relationship from A -> UnionBase.
         expected_msg = """\
-Type A is not a member of the UnionBase @union
-"""
+                       Type A is not a member of the UnionBase @union
+                       """
         with self._assert_execution_error(expected_msg):
             self.scheduler.product_request(A, [Params(UnionWrapper(A()))])
 
@@ -260,8 +260,8 @@ class SchedulerWithNestedRaiseTest(TestBase):
     def test_get_type_match_failure(self):
         """Test that Get(...)s are now type-checked during rule execution, to allow for union types."""
         expected_msg = """\
-Exception: WithDeps(Inner(InnerEntry { params: {TypeCheckFailWrapper}, rule: Task(Task { product: A, clause: [Select { product: TypeCheckFailWrapper }], gets: [Get { product: A, subject: B }], func: a_typecheck_fail_test(), cacheable: true }) })) did not declare a dependency on JustGet(Get { product: A, subject: A })
-"""
+                       Exception: WithDeps(Inner(InnerEntry { params: {TypeCheckFailWrapper}, rule: Task(Task { product: A, clause: [Select { product: TypeCheckFailWrapper }], gets: [Get { product: A, subject: B }], func: a_typecheck_fail_test(), cacheable: true }) })) did not declare a dependency on JustGet(Get { product: A, subject: A })
+                       """
         with assert_execution_error(self, expected_msg):
             # `a_typecheck_fail_test` above expects `wrapper.inner` to be a `B`.
             self.scheduler.product_request(A, [Params(TypeCheckFailWrapper(A()))])
@@ -274,9 +274,9 @@ Exception: WithDeps(Inner(InnerEntry { params: {TypeCheckFailWrapper}, rule: Tas
                 exc_str.startswith(
                     dedent(
                         """\
-        1 Exception raised in CFFI extern methods:
-        Traceback (most recent call last):
-        """
+                        1 Exception raised in CFFI extern methods:
+                        Traceback (most recent call last):
+                        """
                     )
                 ),
                 "exc_str was: {}".format(exc_str),
@@ -286,14 +286,14 @@ Exception: WithDeps(Inner(InnerEntry { params: {TypeCheckFailWrapper}, rule: Tas
             self.assertIn(
                 dedent(
                     """\
-        Traceback (most recent call last):
-          File LOCATION-INFO, in extern_identify
-            return c.identify(obj)
-          File LOCATION-INFO, in identify
-            hash_ = hash(obj)
-          File "<string>", line 2, in __hash__
-        TypeError: unhashable type: 'list'
-        """
+                    Traceback (most recent call last):
+                      File LOCATION-INFO, in extern_identify
+                        return c.identify(obj)
+                      File LOCATION-INFO, in identify
+                        hash_ = hash(obj)
+                      File "<string>", line 2, in __hash__
+                    TypeError: unhashable type: 'list'
+                    """
                 ),
                 exc_str,
                 "exc_str was: {}".format(exc_str),
@@ -301,8 +301,9 @@ Exception: WithDeps(Inner(InnerEntry { params: {TypeCheckFailWrapper}, rule: Tas
 
         resulting_engine_error = dedent(
             """\
-        Exception: Types that will be passed as Params at the root of a graph need to be registered via RootRule:
-          Any\n\n\n"""
+            Exception: Types that will be passed as Params at the root of a graph need to be registered via RootRule:
+              Any\n\n\n
+            """
         )
 
         # Test that the error contains the full traceback from within the CFFI context as well
@@ -317,9 +318,9 @@ Exception: WithDeps(Inner(InnerEntry { params: {TypeCheckFailWrapper}, rule: Tas
         self.assertIn(
             dedent(
                 """\
-      The engine execution request raised this error, which is probably due to the errors in the
-      CFFI extern methods listed above, as CFFI externs return None upon error:
-      """
+                The engine execution request raised this error, which is probably due to the errors in the
+                CFFI extern methods listed above, as CFFI externs return None upon error:
+                """
             ),
             exc_str,
         )
@@ -372,17 +373,18 @@ Exception: WithDeps(Inner(InnerEntry { params: {TypeCheckFailWrapper}, rule: Tas
             self,
             dedent(
                 """
-                     Computing Select(B(), A)
-                       Computing Task(nested_raise(), B(), A, true)
-                         Throw(An exception for B)
-                           Traceback (most recent call last):
-                             File LOCATION-INFO, in call
-                               val = func(*args)
-                             File LOCATION-INFO, in nested_raise
-                               fn_raises(x)
-                             File LOCATION-INFO, in fn_raises
-                               raise Exception(f"An exception for {type(x).__name__}")
-                           Exception: An exception for B"""
+                Computing Select(B(), A)
+                  Computing Task(nested_raise(), B(), A, true)
+                    Throw(An exception for B)
+                      Traceback (most recent call last):
+                        File LOCATION-INFO, in call
+                          val = func(*args)
+                        File LOCATION-INFO, in nested_raise
+                          fn_raises(x)
+                        File LOCATION-INFO, in fn_raises
+                          raise Exception(f"An exception for {type(x).__name__}")
+                      Exception: An exception for B
+                """
             ).lstrip()
             + "\n\n",  # Traces include two empty lines after.
             trace,

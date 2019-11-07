@@ -32,13 +32,13 @@ class CacheCleanupIntegrationTest(PantsRunIntegrationTest):
         prev_dirs=[],
     ):
         """Run Pants with the given `args` and `config`, delete the results, add
-    some files, then run pants again and ensure there are exactly
-    `expected_num_files` in the output.
+        some files, then run pants again and ensure there are exactly
+        `expected_num_files` in the output.
 
-    Pants needs to be run twice because we don't know what the results directory
-    will be named before we run Pants, and we want to insert files into that
-    specific directory to test cache cleanup procedures.
-    """
+        Pants needs to be run twice because we don't know what the results directory
+        will be named before we run Pants, and we want to insert files into that
+        specific directory to test cache cleanup procedures.
+        """
         self.assert_success(self.run_pants(args, config=config))
 
         artifact_base_dir = self.get_cache_subdir(cache_dir, other_dirs=prev_dirs)
@@ -96,9 +96,9 @@ class CacheCleanupIntegrationTest(PantsRunIntegrationTest):
     def test_buildcache_leave_none(self):
         """Ensure that max-old of zero removes all files
 
-    This test should ensure that conditional doesn't change to the simpler test of if max_old since
-    we need to handle zero as well.
-    """
+        This test should ensure that conditional doesn't change to the simpler test of if max_old since
+        we need to handle zero as well.
+        """
 
         with temporary_dir() as cache_dir:
             config = {"cache.compile.rsc": {"write_to": [cache_dir]}}
@@ -138,8 +138,8 @@ class CacheCleanupIntegrationTest(PantsRunIntegrationTest):
 
     def test_workdir_stale_builds_cleanup(self):
         """Ensure that current and previous build result_dirs and the newest `--workdir-max-build-entries` number of dirs
-    will be kept, and the rest will be purged.
-    """
+        will be kept, and the rest will be purged.
+        """
 
         with self.temporary_workdir() as workdir:
             self.assert_success(

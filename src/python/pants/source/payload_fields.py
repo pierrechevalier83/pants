@@ -25,9 +25,9 @@ class SourcesField(PayloadField):
 
     def __init__(self, sources, ref_address=None):
         """
-    :param sources: FilesetWithSpec representing the underlying sources.
-    :param ref_address: optional address spec of target that provides these sources
-    """
+        :param sources: FilesetWithSpec representing the underlying sources.
+        :param ref_address: optional address spec of target that provides these sources
+        """
         self._sources = self._validate_sources(sources)
         self._ref_address = ref_address
 
@@ -65,10 +65,10 @@ class SourcesField(PayloadField):
 
     def snapshot(self, scheduler=None):
         """
-    Returns a Snapshot containing the sources, relative to the build root.
+        Returns a Snapshot containing the sources, relative to the build root.
 
-    This API is experimental, and subject to change.
-    """
+        This API is experimental, and subject to change.
+        """
         if isinstance(self._sources, EagerFilesetWithSpec):
             snapshot = self._sources.snapshot
             if snapshot is not None:

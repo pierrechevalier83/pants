@@ -70,7 +70,7 @@ class CodeCoverageSettings:
 
 class CodeCoverage(Subsystem):
     """Manages setup and construction of JVM code coverage engines.
-  """
+    """
 
     options_scope = "coverage"
 

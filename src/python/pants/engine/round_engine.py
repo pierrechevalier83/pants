@@ -25,9 +25,9 @@ class GoalExecutor:
     def attempt(self, explain):
         """Attempts to execute the goal's tasks in installed order.
 
-    :param bool explain: If ``True`` then the goal plan will be explained instead of being
-                         executed.
-    """
+        :param bool explain: If ``True`` then the goal plan will be explained instead of being
+                             executed.
+        """
         goal_workdir = os.path.join(
             self._context.options.for_global_scope().pants_workdir, self._goal.name
         )
@@ -65,8 +65,8 @@ class GoalExecutor:
 
 class RoundEngine(Engine):
     """
-  :API: public
-  """
+    :API: public
+    """
 
     class DependencyError(ValueError):
         """Indicates a Task has an unsatisfiable data dependency."""
@@ -76,8 +76,8 @@ class RoundEngine(Engine):
 
     class TaskOrderError(DependencyError):
         """Indicates a task depends on data produced by another task in the same goal that is
-    scheduled to runs after it.
-    """
+        scheduled to runs after it.
+        """
 
     class MissingProductError(DependencyError):
         """Indicates an expressed data dependency if not provided by any installed task."""
@@ -230,8 +230,8 @@ class RoundEngine(Engine):
 
     def attempt(self, context, goals):
         """
-    :API: public
-    """
+        :API: public
+        """
         sorted_goal_infos = self.sort_goals(context, goals)
         self._propose_alternative_target_roots(context, sorted_goal_infos)
         goal_executors = list(self._prepare(context, sorted_goal_infos))

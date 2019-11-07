@@ -28,14 +28,14 @@ class PythonEvalTest(PythonTaskTestBase):
             {
                 "a.py": dedent(
                     """
-    import inspect
+                    import inspect
 
 
-    def compile_time_check_decorator(cls):
-      if not inspect.isclass(cls):
-        raise TypeError('This decorator can only be applied to classes, given {}'.format(cls))
-      return cls
-    """
+                    def compile_time_check_decorator(cls):
+                      if not inspect.isclass(cls):
+                        raise TypeError('This decorator can only be applied to classes, given {}'.format(cls))
+                      return cls
+                    """
                 )
             },
         )
@@ -46,13 +46,13 @@ class PythonEvalTest(PythonTaskTestBase):
             {
                 "b.py": dedent(
                     """
-    from a.a import compile_time_check_decorator
+                    from a.a import compile_time_check_decorator
 
 
-    @compile_time_check_decorator
-    class BarB(object):
-      pass
-    """
+                    @compile_time_check_decorator
+                    class BarB(object):
+                      pass
+                    """
                 )
             },
         )
@@ -63,13 +63,13 @@ class PythonEvalTest(PythonTaskTestBase):
             {
                 "c.py": dedent(
                     """
-    from a.a import compile_time_check_decorator
+                    from a.a import compile_time_check_decorator
 
 
-    @compile_time_check_decorator
-    {}:
-      pass
-    """.format(
+                    @compile_time_check_decorator
+                    {}:
+                      pass
+                    """.format(
                         "def baz_c()" if broken_c_library else "class BazC(object)"
                     )
                 )
@@ -83,13 +83,13 @@ class PythonEvalTest(PythonTaskTestBase):
             {
                 "d.py": dedent(
                     """
-    from a.a import compile_time_check_decorator
+                    from a.a import compile_time_check_decorator
 
 
-    @compile_time_check_decorator
-    class BazD(object):
-      pass
-    """
+                    @compile_time_check_decorator
+                    class BazD(object):
+                      pass
+                    """
                 )
             },
             dependencies=["//src/python/a"],

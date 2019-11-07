@@ -11,14 +11,14 @@ from pants.build_graph.target import Target
 class PythonAWSLambda(Target):
     """A self-contained Python function suitable for uploading to AWS Lambda.
 
-  :API: public
-  """
+    :API: public
+    """
 
     def __init__(self, binary=None, handler=None, **kwargs):
         """
-    :param string binary: Target spec of the ``python_binary`` that contains the handler.
-    :param string handler: Lambda handler entrypoint (module.dotted.name:handler_func).
-    """
+        :param string binary: Target spec of the ``python_binary`` that contains the handler.
+        :param string handler: Lambda handler entrypoint (module.dotted.name:handler_func).
+        """
         payload = Payload()
         payload.add_fields(
             {"binary": PrimitiveField(binary), "handler": PrimitiveField(handler),}

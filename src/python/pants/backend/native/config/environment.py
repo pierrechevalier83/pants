@@ -69,11 +69,11 @@ class _ExtensibleAlgebraic(ABC):
     def sequence(self, other, exclude_list_fields=None):
         """Return a copy of this object which combines all the fields common to both `self` and `other`.
 
-    List fields will be concatenated.
+        List fields will be concatenated.
 
-    The return type of this method is the type of `self` (or whatever `.copy()` returns), but the
-    `other` argument can be any `_ExtensibleAlgebraic` instance.
-    """
+        The return type of this method is the type of `self` (or whatever `.copy()` returns), but the
+        `other` argument can be any `_ExtensibleAlgebraic` instance.
+        """
         exclude_list_fields = frozenset(exclude_list_fields or [])
         overwrite_kwargs = {}
 
@@ -135,35 +135,35 @@ class _Executable(_ExtensibleAlgebraic):
     def path_entries(self):
         """A list of directory paths containing this executable, to be used in a subprocess's PATH.
 
-    This may be multiple directories, e.g. if the main executable program invokes any subprocesses.
+        This may be multiple directories, e.g. if the main executable program invokes any subprocesses.
 
-    :rtype: list of str
-    """
+        :rtype: list of str
+        """
 
     @abstractproperty
     def exe_filename(self):
         """The "entry point" -- which file to invoke when PATH is set to `path_entries()`.
 
-    :rtype: str
-    """
+        :rtype: str
+        """
 
     @_list_field
     def runtime_library_dirs(self):
         """Directories containing shared libraries that must be on the runtime library search path.
 
-    Note: this is for libraries needed for the current _Executable to run -- see _LinkerMixin below
-    for libraries that are needed at link time.
-    :rtype: list of str
-    """
+        Note: this is for libraries needed for the current _Executable to run -- see _LinkerMixin below
+        for libraries that are needed at link time.
+        :rtype: list of str
+        """
 
     @_list_field
     def extra_args(self):
         """Additional arguments used when invoking this _Executable.
 
-    These are typically placed before the invocation-specific command line arguments.
+        These are typically placed before the invocation-specific command line arguments.
 
-    :rtype: list of str
-    """
+        :rtype: list of str
+        """
 
     _platform = Platform.current
 
@@ -171,12 +171,12 @@ class _Executable(_ExtensibleAlgebraic):
     def invocation_environment_dict(self):
         """A dict to use as this _Executable's execution environment.
 
-    This isn't made into an "algebraic" field because its contents (the keys of the dict) are
-    generally known to the specific class which is overriding this property. Implementations of this
-    property can then make use of the data in the algebraic fields to populate this dict.
+        This isn't made into an "algebraic" field because its contents (the keys of the dict) are
+        generally known to the specific class which is overriding this property. Implementations of this
+        property can then make use of the data in the algebraic fields to populate this dict.
 
-    :rtype: dict of string -> string
-    """
+        :rtype: dict of string -> string
+        """
         return {
             "PATH": create_path_env_var(self.path_entries),
             self._platform.runtime_lib_path_env_var: create_path_env_var(self.runtime_library_dirs),
@@ -199,17 +199,17 @@ class _LinkerMixin(_Executable):
     def linking_library_dirs(self):
         """Directories to search for libraries needed at link time.
 
-    :rtype: list of str
-    """
+        :rtype: list of str
+        """
 
     @_list_field
     def extra_object_files(self):
         """A list of object files required to perform a successful link.
 
-    This includes crti.o from libc for gcc on Linux, for example.
+        This includes crti.o from libc for gcc on Linux, for example.
 
-    :rtype: list of str
-    """
+        :rtype: list of str
+        """
 
     @property
     def invocation_environment_dict(self):
@@ -245,8 +245,8 @@ class _CompilerMixin(_Executable):
     def include_dirs(self):
         """Directories to search for header files to #include during compilation.
 
-    :rtype: list of str
-    """
+        :rtype: list of str
+        """
 
     @property
     def invocation_environment_dict(self):

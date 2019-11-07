@@ -321,8 +321,8 @@ class FilesystemBuildFileTest(unittest.TestCase):
 
     def test_exception_class_hierarchy(self):
         """Exception handling code depends on the fact that all exceptions from BuildFile are
-    subclassed from the BuildFileError base class.
-    """
+        subclassed from the BuildFileError base class.
+        """
         self.assertIsInstance(BuildFile.MissingBuildFileError(), BuildFile.BuildFileError)
 
     def test_code(self):

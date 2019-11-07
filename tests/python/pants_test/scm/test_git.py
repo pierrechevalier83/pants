@@ -350,10 +350,10 @@ class GitTest(unittest.TestCase):
     def test_changes_in(self):
         """Test finding changes in a diffspecs
 
-    To some extent this is just testing functionality of git not pants, since all pants says
-    is that it will pass the diffspec to git diff-tree, but this should serve to at least document
-    the functionality we belive works.
-    """
+        To some extent this is just testing functionality of git not pants, since all pants says
+        is that it will pass the diffspec to git diff-tree, but this should serve to at least document
+        the functionality we belive works.
+        """
         with environment_as(GIT_DIR=self.gitdir, GIT_WORK_TREE=self.worktree):
 
             def commit_contents_to_files(content, *files):
@@ -433,10 +433,10 @@ class GitTest(unittest.TestCase):
             # when concocting a last-ditch `user.email`.
             non_utf8_config = dedent(
                 """
-      [user]
-        name = Noralf Trønnes
-        email = noralf@example.com
-      """
+                [user]
+                  name = Noralf Trønnes
+                  email = noralf@example.com
+                """
             ).encode("iso-8859-1")
 
             with open(os.path.join(self.gitdir, "config"), "wb") as fp:

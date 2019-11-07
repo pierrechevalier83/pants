@@ -7,14 +7,14 @@ from pants.base.exiter import PANTS_FAILED_EXIT_CODE
 class TaskError(Exception):
     """Indicates a task has failed.
 
-  :API: public
-  """
+    :API: public
+    """
 
     def __init__(self, *args, **kwargs):
         """
-    :param int exit_code: an optional exit code (defaults to nonzero)
-    :param list failed_targets: an optional list of failed targets (default=[])
-    """
+        :param int exit_code: an optional exit code (defaults to nonzero)
+        :param list failed_targets: an optional list of failed targets (default=[])
+        """
         self._exit_code = kwargs.pop("exit_code", PANTS_FAILED_EXIT_CODE)
         self._failed_targets = kwargs.pop("failed_targets", [])
         super().__init__(*args, **kwargs)
@@ -31,23 +31,23 @@ class TaskError(Exception):
 class ErrorWhileTesting(TaskError):
     """Raised when an actual test run failed.
 
-  This is used to distinguish test run failures from infrastructure failures.
+    This is used to distinguish test run failures from infrastructure failures.
 
-  :API: public
-  """
+    :API: public
+    """
 
 
 class TargetDefinitionException(Exception):
     """Indicates an invalid target definition.
 
-  :API: public
-  """
+    :API: public
+    """
 
     def __init__(self, target, msg):
         """
-    :param target: the target in question
-    :param string msg: a description of the target misconfiguration
-    """
+        :param target: the target in question
+        :param string msg: a description of the target misconfiguration
+        """
         super().__init__("Invalid target {}: {}".format(target, msg))
 
 

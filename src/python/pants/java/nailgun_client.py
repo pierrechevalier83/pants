@@ -36,12 +36,12 @@ class NailgunClientSession(NailgunProtocol, NailgunProtocol.TimeoutProvider):
         remote_pgrp_callback=None,
     ):
         """
-    :param bool exit_on_broken_pipe: whether or not to exit when `Broken Pipe` errors are
-                encountered
-    :param remote_pid_callback: Callback to run when a pid chunk is received from a remote client.
-    :param remote_pgrp_callback: Callback to run when a pgrp (process group) chunk is received from
-                                 a remote client.
-    """
+        :param bool exit_on_broken_pipe: whether or not to exit when `Broken Pipe` errors are
+                    encountered
+        :param remote_pid_callback: Callback to run when a pid chunk is received from a remote client.
+        :param remote_pgrp_callback: Callback to run when a pgrp (process group) chunk is received from
+                                     a remote client.
+        """
         self._sock = sock
         self._input_writer = (
             None
@@ -65,16 +65,16 @@ class NailgunClientSession(NailgunProtocol, NailgunProtocol.TimeoutProvider):
 
     def _set_exit_timeout(self, timeout, reason):
         """Set a timeout for the remainder of the session, along with an exception to raise.
-    which is implemented by NailgunProtocol.
+        which is implemented by NailgunProtocol.
 
-    This method may be called by a signal handler to set a timeout for the remainder of the
-    session. If the session completes before the timeout does, the exception in `reason` is
-    raised. Otherwise, `NailgunProtocol.ProcessStreamTimeout` is raised.
+        This method may be called by a signal handler to set a timeout for the remainder of the
+        session. If the session completes before the timeout does, the exception in `reason` is
+        raised. Otherwise, `NailgunProtocol.ProcessStreamTimeout` is raised.
 
-    :param float timeout: The length of time to time out, in seconds.
-    :param Exception reason: The exception to raise if the session completes before the timeout
-                             occurs.
-    """
+        :param float timeout: The length of time to time out, in seconds.
+        :param Exception reason: The exception to raise if the session completes before the timeout
+                                 occurs.
+        """
         self._exit_timeout_start_time = time.time()
         self._exit_timeout = timeout
         self._exit_reason = reason
@@ -114,10 +114,11 @@ class NailgunClientSession(NailgunProtocol, NailgunProtocol.TimeoutProvider):
     def _process_session(self):
         """Process the outputs of the nailgun session.
 
-    :raises: :class:`NailgunProtocol.ProcessStreamTimeout` if a timeout set from a signal handler
-                                                           with .set_exit_timeout() completes.
-    :raises: :class:`Exception` if the session completes before the timeout, the `reason` argument
-                                to .set_exit_timeout() will be raised."""
+        :raises: :class:`NailgunProtocol.ProcessStreamTimeout` if a timeout set from a signal handler
+                                                               with .set_exit_timeout() completes.
+        :raises: :class:`Exception` if the session completes before the timeout, the `reason` argument
+                                    to .set_exit_timeout() will be raised.
+        """
         try:
             for chunk_type, payload in self.iter_chunks(
                 MaybeShutdownSocket(self._sock), return_bytes=True, timeout_object=self,
@@ -192,8 +193,8 @@ class NailgunClient:
         DESCRIPTION = "Problem talking to nailgun server"
 
         _MSG_FMT = """\
-{description} (address: {address}, remote_pid={pid}, remote_pgrp={pgrp}): {wrapped_exc!r}\
-"""
+                   {description} (address: {address}, remote_pid={pid}, remote_pgrp={pgrp}): {wrapped_exc!r}\
+                   """
 
         # TODO: preserve the traceback somehow!
         def __init__(self, address, pid, pgrp, wrapped_exc):
@@ -248,20 +249,20 @@ class NailgunClient:
     ):
         """Creates a nailgun client that can be used to issue zero or more nailgun commands.
 
-    :param string host: the nailgun server to contact (defaults to '127.0.0.1')
-    :param int port: the port the nailgun server is listening on (defaults to the default nailgun
-                     port: 2113)
-    :param file ins: a file to read command standard input from (defaults to stdin) - can be None
-                     in which case no input is read
-    :param file out: a stream to write command standard output to (defaults to stdout)
-    :param file err: a stream to write command standard error to (defaults to stderr)
-    :param bool exit_on_broken_pipe: whether or not to exit when `Broken Pipe` errors are
-                                     encountered
-    :param string metadata_base_dir: If a PID and PGRP are received from the server (only for
-                                     pailgun connections), a file with the remote pid will be
-                                     written under this directory. For non-pailgun connections this
-                                     may be None.
-    """
+        :param string host: the nailgun server to contact (defaults to '127.0.0.1')
+        :param int port: the port the nailgun server is listening on (defaults to the default nailgun
+                         port: 2113)
+        :param file ins: a file to read command standard input from (defaults to stdin) - can be None
+                         in which case no input is read
+        :param file out: a stream to write command standard output to (defaults to stdout)
+        :param file err: a stream to write command standard error to (defaults to stderr)
+        :param bool exit_on_broken_pipe: whether or not to exit when `Broken Pipe` errors are
+                                         encountered
+        :param string metadata_base_dir: If a PID and PGRP are received from the server (only for
+                                         pailgun connections), a file with the remote pid will be
+                                         written under this directory. For non-pailgun connections this
+                                         may be None.
+        """
         self._host = host or self.DEFAULT_NG_HOST
         self._port = port or self.DEFAULT_NG_PORT
         self._address = (self._host, self._port)
@@ -302,9 +303,9 @@ class NailgunClient:
     def try_connect(self):
         """Creates a socket, connects it to the nailgun and returns the connected socket.
 
-    :returns: a connected `socket.socket`.
-    :raises: `NailgunClient.NailgunConnectionError` on failure to connect.
-    """
+        :returns: a connected `socket.socket`.
+        :raises: `NailgunClient.NailgunConnectionError` on failure to connect.
+        """
         sock = RecvBufferedSocket(
             sock=socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
         )
@@ -334,11 +335,11 @@ class NailgunClient:
     def maybe_send_signal(self, signum, include_pgrp=True):
         """Send the signal `signum` send if the PID and/or PGRP chunks have been received.
 
-    No error is raised if the pid or pgrp are None or point to an already-dead process.
+        No error is raised if the pid or pgrp are None or point to an already-dead process.
 
-    :param signum: The signal number to send to the remote process.
-    :param include_pgrp: If True, it will try to kill the pgrp as well
-    """
+        :param signum: The signal number to send to the remote process.
+        :param include_pgrp: If True, it will try to kill the pgrp as well
+        """
         remote_pid = self._maybe_last_pid()
         if remote_pid is not None:
             safe_kill(remote_pid, signum)
@@ -350,13 +351,13 @@ class NailgunClient:
     def execute(self, main_class, cwd=None, *args, **environment):
         """Executes the given main_class with any supplied args in the given environment.
 
-    :param string main_class: the fully qualified class name of the main entrypoint
-    :param string cwd: Set the working directory for this command
-    :param list args: any arguments to pass to the main entrypoint
-    :param dict environment: an env mapping made available to native nails via the nail context
-    :returns: the exit code of the main_class.
-    :raises: :class:`NailgunClient.NailgunError` if there was an error during execution.
-    """
+        :param string main_class: the fully qualified class name of the main entrypoint
+        :param string cwd: Set the working directory for this command
+        :param list args: any arguments to pass to the main entrypoint
+        :param dict environment: an env mapping made available to native nails via the nail context
+        :returns: the exit code of the main_class.
+        :raises: :class:`NailgunClient.NailgunError` if there was an error during execution.
+        """
         environment = dict(**environment)
         environment.update(self.ENV_DEFAULTS)
         cwd = cwd or os.getcwd()

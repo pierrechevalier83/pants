@@ -28,44 +28,44 @@ class Fetcher(ABC):
     def root(self):
         """Returns the root of this fetcher's remote import_path.
 
-    The root is defined as the portion of the remote import path indicating the associated
-    package's remote location; ie: for the remote import path of
-    'github.com/docker/docker/daemon/events' it would be 'github.com/docker/docker'.
+        The root is defined as the portion of the remote import path indicating the associated
+        package's remote location; ie: for the remote import path of
+        'github.com/docker/docker/daemon/events' it would be 'github.com/docker/docker'.
 
-    Many remote import paths may share the same root; ie: all the 20+ docker packages hosted at
-    https://github.com/docker/docker share the 'github.com/docker/docker' root.
+        Many remote import paths may share the same root; ie: all the 20+ docker packages hosted at
+        https://github.com/docker/docker share the 'github.com/docker/docker' root.
 
-    This is called the import-prefix in 'https://golang.org/cmd/go/#hdr-Remote_import_paths'
+        This is called the import-prefix in 'https://golang.org/cmd/go/#hdr-Remote_import_paths'
 
-    :returns: The root portion of the import path.
-    :rtype: string
-    :raises: :class:`FetchError` if there was a problem detecting the root.
-    """
+        :returns: The root portion of the import path.
+        :rtype: string
+        :raises: :class:`FetchError` if there was a problem detecting the root.
+        """
 
     @abstractmethod
     def fetch(self, dest, rev=None):
         """Fetches the remote library to the given dest dir.
 
-    The dest dir provided will be an existing empty directory.
+        The dest dir provided will be an existing empty directory.
 
-    :param string dest: The path of an existing empty directory to extract package containing the
-                        remote library's contents to.
-    :param string rev: The version to fetch - may be `None` or empty indicating the latest version
-                       should be fetched.
-    :raises: :class:`FetchError` if there was a problem fetching the remote package.
-    """
+        :param string dest: The path of an existing empty directory to extract package containing the
+                            remote library's contents to.
+        :param string rev: The version to fetch - may be `None` or empty indicating the latest version
+                           should be fetched.
+        :raises: :class:`FetchError` if there was a problem fetching the remote package.
+        """
 
 
 class CloningFetcher(Fetcher):
     """A fetcher that gets the remote library by cloning its repo.
 
-  This emulates the standard way go fetch works, and follows the protocol described here:
-  https://golang.org/cmd/go/#hdr-Remote_import_paths. In particular, it inspects go-import
-  meta tags.
+    This emulates the standard way go fetch works, and follows the protocol described here:
+    https://golang.org/cmd/go/#hdr-Remote_import_paths. In particular, it inspects go-import
+    meta tags.
 
-  Not that currently we require meta tags, and don't support the explicit form:
-  import "example.org/repo.git/foo/bar", as it looks like it's not used much in practice.
-  """
+    Not that currently we require meta tags, and don't support the explicit form:
+    import "example.org/repo.git/foo/bar", as it looks like it's not used much in practice.
+    """
 
     # TODO: Support the explicit form if needed. It wouldn't be difficult.
 
@@ -103,12 +103,12 @@ class ArchiveFetcher(Fetcher):
     class UrlInfo(namedtuple("UrlInfo", ["url_format", "default_rev", "strip_level"])):
         """Information about a remote archive.
 
-    - url_format: A string template that yields the remote archive's url when formatted with the
-                  remote import path\'s `rev`, `import_prefix`, and `pkg`.
-    - default_rev: Fetch this rev if no other rev is specified.
-    - strip_level: An integer indicating the number of leading path components to strip from
-                   files upacked from the archive.
-    """
+        - url_format: A string template that yields the remote archive's url when formatted with the
+                      remote import path\'s `rev`, `import_prefix`, and `pkg`.
+        - default_rev: Fetch this rev if no other rev is specified.
+        - strip_level: An integer indicating the number of leading path components to strip from
+                       files upacked from the archive.
+        """
 
     def __init__(self, import_path, import_prefix, url_info, archive_retriever):
         super().__init__(import_path)

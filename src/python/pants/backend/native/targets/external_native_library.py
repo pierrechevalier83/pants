@@ -25,12 +25,12 @@ class ConanRequirementSetField(tuple, PayloadField):
 class ConanRequirement:
     """A specification for a conan package to be resolved against a remote repository.
 
-  Example `pkg_spec`: 'lzo/2.10@twitter/stable'
+    Example `pkg_spec`: 'lzo/2.10@twitter/stable'
 
-  The include and lib dirs default to 'include/' and 'lib/', but as this is a convention, they can
-  be overridden for the specific package to be resolved. See
-  https://docs.conan.io/en/latest/using_packages/conanfile_txt.html#imports for more info.
-  """
+    The include and lib dirs default to 'include/' and 'lib/', but as this is a convention, they can
+    be overridden for the specific package to be resolved. See
+    https://docs.conan.io/en/latest/using_packages/conanfile_txt.html#imports for more info.
+    """
 
     pkg_spec: str
     include_relpath: str
@@ -45,16 +45,16 @@ class ConanRequirement:
         lib_names: Optional[Sequence[str]] = None,
     ) -> None:
         """
-    :param pkg_spec: A string specifying a conan package at a specific version, as per
-                     https://docs.conan.io/en/latest/using_packages/conanfile_txt.html#requires
-    :param include_relpath: The relative path from the package root directory to where C/C++
-                            headers are located.
-    :param lib_relpath: The relative path from the package root directory to where native
-                        libraries are located.
-    :param lib_names: Strings containing the libraries to add to the linker command
-                      line. Collected into the `native_lib_names` field of a
-                      `packaged_native_library()` target.
-    """
+        :param pkg_spec: A string specifying a conan package at a specific version, as per
+                         https://docs.conan.io/en/latest/using_packages/conanfile_txt.html#requires
+        :param include_relpath: The relative path from the package root directory to where C/C++
+                                headers are located.
+        :param lib_relpath: The relative path from the package root directory to where native
+                            libraries are located.
+        :param lib_names: Strings containing the libraries to add to the linker command
+                          line. Collected into the `native_lib_names` field of a
+                          `packaged_native_library()` target.
+        """
         self.pkg_spec = pkg_spec
         self.include_relpath = include_relpath or "include"
         self.lib_relpath = lib_relpath or "lib"
@@ -72,17 +72,17 @@ class ConanRequirement:
     @memoized_property
     def directory_path(self):
         """
-    A helper method for converting Conan to package specifications to the data directory
-    path that Conan creates for each package.
+        A helper method for converting Conan to package specifications to the data directory
+        path that Conan creates for each package.
 
-    Example package specification:
-      "my_library/1.0.0@pants/stable"
-    Example of the direcory path that Conan downloads pacakge data for this package to:
-      "my_library/1.0.0/pants/stable"
+        Example package specification:
+          "my_library/1.0.0@pants/stable"
+        Example of the direcory path that Conan downloads pacakge data for this package to:
+          "my_library/1.0.0/pants/stable"
 
-    For more info on Conan package specifications, see:
-      https://docs.conan.io/en/latest/introduction.html
-    """
+        For more info on Conan package specifications, see:
+          https://docs.conan.io/en/latest/introduction.html
+        """
         return self.pkg_spec.replace("@", "/")
 
 
@@ -98,8 +98,8 @@ class ExternalNativeLibrary(Target):
 
     def __init__(self, payload=None, packages=None, **kwargs):
         """
-    :param list packages: the `ConanRequirement`s to resolve into a `packaged_native_library()` target.
-    """
+        :param list packages: the `ConanRequirement`s to resolve into a `packaged_native_library()` target.
+        """
         payload = payload or Payload()
 
         assert_list(

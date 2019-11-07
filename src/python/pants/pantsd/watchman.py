@@ -34,14 +34,14 @@ class Watchman(ProcessManager):
         socket_path_override=None,
     ):
         """
-    :param str watchman_path: The path to the watchman binary.
-    :param str metadata_base_dir: The metadata base dir for `ProcessMetadataManager`.
-    :param float startup_timeout: The timeout for the initial `watch-project` query (in seconds).
-    :param float timeout: The watchman socket timeout for all subsequent queries (in seconds).
-    :param str log_level: The watchman log level. Watchman has 3 log levels: '0' for no logging,
-                          '1' for standard logging and '2' for verbose logging.
-    :param str socket_path_override: The overridden target path of the watchman socket, if any.
-    """
+        :param str watchman_path: The path to the watchman binary.
+        :param str metadata_base_dir: The metadata base dir for `ProcessMetadataManager`.
+        :param float startup_timeout: The timeout for the initial `watch-project` query (in seconds).
+        :param float timeout: The watchman socket timeout for all subsequent queries (in seconds).
+        :param str log_level: The watchman log level. Watchman has 3 log levels: '0' for no logging,
+                              '1' for standard logging and '2' for verbose logging.
+        :param str socket_path_override: The overridden target path of the watchman socket, if any.
+        """
         super().__init__(
             name="watchman",
             process_name="watchman",
@@ -120,8 +120,8 @@ class Watchman(ProcessManager):
     def launch(self):
         """Launch and synchronously write metadata.
 
-    This is possible due to watchman's built-in async server startup - no double-forking required.
-    """
+        This is possible due to watchman's built-in async server startup - no double-forking required.
+        """
         cmd = self._construct_cmd(
             (self._watchman_path, "get-pid"),
             state_file=self._state_file,
@@ -170,8 +170,8 @@ class Watchman(ProcessManager):
     def watch_project(self, path):
         """Issues the watch-project command to watchman to begin watching the buildroot.
 
-    :param string path: the path to the watchman project root/pants build root.
-    """
+        :param string path: the path to the watchman project root/pants build root.
+        """
         # TODO(kwlzn): Add a client.query(timeout=X) param to the upstream pywatchman project.
         try:
             return self.client.query("watch-project", os.path.realpath(path))
@@ -181,10 +181,10 @@ class Watchman(ProcessManager):
     def subscribed(self, build_root, handlers):
         """Bulk subscribe generator for StreamableWatchmanClient.
 
-    :param str build_root: the build_root for all subscriptions.
-    :param iterable handlers: a sequence of Watchman.EventHandler namedtuple objects.
-    :yields: a stream of tuples in the form (subscription_name: str, subscription_event: dict).
-    """
+        :param str build_root: the build_root for all subscriptions.
+        :param iterable handlers: a sequence of Watchman.EventHandler namedtuple objects.
+        :yields: a stream of tuples in the form (subscription_name: str, subscription_event: dict).
+        """
         command_list = [
             ["subscribe", build_root, handler.name, handler.metadata] for handler in handlers
         ]

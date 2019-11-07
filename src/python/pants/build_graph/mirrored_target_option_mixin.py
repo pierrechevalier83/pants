@@ -24,9 +24,9 @@ class MirroredTargetOptionDeclaration:
     def extract_target_value(self, target):
         """Get the value of this option from target.
 
-    NB: If this method returns None, that is interpreted as the target not having a value set for
-    the specified option, and the option value from `self.options` is used.
-    """
+        NB: If this method returns None, that is interpreted as the target not having a value set for
+        the specified option, and the option value from `self.options` is used.
+        """
         return self.accessor(target)
 
     @memoized_property
@@ -54,35 +54,35 @@ class MirroredTargetOptionDeclaration:
 class MirroredTargetOptionMixin(ABC):
     """Get option values which may be set in this subsystem or in a Target's keyword argument.
 
-  A subsystem or task mixing in this class may set e.g.:
+    A subsystem or task mixing in this class may set e.g.:
 
-      mirrored_target_option_actions = {
-        'some_option_name': lambda tgt: tgt.some_option_name,
-      }
+        mirrored_target_option_actions = {
+          'some_option_name': lambda tgt: tgt.some_option_name,
+        }
 
-  which declares that '--some-option-name' can be set as a subsystem option which a target may
-  override, and that the target needs to have a field `.some_option_name` which this subsystem may
-  access.
+    which declares that '--some-option-name' can be set as a subsystem option which a target may
+    override, and that the target needs to have a field `.some_option_name` which this subsystem may
+    access.
 
-  The class mixing this in can then call:
+    The class mixing this in can then call:
 
-      some_option_value = self.get_scalar_mirrored_target_option('some_option_name', target)
+        some_option_value = self.get_scalar_mirrored_target_option('some_option_name', target)
 
-  which will apply the following precedence to obtain `some_option_value`:
-  1. If --some-option-name is "flagged" (provided on the command line), use the command-line value.
-  2. If `target.some_option_name` is non-None, use that target-level value.
-  3. Otherwise, return the option value from the environment, config, or hardcoded default.
-  """
+    which will apply the following precedence to obtain `some_option_value`:
+    1. If --some-option-name is "flagged" (provided on the command line), use the command-line value.
+    2. If `target.some_option_name` is non-None, use that target-level value.
+    3. Otherwise, return the option value from the environment, config, or hardcoded default.
+    """
 
     @property
     @abstractmethod
     def mirrored_target_option_actions(self):
         """Subclasses should override and return a dict of (subsystem option name) -> selector function.
 
-    A selector is a 1-argument function accepting a target and returning a value, or None. This
-    property should return a dict mapping this subsystem's options attribute name (with underscores)
-    to the corresponding selector.
-    """
+        A selector is a 1-argument function accepting a target and returning a value, or None. This
+        property should return a dict mapping this subsystem's options attribute name (with underscores)
+        to the corresponding selector.
+        """
 
     @memoized_property
     def _mirrored_option_declarations(self):

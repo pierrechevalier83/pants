@@ -52,16 +52,16 @@ from pants.util.meta import frozen_after_init
 class Parser:
     """An argument parser in a hierarchy.
 
-  Each node in the hierarchy is a 'scope': the root is the global scope, and the parent of
-  a node is the scope it's immediately contained in. E.g., the 'compile.java' scope is
-  a child of the 'compile' scope, which is a child of the global scope.
+    Each node in the hierarchy is a 'scope': the root is the global scope, and the parent of
+    a node is the scope it's immediately contained in. E.g., the 'compile.java' scope is
+    a child of the 'compile' scope, which is a child of the global scope.
 
-  Options registered on a parser are also registered transitively on all the scopes it encloses.
-  Registration must be in outside-in order: we forbid registering options on an outer scope if
-  we've already registered an option on one of its inner scopes. This is to ensure that
-  re-registering the same option name on an inner scope correctly replaces the identically-named
-  option from the outer scope.
-  """
+    Options registered on a parser are also registered transitively on all the scopes it encloses.
+    Registration must be in outside-in order: we forbid registering options on an outer scope if
+    we've already registered an option on one of its inner scopes. This is to ensure that
+    re-registering the same option name on an inner scope correctly replaces the identically-named
+    option from the outer scope.
+    """
 
     class BooleanConversionError(ParseError):
         """Indicates a value other than 'True' or 'False' when attempting to parse a bool."""
@@ -100,13 +100,13 @@ class Parser:
     def __init__(self, env, config, scope_info, parent_parser, option_tracker):
         """Create a Parser instance.
 
-    :param env: a dict of environment variables.
-    :param :class:`pants.option.config.Config` config: data from a config file.
-    :param scope_info: the scope this parser acts for.
-    :param parent_parser: the parser for the scope immediately enclosing this one, or
-                          None if this is the global scope.
-    :param option_tracker: the option tracker to record where option values came from.
-    """
+        :param env: a dict of environment variables.
+        :param :class:`pants.option.config.Config` config: data from a config file.
+        :param scope_info: the scope this parser acts for.
+        :param parent_parser: the parser for the scope immediately enclosing this one, or
+                              None if this is the global scope.
+        :param option_tracker: the option tracker to record where option values came from.
+        """
         self._env = env
         self._config = config
         self._scope_info = scope_info
@@ -161,16 +161,16 @@ class Parser:
             levenshtein_max_distance: int,
         ) -> None:
             """
-      :param flags_in_scope: Iterable of arg strings to parse into flag values.
-      :param namespace: The object to register the flag values on
-      :param get_all_scoped_flag_names: A 0-argument function which returns an iterable of
-                                        all registered option names in all their scopes. This
-                                        is used to create an error message with suggestions
-                                        when raising a `ParseError`.
-      :param levenshtein_max_distance: The maximum Levenshtein edit distance between option names
-                                       to determine similarly named options when an option name
-                                       hasn't been registered.
-      """
+            :param flags_in_scope: Iterable of arg strings to parse into flag values.
+            :param namespace: The object to register the flag values on
+            :param get_all_scoped_flag_names: A 0-argument function which returns an iterable of
+                                              all registered option names in all their scopes. This
+                                              is used to create an error message with suggestions
+                                              when raising a `ParseError`.
+            :param levenshtein_max_distance: The maximum Levenshtein edit distance between option names
+                                             to determine similarly named options when an option name
+                                             hasn't been registered.
+            """
             self.flag_value_map = self._create_flag_value_map(flags_in_scope)
             self.namespace = namespace
             self.get_all_scoped_flag_names = get_all_scoped_flag_names
@@ -180,10 +180,10 @@ class Parser:
         def _create_flag_value_map(flags):
             """Returns a map of flag -> list of values, based on the given flag strings.
 
-      None signals no value given (e.g., -x, --foo).
-      The value is a list because the user may specify the same flag multiple times, and that's
-      sometimes OK (e.g., when appending to list-valued options).
-      """
+            None signals no value given (e.g., -x, --foo).
+            The value is a list because the user may specify the same flag multiple times, and that's
+            sometimes OK (e.g., when appending to list-valued options).
+            """
             flag_value_map = defaultdict(list)
             for flag in flags:
                 key, has_equals_sign, flag_val = flag.partition("=")
@@ -202,12 +202,12 @@ class Parser:
     def parse_args(self, parse_args_request):
         """Set values for this parser's options on the namespace object.
 
-    :param Parser.ParseArgsRequest parse_args_request: parameters for parsing this parser's
-                                                       arguments.
-    :returns: The `parse_args_request.namespace` object that the option values are being registered
-              on.
-    :raises: :class:`ParseError` if any flags weren't recognized.
-    """
+        :param Parser.ParseArgsRequest parse_args_request: parameters for parsing this parser's
+                                                           arguments.
+        :returns: The `parse_args_request.namespace` object that the option values are being registered
+                  on.
+        :raises: :class:`ParseError` if any flags weren't recognized.
+        """
 
         flag_value_map = parse_args_request.flag_value_map
         namespace = parse_args_request.namespace
@@ -381,17 +381,17 @@ class Parser:
     def option_registrations_iter(self):
         """Returns an iterator over the normalized registration arguments of each option in this parser.
 
-    Useful for generating help and other documentation.
+        Useful for generating help and other documentation.
 
-    Each yielded item is an (args, kwargs) pair, as passed to register(), except that kwargs
-    will be normalized in the following ways:
-      - It will always have 'dest' explicitly set.
-      - It will always have 'default' explicitly set, and the value will be a RankedValue.
-      - For recursive options, the original registrar will also have 'recursive_root' set.
+        Each yielded item is an (args, kwargs) pair, as passed to register(), except that kwargs
+        will be normalized in the following ways:
+          - It will always have 'dest' explicitly set.
+          - It will always have 'default' explicitly set, and the value will be a RankedValue.
+          - For recursive options, the original registrar will also have 'recursive_root' set.
 
-    Note that recursive options we inherit from a parent will also be yielded here, with
-    the correctly-scoped default value.
-    """
+        Note that recursive options we inherit from a parent will also be yielded here, with
+        the correctly-scoped default value.
+        """
 
         def normalize_kwargs(args, orig_kwargs):
             nkwargs = copy.copy(orig_kwargs)
@@ -418,11 +418,11 @@ class Parser:
     def _unnormalized_option_registrations_iter(self):
         """Returns an iterator over the raw registration arguments of each option in this parser.
 
-    Each yielded item is an (args, kwargs) pair, exactly as passed to register(), except for
-    substituting list and dict types with list_option/dict_option.
+        Each yielded item is an (args, kwargs) pair, exactly as passed to register(), except for
+        substituting list and dict types with list_option/dict_option.
 
-    Note that recursive options we inherit from a parent will also be yielded here.
-    """
+        Note that recursive options we inherit from a parent will also be yielded here.
+        """
         # First yield any recursive options we inherit from our parent.
         if self._parent_parser:
             for args, kwargs in self._parent_parser._recursive_option_registration_args():
@@ -436,8 +436,8 @@ class Parser:
     def _recursive_option_registration_args(self):
         """Yield args, kwargs pairs for just our recursive options.
 
-    Includes all the options we inherit recursively from our ancestors.
-    """
+        Includes all the options we inherit recursively from our ancestors.
+        """
         if self._parent_parser:
             for args, kwargs in self._parent_parser._recursive_option_registration_args():
                 yield args, kwargs
@@ -592,9 +592,9 @@ class Parser:
     def parse_dest(*args, **kwargs):
         """Select the dest name for an option registration.
 
-    If an explicit `dest` is specified, returns that and otherwise derives a default from the
-    option flags where '--foo-bar' -> 'foo_bar' and '-x' -> 'x'.
-    """
+        If an explicit `dest` is specified, returns that and otherwise derives a default from the
+        option flags where '--foo-bar' -> 'foo_bar' and '-x' -> 'x'.
+        """
         explicit_dest = kwargs.get("dest")
         if explicit_dest:
             return explicit_dest
@@ -621,8 +621,8 @@ class Parser:
     def _compute_value(self, dest, kwargs, flag_val_strs):
         """Compute the value to use for an option.
 
-    The source of the default value is chosen according to the ranking in RankedValue.
-    """
+        The source of the default value is chosen according to the ranking in RankedValue.
+        """
         # Helper function to convert a string to a value of the option's type.
         def to_value_type(val_str):
             if val_str is None:

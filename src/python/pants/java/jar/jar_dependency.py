@@ -19,25 +19,25 @@ from pants.util.meta import frozen_after_init
 class JarDependencyParseContextWrapper:
     """A pre-built Maven repository dependency.
 
-  Examples:
+    Examples:
 
-    # The typical use case.
-    jar('com.puppycrawl.tools', 'checkstyle', '1.2')
+      # The typical use case.
+      jar('com.puppycrawl.tools', 'checkstyle', '1.2')
 
-    # Test external dependency locally.
-    jar('org.foobar', 'foobar', '1.2-SNAPSHOT',
-        url='file:///Users/pantsdev/workspace/project/jars/checkstyle/checkstyle.jar')
+      # Test external dependency locally.
+      jar('org.foobar', 'foobar', '1.2-SNAPSHOT',
+          url='file:///Users/pantsdev/workspace/project/jars/checkstyle/checkstyle.jar')
 
-    # Test external dependency locally using relative path (with respect to the path
-    # of the belonging BUILD file)
-    jar('org.foobar', 'foobar', '1.2-SNAPSHOT',
-        url='file:../checkstyle/checkstyle.jar')
-  """
+      # Test external dependency locally using relative path (with respect to the path
+      # of the belonging BUILD file)
+      jar('org.foobar', 'foobar', '1.2-SNAPSHOT',
+          url='file:../checkstyle/checkstyle.jar')
+    """
 
     def __init__(self, parse_context):
         """
-    :param parse_context: The BUILD file parse context.
-    """
+        :param parse_context: The BUILD file parse context.
+        """
         self._parse_context = parse_context
 
     def __call__(
@@ -55,27 +55,27 @@ class JarDependencyParseContextWrapper:
         excludes=None,
     ):
         """
-    :param string org: The Maven ``groupId`` of this dependency.
-    :param string name: The Maven ``artifactId`` of this dependency.
-    :param string rev: The Maven ``version`` of this dependency.
-      If unspecified the latest available version is used.
-    :param boolean force: Force this specific artifact revision even if other transitive
-      dependencies specify a different revision. This requires specifying the ``rev`` parameter.
-    :param string ext: Extension of the artifact if different from the artifact type.
-      This is sometimes needed for artifacts packaged with Maven bundle type but stored as jars.
-    :param string url: URL of this artifact, if different from the Maven repo standard location
-      (specifying this parameter is unusual). Path of file URL can be either absolute or relative
-      to the belonging BUILD file.
-    :param string apidocs: URL of existing javadocs, which if specified, pants-generated javadocs
-      will properly hyperlink {\\ @link}s.
-    :param string classifier: Classifier specifying the artifact variant to use.
-    :param boolean mutable: Inhibit caching of this mutable artifact. A common use is for
-      Maven -SNAPSHOT style artifacts in an active development/integration cycle.
-    :param boolean intransitive: Declares this Dependency intransitive, indicating only the jar for
-      the dependency itself should be downloaded and placed on the classpath
-    :param list excludes: Transitive dependencies of this jar to exclude.
-    :type excludes: list of :class:`pants.backend.jvm.targets.exclude.Exclude`
-    """
+        :param string org: The Maven ``groupId`` of this dependency.
+        :param string name: The Maven ``artifactId`` of this dependency.
+        :param string rev: The Maven ``version`` of this dependency.
+          If unspecified the latest available version is used.
+        :param boolean force: Force this specific artifact revision even if other transitive
+          dependencies specify a different revision. This requires specifying the ``rev`` parameter.
+        :param string ext: Extension of the artifact if different from the artifact type.
+          This is sometimes needed for artifacts packaged with Maven bundle type but stored as jars.
+        :param string url: URL of this artifact, if different from the Maven repo standard location
+          (specifying this parameter is unusual). Path of file URL can be either absolute or relative
+          to the belonging BUILD file.
+        :param string apidocs: URL of existing javadocs, which if specified, pants-generated javadocs
+          will properly hyperlink {\\ @link}s.
+        :param string classifier: Classifier specifying the artifact variant to use.
+        :param boolean mutable: Inhibit caching of this mutable artifact. A common use is for
+          Maven -SNAPSHOT style artifacts in an active development/integration cycle.
+        :param boolean intransitive: Declares this Dependency intransitive, indicating only the jar for
+          the dependency itself should be downloaded and placed on the classpath
+        :param list excludes: Transitive dependencies of this jar to exclude.
+        :type excludes: list of :class:`pants.backend.jvm.targets.exclude.Exclude`
+        """
         return JarDependency(
             org,
             name,
@@ -97,17 +97,17 @@ class JarDependencyParseContextWrapper:
 class JarDependency:
     """A pre-built Maven repository dependency.
 
-  This is the developer facing api, compared to the context wrapper class
-  `JarDependencyParseContextWrapper`, which exposes api through build file to users.
+    This is the developer facing api, compared to the context wrapper class
+    `JarDependencyParseContextWrapper`, which exposes api through build file to users.
 
-  The only additional parameter `base_path` here is so that we can retrieve the file URL
-  in its absolute (for ivy) or relative (for fingerprinting) form. The context wrapper class
-  determines the `base_path` from where `jar` is defined at.
+    The only additional parameter `base_path` here is so that we can retrieve the file URL
+    in its absolute (for ivy) or relative (for fingerprinting) form. The context wrapper class
+    determines the `base_path` from where `jar` is defined at.
 
-  If a relative file url is provided, its absolute form will be (`buildroot` + `base_path` + relative url).
+    If a relative file url is provided, its absolute form will be (`buildroot` + `base_path` + relative url).
 
-  :API: public
-  """
+    :API: public
+    """
 
     org: str
     base_name: str
@@ -206,8 +206,8 @@ class JarDependency:
     def coordinate(self):
         """Returns the maven coordinate of this jar.
 
-    :rtype: :class:`pants.java.jar.M2Coordinate`
-    """
+        :rtype: :class:`pants.java.jar.M2Coordinate`
+        """
         return M2Coordinate(
             org=self.org, name=self.name, rev=self.rev, classifier=self.classifier, ext=self.ext
         )

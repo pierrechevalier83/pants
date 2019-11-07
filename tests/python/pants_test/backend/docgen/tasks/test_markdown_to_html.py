@@ -16,8 +16,9 @@ from pants_test.task_test_base import TaskTestBase
 
 
 ABC = """able
-baker
-charlie"""
+      baker
+      charlie
+      """
 
 
 class ChooseLinesTest(unittest.TestCase):
@@ -125,10 +126,10 @@ class MarkdownToHtmlTest(TaskTestBase):
             "bad.rst",
             contents=dedent(
                 """
-    A bad link:
+                A bad link:
 
-    * `RB #2363 https://rbcommons.com/s/twitter/r/2363/>`_
-    """
+                * `RB #2363 https://rbcommons.com/s/twitter/r/2363/>`_
+                """
             ),
         )
         self.add_to_build_file("", 'page(name = "bad_rst", source = "bad.rst")')
@@ -154,10 +155,10 @@ class MarkdownToHtmlTest(TaskTestBase):
             "bad.rst",
             contents=dedent(
                 """
-    A bad link:
+                A bad link:
 
-    * `RB #2363 https://rbcommons.com/s/twitter/r/2363/>`_
-    """
+                * `RB #2363 https://rbcommons.com/s/twitter/r/2363/>`_
+                """
             ),
         )
         self.add_to_build_file("", 'page(name = "bad_rst", source = "bad.rst")')
@@ -185,10 +186,10 @@ class MarkdownToHtmlTest(TaskTestBase):
             "good.rst",
             contents=dedent(
                 """
-    A good link:
+                A good link:
 
-    * `RB #2363 <https://rbcommons.com/s/twitter/r/2363/>`_
-    """
+                * `RB #2363 <https://rbcommons.com/s/twitter/r/2363/>`_
+                """
             ),
         )
         self.add_to_build_file("", 'page(name = "good_rst", source = "good.rst")')

@@ -7,8 +7,8 @@ import os
 class ClasspathEntry:
     """Represents a java classpath entry.
 
-  :API: public
-  """
+    :API: public
+    """
 
     def __init__(self, path, directory_digest=None):
         self._path = path
@@ -18,12 +18,12 @@ class ClasspathEntry:
     def path(self):
         """Returns the pants internal path of this classpath entry.
 
-    Suitable for use in constructing classpaths for pants executions and pants generated artifacts.
+        Suitable for use in constructing classpaths for pants executions and pants generated artifacts.
 
-    :API: public
+        :API: public
 
-    :rtype: string
-    """
+        :rtype: string
+        """
         return self._path
 
     def hydrate_missing_directory_digest(self, directory_digest):
@@ -40,19 +40,19 @@ class ClasspathEntry:
     def directory_digest(self):
         """Returns the directory digest which contains this file. May be None.
 
-    This API is experimental, and subject to change.
+        This API is experimental, and subject to change.
 
-    :rtype: pants.engine.fs.Digest
-    """
+        :rtype: pants.engine.fs.Digest
+        """
         return self._directory_digest
 
     def is_excluded_by(self, excludes):
         """Returns `True` if this classpath entry should be excluded given the `excludes` in play.
 
-    :param excludes: The excludes to check this classpath entry against.
-    :type excludes: list of :class:`pants.backend.jvm.targets.exclude.Exclude`
-    :rtype: bool
-    """
+        :param excludes: The excludes to check this classpath entry against.
+        :type excludes: list of :class:`pants.backend.jvm.targets.exclude.Exclude`
+        :rtype: bool
+        """
         return False
 
     def __hash__(self):
@@ -76,23 +76,23 @@ class ClasspathEntry:
     @classmethod
     def is_artifact_classpath_entry(cls, classpath_entry):
         """
-    :API: public
-    """
+        :API: public
+        """
         return isinstance(classpath_entry, ArtifactClasspathEntry)
 
     @classmethod
     def is_internal_classpath_entry(cls, classpath_entry):
         """
-    :API: public
-    """
+        :API: public
+        """
         return not cls.is_artifact_classpath_entry(classpath_entry)
 
 
 class ArtifactClasspathEntry(ClasspathEntry):
     """Represents a resolved third party classpath entry.
 
-  :API: public
-  """
+    :API: public
+    """
 
     def __init__(self, path, coordinate, cache_path, directory_digest=None):
         super().__init__(path, directory_digest)
@@ -103,24 +103,24 @@ class ArtifactClasspathEntry(ClasspathEntry):
     def coordinate(self):
         """Returns the maven coordinate that used to resolve this classpath entry's artifact.
 
-    :rtype: :class:`pants.java.jar.M2Coordinate`
-    """
+        :rtype: :class:`pants.java.jar.M2Coordinate`
+        """
         return self._coordinate
 
     @property
     def cache_path(self):
         """Returns the external cache path of this classpath entry.
 
-    For example, the `~/.m2/repository` or `~/.ivy2/cache` location of the resolved artifact for
-    maven and ivy resolvers respectively.
+        For example, the `~/.m2/repository` or `~/.ivy2/cache` location of the resolved artifact for
+        maven and ivy resolvers respectively.
 
-    Suitable for use in constructing classpaths for external tools that should not be subject to
-    potential volatility in pants own internal caches.
+        Suitable for use in constructing classpaths for external tools that should not be subject to
+        potential volatility in pants own internal caches.
 
-    :API: public
+        :API: public
 
-    :rtype: string
-    """
+        :rtype: string
+        """
         return self._cache_path
 
     def is_excluded_by(self, excludes):

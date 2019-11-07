@@ -22,11 +22,11 @@ class GoLocalSource(GoTarget):
     def local_import_path(cls, source_root, address):
         """Returns the Go import path for the given address housed under the given source root.
 
-    :param string source_root: The path of the source root the address is found within.
-    :param address: The target address of a GoLocalSource target.
-    :type: :class:`pants.build_graph.address.Address`
-    :raises: `ValueError` if the address does not reside within the source root.
-    """
+        :param string source_root: The path of the source root the address is found within.
+        :param address: The target address of a GoLocalSource target.
+        :type: :class:`pants.build_graph.address.Address`
+        :raises: `ValueError` if the address does not reside within the source root.
+        """
         return cls.package_path(source_root, address.spec_path)
 
     @classmethod

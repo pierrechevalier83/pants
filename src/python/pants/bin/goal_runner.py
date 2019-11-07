@@ -33,15 +33,15 @@ class GoalRunnerFactory:
         exiter=sys.exit,
     ):
         """
-    :param str root_dir: The root directory of the pants workspace (aka the "build root").
-    :param Options options: The global, pre-initialized Options instance.
-    :param BuildConfiguration build_config: A pre-initialized BuildConfiguration instance.
-    :param Runtracker run_tracker: The global, pre-initialized/running RunTracker instance.
-    :param Reporting reporting: The global, pre-initialized Reporting instance.
-    :param LegacyGraphSession graph_session: The graph session for this run.
-    :param TargetRoots target_roots: A pre-existing `TargetRoots` object, if available.
-    :param func exiter: A function that accepts an exit code value and exits. (for tests, Optional)
-    """
+        :param str root_dir: The root directory of the pants workspace (aka the "build root").
+        :param Options options: The global, pre-initialized Options instance.
+        :param BuildConfiguration build_config: A pre-initialized BuildConfiguration instance.
+        :param Runtracker run_tracker: The global, pre-initialized/running RunTracker instance.
+        :param Reporting reporting: The global, pre-initialized Reporting instance.
+        :param LegacyGraphSession graph_session: The graph session for this run.
+        :param TargetRoots target_roots: A pre-existing `TargetRoots` object, if available.
+        :param func exiter: A function that accepts an exit code value and exits. (for tests, Optional)
+        """
         self._root_dir = root_dir
         self._options = options
         self._build_config = build_config
@@ -142,19 +142,19 @@ class GoalRunnerFactory:
 class GoalRunner:
     """Lists installed goals or else executes a named goal.
 
-  NB: GoalRunner represents a v1-only codepath. v2 goals are registered via `@console_rule` and
-  the `pants.engine.goal.Goal` class.
-  """
+    NB: GoalRunner represents a v1-only codepath. v2 goals are registered via `@console_rule` and
+    the `pants.engine.goal.Goal` class.
+    """
 
     Factory = GoalRunnerFactory
 
     def __init__(self, context, goals, run_tracker, kill_nailguns):
         """
-    :param Context context: The global, pre-initialized Context as created by GoalRunnerFactory.
-    :param list[Goal] goals: The list of goals to act on.
-    :param Runtracker run_tracker: The global, pre-initialized/running RunTracker instance.
-    :param bool kill_nailguns: Whether or not to kill nailguns after the run.
-    """
+        :param Context context: The global, pre-initialized Context as created by GoalRunnerFactory.
+        :param list[Goal] goals: The list of goals to act on.
+        :param Runtracker run_tracker: The global, pre-initialized/running RunTracker instance.
+        :param bool kill_nailguns: Whether or not to kill nailguns after the run.
+        """
         self._context = context
         self._goals = goals
         self._run_tracker = run_tracker

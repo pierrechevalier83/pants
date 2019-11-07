@@ -12,15 +12,15 @@ from pants.java.jar.jar_dependency import JarDependency
 class JarLibrary(Target):
     """A set of external JAR files.
 
-  :API: public
-  """
+    :API: public
+    """
 
     def __init__(self, payload=None, jars=None, managed_dependencies=None, **kwargs):
         """
-    :param jars: List of `jar <#jar>`_\\s to depend upon.
-    :param managed_dependencies: Address of a managed_jar_dependencies() target to use. If omitted, uses
-      the default managed_jar_dependencies() target set by --jar-dependency-management-default-target.
-    """
+        :param jars: List of `jar <#jar>`_\\s to depend upon.
+        :param managed_dependencies: Address of a managed_jar_dependencies() target to use. If omitted, uses
+          the default managed_jar_dependencies() target set by --jar-dependency-management-default-target.
+        """
         jars = self.assert_list(jars, expected_type=JarDependency, key_arg="jars")
         payload = payload or Payload()
         payload.add_fields(
@@ -39,8 +39,8 @@ class JarLibrary(Target):
     def managed_dependencies(self):
         """The managed_jar_dependencies target this jar_library specifies, or None.
 
-    :API: public
-    """
+        :API: public
+        """
         if self.payload.managed_dependencies:
             address = Address.parse(
                 self.payload.managed_dependencies, relative_to=self.address.spec_path
@@ -52,15 +52,15 @@ class JarLibrary(Target):
     @property
     def jar_dependencies(self):
         """
-    :API: public
-    """
+        :API: public
+        """
         return self.payload.jars
 
     @property
     def excludes(self):
         """
-    :API: public
-    """
+        :API: public
+        """
         return self.payload.excludes
 
     @property

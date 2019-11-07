@@ -102,13 +102,13 @@ class PythonNativeCode(Subsystem):
 
     def check_build_for_current_platform_only(self, targets):
         """
-    Performs a check of whether the current target closure has native sources and if so, ensures
-    that Pants is only targeting the current platform.
+        Performs a check of whether the current target closure has native sources and if so, ensures
+        that Pants is only targeting the current platform.
 
-    :param tgts: a list of :class:`Target` objects.
-    :return: a boolean value indicating whether the current target closure has native sources.
-    :raises: :class:`pants.base.exceptions.IncompatiblePlatformsError`
-    """
+        :param tgts: a list of :class:`Target` objects.
+        :return: a boolean value indicating whether the current target closure has native sources.
+        :raises: :class:`pants.base.exceptions.IncompatiblePlatformsError`
+        """
         # TODO(#5949): convert this to checking if the closure of python requirements has any
         # platform-specific packages (maybe find the platforms there too?).
         if not self._any_targets_have_native_sources(targets):
@@ -129,12 +129,12 @@ class PythonNativeCode(Subsystem):
         raise IncompatiblePlatformsError(
             dedent(
                 """\
-      Pants doesn't currently support cross-compiling native code.
-      The following targets set platforms arguments other than ['current'], which is unsupported for this reason.
-      Please either remove the platforms argument from these targets, or set them to exactly ['current'].
-      Bad targets:
-      {}
-      """.format(
+                Pants doesn't currently support cross-compiling native code.
+                The following targets set platforms arguments other than ['current'], which is unsupported for this reason.
+                Please either remove the platforms argument from these targets, or set them to exactly ['current'].
+                Bad targets:
+                {}
+                """.format(
                     "\n".join(sorted(target.address.reference() for target in bad_targets))
                 )
             )

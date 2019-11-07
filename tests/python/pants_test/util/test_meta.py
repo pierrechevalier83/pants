@@ -67,8 +67,9 @@ class OverridingValueField(WithProp):
 class OverridingValueInit(WithProp):
     """Override the class-level `_value` with an instance-level `_value` from a constructor.
 
-  The class-level methods should still return the class-level `_value`, but the new instance methods
-  should return the value from the constructor."""
+    The class-level methods should still return the class-level `_value`, but the new instance methods
+    should return the value from the constructor.
+    """
 
     def __init__(self, v):
         # This will be ignored when accessed as a class method.
@@ -85,9 +86,9 @@ class OverridingValueInit(WithProp):
 class WithShadowingInstanceMethod(OverridingValueInit):
     """Override the class-level property and method with instance versions.
 
-  The instance-level methods should return the instance-level `_value` (the constructor argument)
-  instead of the class-level `_value` (defined in :class:`WithProp`).
-  """
+    The instance-level methods should return the instance-level `_value` (the constructor argument)
+    instead of the class-level `_value` (defined in :class:`WithProp`).
+    """
 
     @property
     def class_property(self):
@@ -221,9 +222,10 @@ class ClassPropertyTest(TestBase):
         with self.assertRaisesWithMessage(
             TypeError,
             """\
-The classproperty 'f' in type 'Abstract' was an abstractproperty, meaning that type \
-Abstract must override it by setting it as a variable in the class body or defining a method \
-with an @classproperty decorator.""",
+            The classproperty 'f' in type 'Abstract' was an abstractproperty, meaning that type \
+            Abstract must override it by setting it as a variable in the class body or defining a method \
+            with an @classproperty decorator.
+            """,
         ):
             Abstract.f
 
@@ -235,9 +237,10 @@ with an @classproperty decorator.""",
         with self.assertRaisesWithMessage(
             TypeError,
             """\
-The classproperty 'f' in type 'WithoutOverriding' was an abstractproperty, meaning that type \
-WithoutOverriding must override it by setting it as a variable in the class body or defining a method \
-with an @classproperty decorator.""",
+            The classproperty 'f' in type 'WithoutOverriding' was an abstractproperty, meaning that type \
+            WithoutOverriding must override it by setting it as a variable in the class body or defining a method \
+            with an @classproperty decorator.
+            """,
         ):
             WithoutOverriding.f
 

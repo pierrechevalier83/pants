@@ -21,9 +21,9 @@ class PantsRunner(ExceptionSink.AccessGlobalExiterMixin):
 
     def __init__(self, args=None, env=None, start_time=None):
         """
-    :param list args: The arguments (sys.argv) for this run. (Optional, default: sys.argv)
-    :param dict env: The environment for this run. (Optional, default: os.environ)
-    """
+        :param list args: The arguments (sys.argv) for this run. (Optional, default: sys.argv)
+        :param dict env: The environment for this run. (Optional, default: os.environ)
+        """
         self._args = args or sys.argv
         self._env = env or os.environ
         self._start_time = start_time

@@ -11,14 +11,14 @@ from pants.contrib.go.targets.go_binary import GoBinary
 class GoBinaryFingerprintStrategy(FingerprintStrategy):
     """Build flags aware fingerprint strategy.
 
-  This enables support for runtime merging of build flags (e.g.: config file, per-target, CLI),
-  which impact the output binary.
-  """
+    This enables support for runtime merging of build flags (e.g.: config file, per-target, CLI),
+    which impact the output binary.
+    """
 
     def __init__(self, get_build_flags_func):
         """
-    :param func get_build_flags_func: Partial function that merges build_flags
-    """
+        :param func get_build_flags_func: Partial function that merges build_flags
+        """
         self._get_build_flags_func = get_build_flags_func
 
     def compute_fingerprint(self, target):

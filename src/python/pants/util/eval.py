@@ -13,14 +13,14 @@ def parse_expression(
 ) -> Any:
     """Attempts to parse the given `val` as a python expression of the specified `acceptable_types`.
 
-  :param val: A string containing a python expression.
-  :param acceptable_types: The acceptable types of the parsed object.
-  :param name: An optional logical name for the value being parsed; ie if the literal val
-                      represents a person's age, 'age'.
-  :param raise_type: The type of exception to raise for all failures; ValueError by default.
-  :raises: If `val` is not a valid python literal expression or it is but evaluates to an object
-           that is not a an instance of one of the `acceptable_types`.
-  """
+    :param val: A string containing a python expression.
+    :param acceptable_types: The acceptable types of the parsed object.
+    :param name: An optional logical name for the value being parsed; ie if the literal val
+                        represents a person's age, 'age'.
+    :param raise_type: The type of exception to raise for all failures; ValueError by default.
+    :raises: If `val` is not a valid python literal expression or it is but evaluates to an object
+             that is not a an instance of one of the `acceptable_types`.
+    """
 
     def format_type(typ):
         return typ.__name__
@@ -47,10 +47,10 @@ def parse_expression(
         raise raise_type(
             dedent(
                 """\
-      The {name} cannot be evaluated as a literal expression: {error}
-      Given raw value:
-      {value}
-      """.format(
+                The {name} cannot be evaluated as a literal expression: {error}
+                Given raw value:
+                {value}
+                """.format(
                     name=get_name(), error=e, value=format_raw_value()
                 )
             )
@@ -75,10 +75,10 @@ def parse_expression(
         raise raise_type(
             dedent(
                 """\
-      The {name} is not of the expected type(s): {types}:
-      Given the following raw value that evaluated to type {type}:
-      {value}
-      """.format(
+                The {name} is not of the expected type(s): {types}:
+                Given the following raw value that evaluated to type {type}:
+                {value}
+                """.format(
                     name=get_name(),
                     types=", ".join(format_type(t) for t in iter_types(acceptable_types)),
                     type=format_type(type(parsed_value)),

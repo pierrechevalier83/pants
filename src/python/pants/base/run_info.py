@@ -16,8 +16,8 @@ from pants.version import VERSION
 class RunInfo:
     """A little plaintext file containing very basic info about a pants run.
 
-  Can only be appended to, never edited.
-  """
+    Can only be appended to, never edited.
+    """
 
     def __init__(self, info_file):
         self._info_file = info_file

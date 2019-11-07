@@ -13,8 +13,8 @@ from pants.contrib.go.subsystems.imported_repo import ImportedRepo
 class GoImportMetaTagReader(Subsystem):
     """Implements a reader for the <meta name="go-import"> protocol.
 
-  See https://golang.org/cmd/go/#hdr-Remote_import_paths .
-  """
+    See https://golang.org/cmd/go/#hdr-Remote_import_paths .
+    """
 
     options_scope = "go-import-metatag-reader"
 
@@ -31,13 +31,14 @@ class GoImportMetaTagReader(Subsystem):
 
     _META_IMPORT_REGEX = re.compile(
         r"""
-      <meta
-          \s+
-          name=['"]go-import['"]
-          \s+
-          content=['"](?P<root>[^\s]+)\s+(?P<vcs>[^\s]+)\s+(?P<url>[^\s]+)['"]
-          \s*
-      /?>""",
+        <meta
+            \s+
+            name=['"]go-import['"]
+            \s+
+            content=['"](?P<root>[^\s]+)\s+(?P<vcs>[^\s]+)\s+(?P<url>[^\s]+)['"]
+            \s*
+        /?>
+        """,
         flags=re.VERBOSE,
     )
 
@@ -51,9 +52,9 @@ class GoImportMetaTagReader(Subsystem):
     def get_imported_repo(self, import_path):
         """Looks for a go-import meta tag for the provided import_path.
 
-    Returns an ImportedRepo instance with the information in the meta tag,
-    or None if no go-import meta tag is found.
-    """
+        Returns an ImportedRepo instance with the information in the meta tag,
+        or None if no go-import meta tag is found.
+        """
         try:
             session = requests.session()
             # TODO: Support https with (optional) fallback to http, as Go does.

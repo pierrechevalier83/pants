@@ -52,6 +52,7 @@ class Generator:
 
     def write(self, stream):
         """Applies the template to the template data and writes the result to the given file-like
-    stream."""
+        stream.
+        """
 
         stream.write(self.render())

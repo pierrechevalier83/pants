@@ -27,17 +27,17 @@ class GoFetchTest(TaskTestBase):
         self.create_file(
             "src/github.com/u/a/a.go",
             contents="""
-      package a
+                     package a
 
-      import (
-        "fmt"
-        "math"
-        "sync"
+                     import (
+                       "fmt"
+                       "math"
+                       "sync"
 
-        "bitbucket.org/u/b"
-        "github.com/u/c"
-      )
-    """,
+                       "bitbucket.org/u/b"
+                       "github.com/u/c"
+                     )
+                     """,
         )
         remote_import_ids = go_fetch._get_remote_import_paths(
             "github.com/u/a", gopath=self.build_root
@@ -85,8 +85,8 @@ class GoFetchTest(TaskTestBase):
         self.create_file(
             f,
             contents="""package {name}
-        {imports}
-      """.format(
+                     {imports}
+                     """.format(
                 name=name, imports="\n".join(imports)
             ),
         )
@@ -105,8 +105,8 @@ class GoFetchTest(TaskTestBase):
     def _init_dep_graph_files(self, src, zipdir, dep_graph):
         """Given a dependency graph, initializes the corresponding BUILD/packages/zip files.
 
-    Packages are placed in src, and their zipped contents are placed in zipdir.
-    """
+        Packages are placed in src, and their zipped contents are placed in zipdir.
+        """
         for t, deps in dep_graph.items():
             self._create_package(src, t, deps)
             self._create_zip(src, zipdir, t)
@@ -195,33 +195,33 @@ class GoFetchTest(TaskTestBase):
         self.create_file(
             "src/github.com/u/a/a.go",
             contents="""
-      package a
+                     package a
 
-      import (
-        "fmt"
-        "math"
-        "sync"
+                     import (
+                       "fmt"
+                       "math"
+                       "sync"
 
-        "bitbucket.org/u/b"
-      )
-    """,
+                       "bitbucket.org/u/b"
+                     )
+                     """,
         )
         self.create_file(
             "src/github.com/u/a/b.go",
             contents="""
-      package a
+                     package a
 
-      /*
-       #include <stdlib.h>
-       */
-      import "C" // C was erroneously categorized as a remote lib in issue 2616.
+                     /*
+                      #include <stdlib.h>
+                      */
+                     import "C" // C was erroneously categorized as a remote lib in issue 2616.
 
-      import (
-        "fmt"
+                     import (
+                       "fmt"
 
-        "github.com/u/c"
-      )
-    """,
+                       "github.com/u/c"
+                     )
+                     """,
         )
         remote_import_ids = go_fetch._get_remote_import_paths(
             "github.com/u/a", gopath=self.build_root

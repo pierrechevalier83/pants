@@ -29,15 +29,15 @@ class Cobertura(CoverageEngine):
         @classmethod
         def create(cls, settings, targets, execute_java_for_targets):
             """
-      :param settings: Generic code coverage settings.
-      :type settings: :class:`CodeCoverageSettings`
-      :param list targets: A list of targets to instrument and record code coverage for.
-      :param execute_java_for_targets: A function that accepts a list of targets whose JVM platform
-                                       constraints are used to pick a JVM `Distribution`. The
-                                       function should also accept `*args` and `**kwargs` compatible
-                                       with the remaining parameters accepted by
-                                       `pants.java.util.execute_java`.
-      """
+            :param settings: Generic code coverage settings.
+            :type settings: :class:`CodeCoverageSettings`
+            :param list targets: A list of targets to instrument and record code coverage for.
+            :param execute_java_for_targets: A function that accepts a list of targets whose JVM platform
+                                             constraints are used to pick a JVM `Distribution`. The
+                                             function should also accept `*args` and `**kwargs` compatible
+                                             with the remaining parameters accepted by
+                                             `pants.java.util.execute_java`.
+            """
 
             return Cobertura(settings, targets, execute_java_for_targets)
 
@@ -99,15 +99,15 @@ class Cobertura(CoverageEngine):
 
     def __init__(self, settings, targets, execute_java_for_targets):
         """
-    :param settings: Generic code coverage settings.
-    :type settings: :class:`CodeCoverageSettings`
-    :param list targets: A list of targets to instrument and record code coverage for.
-    :param execute_java_for_targets: A function that accepts a list of targets whose JVM platform
-                                     constraints are used to pick a JVM `Distribution`. The function
-                                     should also accept `*args` and `**kwargs` compatible with the
-                                     remaining parameters accepted by
-                                     `pants.java.util.execute_java`.
-    """
+        :param settings: Generic code coverage settings.
+        :type settings: :class:`CodeCoverageSettings`
+        :param list targets: A list of targets to instrument and record code coverage for.
+        :param execute_java_for_targets: A function that accepts a list of targets whose JVM platform
+                                         constraints are used to pick a JVM `Distribution`. The function
+                                         should also accept `*args` and `**kwargs` compatible with the
+                                         remaining parameters accepted by
+                                         `pants.java.util.execute_java`.
+        """
         self._settings = settings
         options = settings.options
         self._context = settings.context
@@ -123,11 +123,11 @@ class Cobertura(CoverageEngine):
     @staticmethod
     def initialize_instrument_classpath(output_dir, settings, targets, instrumentation_classpath):
         """Clones the existing runtime_classpath and corresponding binaries to instrumentation specific
-    paths.
+        paths.
 
-    :param targets: the targets for which we should create an instrumentation_classpath entry based
-    on their runtime_classpath entry.
-    """
+        :param targets: the targets for which we should create an instrumentation_classpath entry based
+        on their runtime_classpath entry.
+        """
         instrument_dir = os.path.join(output_dir, "coverage", "classes")
         settings.safe_makedir(instrument_dir, clean=True)
 

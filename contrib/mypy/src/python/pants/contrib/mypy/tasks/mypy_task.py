@@ -33,14 +33,14 @@ class MypyTaskError(TaskError):
 class MypyTask(LintTaskMixin, ResolveRequirementsTaskBase):
     """Invoke the mypy static type analyzer for Python.
 
-  Mypy lint task filters out target_roots that are not properly tagged according to
-  --whitelisted-tag-name (defaults to None, and no filtering occurs if this option is 'None'),
-  and executes MyPy on targets in context from whitelisted target roots.
-  (if any transitive targets from the filtered roots are not whitelisted, a warning
-  will be printed.)
+    Mypy lint task filters out target_roots that are not properly tagged according to
+    --whitelisted-tag-name (defaults to None, and no filtering occurs if this option is 'None'),
+    and executes MyPy on targets in context from whitelisted target roots.
+    (if any transitive targets from the filtered roots are not whitelisted, a warning
+    will be printed.)
 
-  'In context' meaning in the sub-graph where a whitelisted target is the root
-  """
+    'In context' meaning in the sub-graph where a whitelisted target is the root
+    """
 
     _MYPY_COMPATIBLE_INTERPETER_CONSTRAINT = ">=3.5"
     _PYTHON_SOURCE_EXTENSION = ".py"
@@ -211,16 +211,16 @@ class MypyTask(LintTaskMixin, ResolveRequirementsTaskBase):
                     exe_fp.write(
                         dedent(
                             """
-            import runpy
-            import site
-            import sys
+                            import runpy
+                            import site
+                            import sys
 
 
-            site.getsitepackages = lambda: sys.path[:]
+                            site.getsitepackages = lambda: sys.path[:]
 
-            
-            runpy.run_module('mypy', run_name='__main__')
-          """
+
+                            runpy.run_module('mypy', run_name='__main__')
+                            """
                         )
                     )
                     exe_fp.flush()

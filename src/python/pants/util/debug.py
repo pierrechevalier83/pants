@@ -18,22 +18,22 @@ def dlog(msg, log_path=DEFAULT_LOG_PATH):
 class ProxyLogger(namedtuple("ProxyLogger", ["wrapped_object", "log_path"])):
     """An instance-wrapping method call logger that uses `dlog` logging.
 
-  Example usage:
+    Example usage:
 
-    >>> import sys
-    >>> from pants.util.debug import ProxyLogger
-    >>> sys.stdout = ProxyLogger.wrap_object(sys.stdout)
-    >>> sys.stdout.write('blah\n')
-    blah
-    >>>
+      >>> import sys
+      >>> from pants.util.debug import ProxyLogger
+      >>> sys.stdout = ProxyLogger.wrap_object(sys.stdout)
+      >>> sys.stdout.write('blah\n')
+      blah
+      >>>
 
-  results in logging in `/tmp/pants_debug.log` like:
+    results in logging in `/tmp/pants_debug.log` like:
 
-  ...
-  32912@MainThread: <open file '<stdout>', mode 'w' at 0x1047150>.write(*('blah\n',), **{}) -> None
-  ...
+    ...
+    32912@MainThread: <open file '<stdout>', mode 'w' at 0x1047150>.write(*('blah\n',), **{}) -> None
+    ...
 
-  """
+    """
 
     @classmethod
     def wrap_object(cls, obj, log_path=DEFAULT_LOG_PATH):

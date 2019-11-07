@@ -62,13 +62,13 @@ class AntlrJavaGenTest(NailgunTaskTestBase):
                 relpath="{srcroot}/{dir}/{prefix}.g{version}".format(version=ver, **self.PARTS),
                 contents=dedent(
                     """
-        grammar {prefix};
-        ////////////////////
-        start  : letter EOF ;
-        letter : LETTER ;
-        ////////////////////
-        fragment LETTER : 'a'..'z' | 'A'..'Z' ;
-      """.format(
+                    grammar {prefix};
+                    ////////////////////
+                    start  : letter EOF ;
+                    letter : LETTER ;
+                    ////////////////////
+                    fragment LETTER : 'a'..'z' | 'A'..'Z' ;
+                    """.format(
                         **self.PARTS
                     )
                 ),
@@ -151,13 +151,13 @@ class AntlrJavaGenTest(NailgunTaskTestBase):
             self.BUILDFILE,
             dedent(
                 """
-      java_antlr_library(
-        name='{name}',
-        compiler='antlr{version}',
-        package='this.is.a.package',
-        sources=['{prefix}.g{version}'],
-      )
-    """.format(
+                java_antlr_library(
+                  name='{name}',
+                  compiler='antlr{version}',
+                  package='this.is.a.package',
+                  sources=['{prefix}.g{version}'],
+                )
+                """.format(
                     version=version, **self.PARTS
                 )
             ),
@@ -176,12 +176,12 @@ class AntlrJavaGenTest(NailgunTaskTestBase):
             self.BUILDFILE,
             dedent(
                 """
-      java_antlr_library(
-        name='{name}',
-        compiler='antlr{version}',
-        sources=['{prefix}.g{version}'],
-      )
-    """.format(
+                java_antlr_library(
+                  name='{name}',
+                  compiler='antlr{version}',
+                  sources=['{prefix}.g{version}'],
+                )
+                """.format(
                     version=version, **self.PARTS
                 )
             ),
@@ -199,12 +199,12 @@ class AntlrJavaGenTest(NailgunTaskTestBase):
             self.BUILDFILE,
             dedent(
                 """
-      java_antlr_library(
-        name='{name}',
-        compiler='antlr4',
-        sources=['{prefix}.g4', 'sub/not_read.g4'],
-      )
-    """.format(
+                java_antlr_library(
+                  name='{name}',
+                  compiler='antlr4',
+                  sources=['{prefix}.g4', 'sub/not_read.g4'],
+                )
+                """.format(
                     **self.PARTS
                 )
             ),
@@ -224,12 +224,12 @@ class AntlrJavaGenTest(NailgunTaskTestBase):
             self.BUILDFILE,
             dedent(
                 """
-      java_antlr_library(
-        name='{name}',
-        compiler='antlr{version}',
-        sources=['{prefix}.g{version}'],
-      )
-    """.format(
+                java_antlr_library(
+                  name='{name}',
+                  compiler='antlr{version}',
+                  sources=['{prefix}.g{version}'],
+                )
+                """.format(
                     version=version, **self.PARTS
                 )
             ),

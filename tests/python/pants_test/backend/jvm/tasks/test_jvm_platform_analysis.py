@@ -11,8 +11,8 @@ from pants_test.task_test_base import TaskTestBase
 class JvmPlatformAnalysisTestMixin:
     """Common helper methods for testing JvmPlatformValidate and JvmPlatformExplain.
 
-  Mostly for building sets of targets that are interesting for testing.
-  """
+    Mostly for building sets of targets that are interesting for testing.
+    """
 
     def _java(self, name, platform=None, deps=None):
         return self.make_target(
@@ -118,17 +118,17 @@ class JvmPlatformValidateTest(JvmPlatformAnalysisTestMixin, TaskTestBase):
     def construct_interesting_graph(self):
         """Constructs an "interesting" transitive graph, with a mix of jvm and non-jvm targets.
 
-    Drawn in ascii below, with '->' indicating dependencies, with capital letters indicating
-    JvmTargets and lower-case letters indicating non-JvmTargets.
+        Drawn in ascii below, with '->' indicating dependencies, with capital letters indicating
+        JvmTargets and lower-case letters indicating non-JvmTargets.
 
-    A -> B
-      -> c -> D -> l -> N
-           -> f -> G
-           -> e -> q
+        A -> B
+          -> c -> D -> l -> N
+               -> f -> G
+               -> e -> q
 
-    Constructed to demonstrate the behavior of jvm_dependency_map on dependency
-    graphs that include many intermediate dependencies which are not JvmTargets.
-    """
+        Constructed to demonstrate the behavior of jvm_dependency_map on dependency
+        graphs that include many intermediate dependencies which are not JvmTargets.
+        """
         q = self._plain("q")
         e = self._plain("e", deps=[q])
         n = self._java("n")

@@ -25,49 +25,49 @@ class GoRemoteLibrary(GoTarget):
     def remote_package_path(cls, remote_root, import_path):
         """Returns the remote package path portion of the given import path.
 
-    A remote package path is the portion of the remote Go package's import path after the remote
-    root path.
+        A remote package path is the portion of the remote Go package's import path after the remote
+        root path.
 
-    For example, the remote import path 'https://github.com/bitly/go-simplejson' has
-    a remote root of 'https://github.com/bitly/go-simplejson' and there is only 1 package
-    in that remote root.  The package path in this case is '' or '.' and is normalized
-    to ''.
+        For example, the remote import path 'https://github.com/bitly/go-simplejson' has
+        a remote root of 'https://github.com/bitly/go-simplejson' and there is only 1 package
+        in that remote root.  The package path in this case is '' or '.' and is normalized
+        to ''.
 
-    Some remote roots have no root package and others have both a root and sub-packages.  The
-    remote root of 'github.com/docker/docker' is an example of the former.  One of the packages
-    you might import from it is 'github.com/docker/docker/daemon/events' and that package has a
-    normalized remote package path of 'daemon/events'.
+        Some remote roots have no root package and others have both a root and sub-packages.  The
+        remote root of 'github.com/docker/docker' is an example of the former.  One of the packages
+        you might import from it is 'github.com/docker/docker/daemon/events' and that package has a
+        normalized remote package path of 'daemon/events'.
 
-    :param string remote_root: The path to the remote; generally a scheme-less URL.
-    :param string import_path: The full import path used to import the package in a `.go` source
-                               file.
-    :raises: `ValueError` if the import_path does not lay within the remote root.
-    """
+        :param string remote_root: The path to the remote; generally a scheme-less URL.
+        :param string import_path: The full import path used to import the package in a `.go` source
+                                   file.
+        :raises: `ValueError` if the import_path does not lay within the remote root.
+        """
         return cls.package_path(remote_root, import_path)
 
     @classmethod
     def from_packages(cls, parse_context, rev="", packages=None, **kwargs):
         """
-    :param list packages: The package import paths within the remote library; by default just the
-                          root package will be available (equivalent to passing `packages=['']`).
-    :param string rev: Identifies which version of the remote library to download. This could be a
-                       commit SHA (git), node id (hg), etc.  If left unspecified the version will
-                       default to the latest available.  It's highly recommended to not accept the
-                       default and instead pin the rev explicitly for repeatable builds.
-    """
+        :param list packages: The package import paths within the remote library; by default just the
+                              root package will be available (equivalent to passing `packages=['']`).
+        :param string rev: Identifies which version of the remote library to download. This could be a
+                           commit SHA (git), node id (hg), etc.  If left unspecified the version will
+                           default to the latest available.  It's highly recommended to not accept the
+                           default and instead pin the rev explicitly for repeatable builds.
+        """
         for pkg in packages or ("",):
             cls.from_package(parse_context, pkg=pkg, rev=rev, **kwargs)
 
     @classmethod
     def from_package(cls, parse_context, pkg="", rev="", **kwargs):
         """
-    :param string pkg: The package import paths within the remote library; by default just the
-                       root package will be available (equivalent to passing `pkg=''`).
-    :param string rev: Identifies which version of the remote library to download. This could be a
-                       commit SHA (git), node id (hg), etc.  If left unspecified the version will
-                       default to the latest available.  It's highly recommended to not accept the
-                       default and instead pin the rev explicitly for repeatable builds.
-    """
+        :param string pkg: The package import paths within the remote library; by default just the
+                           root package will be available (equivalent to passing `pkg=''`).
+        :param string rev: Identifies which version of the remote library to download. This could be a
+                           commit SHA (git), node id (hg), etc.  If left unspecified the version will
+                           default to the latest available.  It's highly recommended to not accept the
+                           default and instead pin the rev explicitly for repeatable builds.
+        """
         if "name" in kwargs:
             raise TargetDefinitionException(
                 Address(parse_context.rel_path, kwargs["name"]),
@@ -94,13 +94,13 @@ class GoRemoteLibrary(GoTarget):
 
     def __init__(self, pkg="", rev="", address=None, payload=None, **kwargs):
         """
-    :param str pkg: The package import path within the remote library; by default the root package
-                    path (equivalent to passing `pkg='.'` or `pkg=''`).
-    :param str rev: Identifies which version of the remote library to download. This could be a
-                    commit SHA (git), node id (hg), etc.  If left unspecified the version will
-                    default to the latest available.  It's highly recommended to not accept the
-                    default and instead pin the rev explicitly for repeatable builds.
-    """
+        :param str pkg: The package import path within the remote library; by default the root package
+                        path (equivalent to passing `pkg='.'` or `pkg=''`).
+        :param str rev: Identifies which version of the remote library to download. This could be a
+                        commit SHA (git), node id (hg), etc.  If left unspecified the version will
+                        default to the latest available.  It's highly recommended to not accept the
+                        default and instead pin the rev explicitly for repeatable builds.
+        """
         try:
             package_path = self.normalize_package_path(pkg)
         except ValueError as e:

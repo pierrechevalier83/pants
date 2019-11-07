@@ -166,11 +166,11 @@ class ZincCompileIntegrationTest(BaseCompileIT):
 
     def test_hermetic_incremental_compile(self):
         """
-    1) create a target containing two scala files
-    2) compile the target, which would be a full compile
-    3) modify a scala file slightly
-    4) recompile, and make sure the compile is incremental by checking the zinc outputs
-    """
+        1) create a target containing two scala files
+        2) compile the target, which would be a full compile
+        3) modify a scala file slightly
+        4) recompile, and make sure the compile is incremental by checking the zinc outputs
+        """
         with self.temporary_workdir(cleanup=False) as tmp_build_root:
             # Make sure the tmp build root is recognized by Pants as a build root
             # by touching BUILDROOT.
@@ -180,12 +180,12 @@ class ZincCompileIntegrationTest(BaseCompileIT):
             def _create_file(relpath, contents="", mode="w"):
                 """Writes to a file under the buildroot.
 
-        :API: public
+                :API: public
 
-        relpath:  The relative path to the file from the build root.
-        contents: A string containing the contents of the file - '' by default..
-        mode:     The mode to write to the file in - over-write by default.
-        """
+                relpath:  The relative path to the file from the build root.
+                contents: A string containing the contents of the file - '' by default..
+                mode:     The mode to write to the file in - over-write by default.
+                """
                 path = os.path.join(tmp_build_root, relpath)
                 with safe_open(path, mode=mode) as fp:
                     fp.write(contents)
@@ -199,25 +199,25 @@ class ZincCompileIntegrationTest(BaseCompileIT):
                 _create_file(_build_file, "scala_library()")
                 _srcfile_content = dedent(
                     """
-                                package org.pantsbuild.cachetest
-                                object A {
-                                  def x(y: Option[Int] = None) = {
-                                    println("hello");
-                                  }
-                                }
-                                """
+                    package org.pantsbuild.cachetest
+                    object A {
+                      def x(y: Option[Int] = None) = {
+                        println("hello");
+                      }
+                    }
+                    """
                 )
                 _create_file(_srcfile_a, _srcfile_content)
                 _create_file(
                     _srcfile_b,
                     dedent(
                         """
-                                      package org.pantsbuild.cachetest
-                                      object B extends App {
-                                        A.x();
-                                        System.exit(0);
-                                      }
-                                      """
+                        package org.pantsbuild.cachetest
+                        object B extends App {
+                          A.x();
+                          System.exit(0);
+                        }
+                        """
                     ),
                 )
                 return _lib_spec, _srcfile_a, _srcfile_content
@@ -391,37 +391,38 @@ class ZincCompileIntegrationTest(BaseCompileIT):
                 with self.with_overwritten_file_content(file_abs_path):
 
                     new_temp_test = """package org.pantsbuild.example.hello.exe
-                              
-                              import java.io.{BufferedReader, InputStreamReader}
-                              import org.pantsbuild.example.hello
-                              import org.pantsbuild.example.hello.welcome
-                              
-                              // A simple jvm binary to illustrate Scala BUILD targets
-                              
-                              object Exe {
-                                /** Test that resources are properly namespaced. */
-                                def getWorld: String = {
-                                  val is =
-                                    this.getClass.getClassLoader.getResourceAsStream(
-                                      "org/pantsbuild/example/hello/world.txt"
-                                    )
-                                  try {
-                                    new BufferedReader(new InputStreamReader(is)).readLine()
-                                  } finally {
-                                    is.close()
-                                  }
-                                }
-                              
-                                def main(args: Array[String]) {
-                                  println("Num args passed: " + args.size + ". Stand by for welcome...")
-                                  if (args.size <= 0) {
-                                    println("Hello, and welcome to " + getWorld + "!")
-                                  } else {
-                                    val w = welcome.WelcomeEverybody(args)
-                                    w.foreach(s => println(s))
-                                  }
-                                }
-                              }"""
+
+                                    import java.io.{BufferedReader, InputStreamReader}
+                                    import org.pantsbuild.example.hello
+                                    import org.pantsbuild.example.hello.welcome
+
+                                    // A simple jvm binary to illustrate Scala BUILD targets
+
+                                    object Exe {
+                                      /** Test that resources are properly namespaced. */
+                                      def getWorld: String = {
+                                        val is =
+                                          this.getClass.getClassLoader.getResourceAsStream(
+                                            "org/pantsbuild/example/hello/world.txt"
+                                          )
+                                        try {
+                                          new BufferedReader(new InputStreamReader(is)).readLine()
+                                        } finally {
+                                          is.close()
+                                        }
+                                      }
+
+                                      def main(args: Array[String]) {
+                                        println("Num args passed: " + args.size + ". Stand by for welcome...")
+                                        if (args.size <= 0) {
+                                          println("Hello, and welcome to " + getWorld + "!")
+                                        } else {
+                                          val w = welcome.WelcomeEverybody(args)
+                                          w.foreach(s => println(s))
+                                        }
+                                      }
+                                    }
+                                    """
 
                     with open(file_abs_path, "w") as f:
                         f.write(new_temp_test)

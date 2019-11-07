@@ -130,8 +130,8 @@ class TestPantsDaemonIntegration(PantsDaemonIntegrationTestBase):
 
     def test_pantsd_lifecycle_invalidation(self):
         """Runs pants commands with pantsd enabled, in a loop, alternating between options that
-    should invalidate pantsd and incur a restart and then asserts for pid consistency.
-    """
+        should invalidate pantsd and incur a restart and then asserts for pid consistency.
+        """
         with self.pantsd_successful_run_context() as (pantsd_run, checker, _, _):
             variants = (["debug", "help"], ["info", "help"])
             last_pid = None
@@ -508,12 +508,12 @@ class TestPantsDaemonIntegration(PantsDaemonIntegrationTestBase):
     def _assert_pantsd_keyboardinterrupt_signal(self, signum, regexps=[], quit_timeout=None):
         """Send a signal to the thin pailgun client and observe the error messaging.
 
-    :param int signum: The signal to send.
-    :param regexps: Assert that all of these regexps match somewhere in stderr.
-    :type regexps: list of str
-    :param float quit_timeout: The duration of time to wait for the pailgun client to flush all of
-                               its output and die after being killed.
-    """
+        :param int signum: The signal to send.
+        :param regexps: Assert that all of these regexps match somewhere in stderr.
+        :type regexps: list of str
+        :param float quit_timeout: The duration of time to wait for the pailgun client to flush all of
+                                   its output and die after being killed.
+        """
         # TODO: This tests that pantsd processes actually die after the thin client receives the
         # specified signal.
         with self.pantsd_test_context() as (workdir, config, checker):
@@ -565,9 +565,10 @@ class TestPantsDaemonIntegration(PantsDaemonIntegrationTestBase):
                     )
                 ),
                 """
-Interrupted by user:
-Interrupted by user over pailgun client!
-$""",
+                Interrupted by user:
+                Interrupted by user over pailgun client!
+                $
+                """,
             ],
         )
 
@@ -583,9 +584,10 @@ $""",
                     )
                 ),
                 """
-Interrupted by user:
-Interrupted by user over pailgun client!
-$""",
+                Interrupted by user:
+                Interrupted by user over pailgun client!
+                $
+                """,
             ],
         )
 
@@ -595,11 +597,12 @@ $""",
             signal.SIGINT,
             regexps=[
                 """\
-\\[INFO\\] Sending SIGINT to pantsd with pid [0-9]+, waiting up to 5\\.0 seconds before sending SIGKILL\\.\\.\\.
-Interrupted by user.
-Interrupted by user:
-Interrupted by user over pailgun client!
-$"""
+                \\[INFO\\] Sending SIGINT to pantsd with pid [0-9]+, waiting up to 5\\.0 seconds before sending SIGKILL\\.\\.\\.
+                Interrupted by user.
+                Interrupted by user:
+                Interrupted by user over pailgun client!
+                $
+                """
             ],
         )
 
@@ -612,15 +615,15 @@ $"""
             signal.SIGINT,
             regexps=[
                 """\
-\\[INFO\\] Sending SIGINT to pantsd with pid [0-9]+, waiting up to 0\\.01 seconds before sending SIGKILL\\.\\.\\.
-Interrupted by user\\.
-[^ ]* \\[WARN\\] timed out when attempting to gracefully shut down the remote client executing \
-"'pantsd.*'"\\. sending SIGKILL to the remote client at pid: [0-9]+\\. message: iterating \
-over bytes from nailgun timed out with timeout interval 0\\.01 starting at {today}T[^\n]+, \
-overtime seconds: [^\n]+
-Interrupted by user:
-Interrupted by user over pailgun client!
-""".format(
+                \\[INFO\\] Sending SIGINT to pantsd with pid [0-9]+, waiting up to 0\\.01 seconds before sending SIGKILL\\.\\.\\.
+                Interrupted by user\\.
+                [^ ]* \\[WARN\\] timed out when attempting to gracefully shut down the remote client executing \
+                "'pantsd.*'"\\. sending SIGKILL to the remote client at pid: [0-9]+\\. message: iterating \
+                over bytes from nailgun timed out with timeout interval 0\\.01 starting at {today}T[^\n]+, \
+                overtime seconds: [^\n]+
+                Interrupted by user:
+                Interrupted by user over pailgun client!
+                """.format(
                     today=re.escape(today)
                 )
             ],
@@ -630,11 +633,11 @@ Interrupted by user over pailgun client!
 
     def test_sigint_kills_request_waiting_for_lock(self):
         """
-    Test that, when a pailgun request is blocked waiting for another one to end,
-    sending SIGINT to the blocked run will kill it.
+        Test that, when a pailgun request is blocked waiting for another one to end,
+        sending SIGINT to the blocked run will kill it.
 
-    Regression test for issue: #7920
-    """
+        Regression test for issue: #7920
+        """
         config = {"GLOBAL": {"pantsd_timeout_when_multiple_invocations": -1, "level": "debug"}}
         with self.pantsd_test_context(extra_config=config) as (workdir, config, checker):
             # Run a repl, so that any other run waiting to acquire the daemon lock waits forever.
@@ -721,18 +724,18 @@ Interrupted by user over pailgun client!
     def test_dependencies_swap(self):
         template = dedent(
             """
-        python_library(
-          name = 'A',
-          source = 'A.py',
-          {a_deps}
-        )
+            python_library(
+              name = 'A',
+              source = 'A.py',
+              {a_deps}
+            )
 
-        python_library(
-          name = 'B',
-          source = 'B.py',
-          {b_deps}
-        )
-        """
+            python_library(
+              name = 'B',
+              source = 'B.py',
+              {b_deps}
+            )
+            """
         )
         with self.pantsd_successful_run_context() as (pantsd_run, checker, _, _):
             with temporary_dir(".") as directory:
@@ -759,9 +762,9 @@ Interrupted by user over pailgun client!
 
     def test_concurrent_overrides_pantsd(self):
         """
-    Tests that the --concurrent flag overrides the --enable-pantsd flag,
-    because we don't allow concurrent runs under pantsd.
-    """
+        Tests that the --concurrent flag overrides the --enable-pantsd flag,
+        because we don't allow concurrent runs under pantsd.
+        """
         config = {"GLOBAL": {"concurrent": True, "enable_pantsd": True}}
         with self.temporary_workdir() as workdir:
             pants_run = self.run_pants_with_workdir(["goals"], workdir=workdir, config=config)
@@ -772,13 +775,13 @@ Interrupted by user over pailgun client!
 
     def test_unhandled_exceptions_only_log_exceptions_once(self):
         """
-    Tests that the unhandled exceptions triggered by LocalPantsRunner instances don't manifest
-    as a PantsRunFinishedWithFailureException.
+        Tests that the unhandled exceptions triggered by LocalPantsRunner instances don't manifest
+        as a PantsRunFinishedWithFailureException.
 
-    That is, that we unset the global Exiter override set by LocalPantsRunner before we try to log the exception.
+        That is, that we unset the global Exiter override set by LocalPantsRunner before we try to log the exception.
 
-    This is a regression test for the most glaring case of https://github.com/pantsbuild/pants/issues/7597.
-    """
+        This is a regression test for the most glaring case of https://github.com/pantsbuild/pants/issues/7597.
+        """
         with self.pantsd_run_context(success=False) as (pantsd_run, checker, _, _):
             result = pantsd_run(["run", "testprojects/src/python/bad_requirements:use_badreq"])
             checker.assert_running()
@@ -800,15 +803,15 @@ Interrupted by user over pailgun client!
 
     def test_inner_runs_dont_deadlock(self):
         """
-    Create a pantsd run that calls testprojects/src/python/nested_runs with the appropriate
-    bootstrap options to avoid restarting pantsd.
+        Create a pantsd run that calls testprojects/src/python/nested_runs with the appropriate
+        bootstrap options to avoid restarting pantsd.
 
-    Regression test for issue https://github.com/pantsbuild/pants/issues/7881
-    When a run under pantsd calls pants with pantsd inside it, the inner run will time out
-    waiting for the outer run to end.
+        Regression test for issue https://github.com/pantsbuild/pants/issues/7881
+        When a run under pantsd calls pants with pantsd inside it, the inner run will time out
+        waiting for the outer run to end.
 
-    NB: testprojects/src/python/nested_runs assumes that the pants.ini file is in ${workdir}/pants.ini
-    """
+        NB: testprojects/src/python/nested_runs assumes that the pants.ini file is in ${workdir}/pants.ini
+        """
         config = {"GLOBAL": {"pantsd_timeout_when_multiple_invocations": 1,}}
         with self.pantsd_successful_run_context(extra_config=config) as (
             pantsd_run,

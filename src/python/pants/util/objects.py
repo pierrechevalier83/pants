@@ -12,26 +12,26 @@ class TypeConstraintError(TypeError):
 class TypeConstraint(ABC):
     """Represents a type constraint.
 
-  Not intended for direct use; instead, use one of :class:`SuperclassesOf`, :class:`Exactly` or
-  :class:`SubclassesOf`.
-  """
+    Not intended for direct use; instead, use one of :class:`SuperclassesOf`, :class:`Exactly` or
+    :class:`SubclassesOf`.
+    """
 
     def __init__(self, description):
         """Creates a type constraint centered around the given types.
 
-    The type constraint is satisfied as a whole if satisfied for at least one of the given types.
+        The type constraint is satisfied as a whole if satisfied for at least one of the given types.
 
-    :param str description: A concise, readable description of what the type constraint represents.
-                            Used directly as the __str__ implementation.
-    """
+        :param str description: A concise, readable description of what the type constraint represents.
+                                Used directly as the __str__ implementation.
+        """
         self._description = description
 
     @abstractmethod
     def satisfied_by(self, obj):
         """Return `True` if the given object satisfies this type constraint.
 
-    :rtype: bool
-    """
+        :rtype: bool
+        """
 
     def make_type_constraint_error(self, obj, constraint):
         return TypeConstraintError(
@@ -45,8 +45,8 @@ class TypeConstraint(ABC):
     def validate_satisfied_by(self, obj):
         """Return `obj` if the object satisfies this type constraint, or raise.
 
-    :raises: `TypeConstraintError` if `obj` does not satisfy the constraint.
-    """
+        :raises: `TypeConstraintError` if `obj` does not satisfy the constraint.
+        """
 
         if self.satisfied_by(obj):
             return obj
@@ -63,20 +63,20 @@ class TypeConstraint(ABC):
 class TypeOnlyConstraint(TypeConstraint):
     """A `TypeConstraint` predicated only on the object's type.
 
-  `TypeConstraint` subclasses may override `.satisfied_by()` to perform arbitrary validation on the
-  object itself -- however, this class implements `.satisfied_by()` with a guarantee that it will
-  only act on the object's `type` via `.satisfied_by_type()`. This kind of type checking is faster
-  and easier to understand than the more complex validation allowed by `.satisfied_by()`.
-  """
+    `TypeConstraint` subclasses may override `.satisfied_by()` to perform arbitrary validation on the
+    object itself -- however, this class implements `.satisfied_by()` with a guarantee that it will
+    only act on the object's `type` via `.satisfied_by_type()`. This kind of type checking is faster
+    and easier to understand than the more complex validation allowed by `.satisfied_by()`.
+    """
 
     def __init__(self, *types):
         """Creates a type constraint based on some logic to match the given types.
 
-    NB: A `TypeOnlyConstraint` implementation should ensure that the type constraint is satisfied as
-    a whole if satisfied for at least one of the given `types`.
+        NB: A `TypeOnlyConstraint` implementation should ensure that the type constraint is satisfied as
+        a whole if satisfied for at least one of the given `types`.
 
-    :param type *types: The types this constraint will match in some way.
-    """
+        :param type *types: The types this constraint will match in some way.
+        """
 
         if not types:
             raise ValueError("Must supply at least one type")
@@ -104,8 +104,8 @@ class TypeOnlyConstraint(TypeConstraint):
     def satisfied_by_type(self, obj_type):
         """Return `True` if the given object satisfies this type constraint.
 
-    :rtype: bool
-    """
+        :rtype: bool
+        """
 
     def satisfied_by(self, obj):
         return self.satisfied_by_type(type(obj))

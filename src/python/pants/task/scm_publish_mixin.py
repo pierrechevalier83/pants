@@ -28,11 +28,11 @@ class Version:
 class Namedver(Version):
     """A less restrictive versioning scheme that does not conflict with Semver
 
-  Its important to not allow certain characters that are used in maven for performing
-  range matching like *><=!  See:
+    Its important to not allow certain characters that are used in maven for performing
+    range matching like *><=!  See:
 
-  https://maven.apache.org/enforcer/enforcer-rules/versionRanges.html
-  """
+    https://maven.apache.org/enforcer/enforcer-rules/versionRanges.html
+    """
 
     _VALID_NAME = re.compile("^[-_.A-Za-z0-9]+$")
     _INVALID_NAME = re.compile("^[-_.]*$")
@@ -139,10 +139,10 @@ class Semver(Version):
 class ScmPublishMixin:
     """A mixin for tasks that provides methods for publishing pushdbs via scm.
 
-  Requires that the mixing task class
-  * has the properties scm and log,
-  * has the method get_options
-  """
+    Requires that the mixing task class
+    * has the properties scm and log,
+    * has the method get_options
+    """
 
     class InvalidBranchError(TaskError):
         """Indicates the current branch is not an allowed branch to publish from."""
@@ -200,12 +200,12 @@ class ScmPublishMixin:
     def check_clean_master(self, commit=False):
         """Perform a sanity check on SCM publishing constraints.
 
-    Checks for uncommitted tracked files and ensures we're on an allowed branch configured to push
-    to an allowed server if `commit` is `True`.
+        Checks for uncommitted tracked files and ensures we're on an allowed branch configured to push
+        to an allowed server if `commit` is `True`.
 
-    :param bool commit: `True` if a commit is in progress.
-    :raise TaskError: on failure
-    """
+        :param bool commit: `True` if a commit is in progress.
+        :raise TaskError: on failure
+        """
         if commit:
             if self.restrict_push_branches:
                 branch = self.scm.branch_name

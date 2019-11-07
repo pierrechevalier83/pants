@@ -14,14 +14,14 @@ class TargetFilterTaskMixin(Task):
     def target_types_for_alias(self, alias):
         """Returns all the target types that might be produced by the given alias.
 
-    Normally there is 1 target type per alias, but macros can expand a single alias to several
-    target types.
+        Normally there is 1 target type per alias, but macros can expand a single alias to several
+        target types.
 
-    :param string alias: The alias to look up associated target types for.
-    :returns: The set of target types that can be produced by the given alias.
-    :raises :class:`TargetFilterTaskMixin.InvalidTargetType`: when no target types correspond to
-                                                              the given `alias`.
-    """
+        :param string alias: The alias to look up associated target types for.
+        :returns: The set of target types that can be produced by the given alias.
+        :raises :class:`TargetFilterTaskMixin.InvalidTargetType`: when no target types correspond to
+                                                                  the given `alias`.
+        """
         registered_aliases = self.context.build_configuration.registered_aliases()
         target_types = registered_aliases.target_types_by_alias.get(alias, None)
         if not target_types:

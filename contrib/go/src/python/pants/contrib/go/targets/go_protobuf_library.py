@@ -16,10 +16,10 @@ class GoProtobufLibrary(Target):
 
     def __init__(self, address=None, payload=None, sources=None, protoc_plugins=None, **kwargs):
         """
-    :param sources: protobuf source files
-    :type sources: :class:`pants.source.wrapped_globs.FilesetWithSpec` or list of strings. Paths
-                   are relative to the BUILD file's directory.
-    """
+        :param sources: protobuf source files
+        :type sources: :class:`pants.source.wrapped_globs.FilesetWithSpec` or list of strings. Paths
+                       are relative to the BUILD file's directory.
+        """
         payload = payload or Payload()
         payload.add_field(
             "sources", self.create_sources_field(sources, address.spec_path, key_arg="sources")
@@ -36,8 +36,8 @@ class GoProtobufLibrary(Target):
     def protoc_plugins(self):
         """The names of protoc plugins to use when generating code from this target.
 
-    :rtype: list of strings.
-    """
+        :rtype: list of strings.
+        """
         return self.payload.protoc_plugins
 
 

@@ -12,41 +12,41 @@ class ConfigTest(unittest.TestCase):
     def setUp(self):
         self.ini1_content = textwrap.dedent(
             """
-      [DEFAULT]
-      name: foo
-      answer: 42
-      scale: 1.2
-      path: /a/b/%(answer)s
-      embed: %(path)s::foo
-      disclaimer:
-        Let it be known
-        that.
-      blank_section:
+            [DEFAULT]
+            name: foo
+            answer: 42
+            scale: 1.2
+            path: /a/b/%(answer)s
+            embed: %(path)s::foo
+            disclaimer:
+              Let it be known
+              that.
+            blank_section:
 
-      [a]
-      list: [1, 2, 3, %(answer)s]
-      listappend: +[7, 8, 9]
+            [a]
+            list: [1, 2, 3, %(answer)s]
+            listappend: +[7, 8, 9]
 
-      [b]
-      preempt: True
-      dict: {
-          'a': 1,
-          'b': %(answer)s,
-          'c': ['%(answer)s', %(answer)s]
-        }
-      """
+            [b]
+            preempt: True
+            dict: {
+                'a': 1,
+                'b': %(answer)s,
+                'c': ['%(answer)s', %(answer)s]
+              }
+            """
         )
 
         self.ini2_content = textwrap.dedent(
             """
-      [a]
-      fast: True
+            [a]
+            fast: True
 
-      [b]
-      preempt: False
+            [b]
+            preempt: False
 
-      [defined_section]
-      """
+            [defined_section]
+            """
         )
 
         with temporary_file(binary_mode=False) as ini1, temporary_file(
@@ -68,8 +68,9 @@ class ConfigTest(unittest.TestCase):
         self.assertEqual("+[7, 8, 9]", self.config.get("a", "listappend"))
         self.assertEqual(
             """
-Let it be known
-that.""",
+            Let it be known
+            that.
+            """,
             self.config.get("b", "disclaimer"),
         )
 

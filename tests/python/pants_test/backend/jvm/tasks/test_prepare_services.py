@@ -20,8 +20,8 @@ class PrepareServicesTest(TaskTestBase):
     @classmethod
     def alias_groups(cls):
         """
-    :API: public
-    """
+        :API: public
+        """
         return BuildFileAliases(targets={"java_library": JavaLibrary})
 
     def test_find_all_relevant_resources_targets(self):
@@ -109,15 +109,15 @@ class PrepareServicesTest(TaskTestBase):
         self.add_to_build_file(
             "java",
             """
-java_library(
-  name = "target",
-  services = {
-    "ServiceInterfaceA": ["ServiceImplA1, ServiceImplA2"],
-    "ServiceInterfaceB": [],
-    "ServiceInterfaceC": ["ServiceImplC1"],
-  },
-)
-""",
+            java_library(
+              name = "target",
+              services = {
+                "ServiceInterfaceA": ["ServiceImplA1, ServiceImplA2"],
+                "ServiceInterfaceB": [],
+                "ServiceInterfaceC": ["ServiceImplC1"],
+              },
+            )
+            """,
         )
         target = self.target("java:target")
         with temporary_dir() as chroot:

@@ -63,8 +63,8 @@ class ProvideToolsJar(JvmToolTaskMixin):
     def _tools_classpath(self):
         """Returns a classpath representing the (equivalent of the) `tools.jar`.
 
-    If `javac` has been set explicitly, it is used. Otherwise, searches the current distribution.
-    """
+        If `javac` has been set explicitly, it is used. Otherwise, searches the current distribution.
+        """
 
         javac_classpath = Java.global_javac_classpath(self.context.products)
         if javac_classpath:

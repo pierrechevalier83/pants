@@ -13,15 +13,15 @@ from pants.util.meta import classproperty
 class PantsRequirement:
     """Exports a `python_requirement_library` pointing at the active pants' corresponding sdist.
 
-  This requirement is useful for custom plugin authors who want to build and test their plugin with
-  pants itself.  Using the resulting target as a dependency of their plugin target ensures the
-  dependency stays true to the surrounding repo's version of pants.
+    This requirement is useful for custom plugin authors who want to build and test their plugin with
+    pants itself.  Using the resulting target as a dependency of their plugin target ensures the
+    dependency stays true to the surrounding repo's version of pants.
 
-  NB: The requirement generated is for official pants releases on pypi; so may not be appropriate
-  for use in a repo that tracks `pantsbuild/pants` or otherwise uses custom pants sdists.
+    NB: The requirement generated is for official pants releases on pypi; so may not be appropriate
+    for use in a repo that tracks `pantsbuild/pants` or otherwise uses custom pants sdists.
 
-  :API: public
-  """
+    :API: public
+    """
 
     @classproperty
     def alias(self):
@@ -32,12 +32,12 @@ class PantsRequirement:
 
     def __call__(self, name=None, dist=None):
         """
-    :param string name: The name to use for the target, defaults to the dist name if specified and
-                        otherwise the parent dir name.
-    :param string dist: The pants dist to create a requirement for. This must be a
-                        'pantsbuild.pants*' distribution; eg:
-                        'pantsbuild.pants.contrib.python.checks'.
-    """
+        :param string name: The name to use for the target, defaults to the dist name if specified and
+                            otherwise the parent dir name.
+        :param string dist: The pants dist to create a requirement for. This must be a
+                            'pantsbuild.pants*' distribution; eg:
+                            'pantsbuild.pants.contrib.python.checks'.
+        """
         name = name or dist or os.path.basename(self._parse_context.rel_path)
         dist = dist or "pantsbuild.pants"
         if not (dist == "pantsbuild.pants" or dist.startswith("pantsbuild.pants.")):

@@ -18,9 +18,9 @@ class AliasTargetMacro(TargetMacro):
 
     def expand(self, name=None, target=None, **kwargs):
         """
-    :param string name: The name for this alias.
-    :param string target: The address of the destination target.
-    """
+        :param string name: The name for this alias.
+        :param string target: The address of the destination target.
+        """
         if name is None:
             raise TargetDefinitionException(
                 "{}:?".format(self._parse_context.rel_path, name), "The alias() must have a name!"
@@ -42,9 +42,9 @@ class AliasTargetMacro(TargetMacro):
 class AliasTargetFactory(TargetMacro.Factory):
     """Creates an alias for a target, so that it can be referred to with another spec.
 
-  Note that this does not current work with deferred source (from_target()); you must still use the
-  target's actual address in that case.
-  """
+    Note that this does not current work with deferred source (from_target()); you must still use the
+    target's actual address in that case.
+    """
 
     @property
     def target_types(self):

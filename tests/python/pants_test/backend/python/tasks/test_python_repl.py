@@ -35,10 +35,10 @@ class PythonReplTest(PythonTaskTestBase):
             relpath=self.build_path(relpath),
             contents=dedent(
                 """
-    jvm_target(
-      name='{name}',
-    )
-    """
+                jvm_target(
+                  name='{name}',
+                )
+                """
             ).format(name=name),
         )
 
@@ -59,12 +59,12 @@ class PythonReplTest(PythonTaskTestBase):
             {
                 "lib.py": dedent(
                     """
-    import six
+                    import six
 
 
-    def go():
-      six.print_('go', 'go', 'go!', sep='')
-    """
+                    def go():
+                      six.print_('go', 'go', 'go!', sep='')
+                    """
                 )
             },
             dependencies=["//3rdparty/python/six"],

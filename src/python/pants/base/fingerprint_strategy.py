@@ -11,9 +11,10 @@ logger = logging.getLogger(__name__)
 class DefaultFingerprintHashingMixin:
     """Default definitions for __hash__ and __eq__.
 
-  Warning: Don't use this when the mixed in class has instance attributes mixed into its
-  fingerprints.  This will cause subtle bugs because fingerprints are cached on the Target
-  base class, and the cache key is the instance of the FingerprintStrategy."""
+    Warning: Don't use this when the mixed in class has instance attributes mixed into its
+    fingerprints.  This will cause subtle bugs because fingerprints are cached on the Target
+    base class, and the cache key is the instance of the FingerprintStrategy.
+    """
 
     def __hash__(self):
         return hash(type(self))
@@ -55,11 +56,11 @@ class FingerprintStrategy(ABC):
 class DefaultFingerprintStrategy(DefaultFingerprintHashingMixin, FingerprintStrategy):
     """The default FingerprintStrategy, which delegates to target.payload.fingerprint().
 
-  :API: public
-  """
+    :API: public
+    """
 
     def compute_fingerprint(self, target):
         """
-    :API: public
-    """
+        :API: public
+        """
         return target.payload.fingerprint()

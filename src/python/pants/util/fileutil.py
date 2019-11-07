@@ -24,12 +24,12 @@ def atomic_copy(src: str, dst: str) -> None:
 def safe_temp_edit(filename: str) -> Iterator[str]:
     """Safely modify a file within context that automatically reverts any changes afterwards
 
-  The file mutatation occurs in place. The file is backed up in a temporary file before edits
-  occur and when the context is closed, the mutated file is discarded and replaced with the backup.
+    The file mutatation occurs in place. The file is backed up in a temporary file before edits
+    occur and when the context is closed, the mutated file is discarded and replaced with the backup.
 
-  WARNING: There may be a chance that the file may not be restored and this method should be used
-  carefully with the known risk.
-  """
+    WARNING: There may be a chance that the file may not be restored and this method should be used
+    carefully with the known risk.
+    """
     with temporary_file() as tmp_file:
         try:
             shutil.copyfile(filename, tmp_file.name)
@@ -41,11 +41,11 @@ def safe_temp_edit(filename: str) -> Iterator[str]:
 def create_size_estimators() -> Dict[str, Callable[[Sequence[str]], int]]:
     """Create a dict of name to a function that returns an estimated size for a given target.
 
-  The estimated size is used to build the largest targets first (subject to dependency constraints).
-  Choose 'random' to choose random sizes for each target, which may be useful for distributed
-  builds.
-  :returns: Dict of a name to a function that returns an estimated size.
-  """
+    The estimated size is used to build the largest targets first (subject to dependency constraints).
+    Choose 'random' to choose random sizes for each target, which may be useful for distributed
+    builds.
+    :returns: Dict of a name to a function that returns an estimated size.
+    """
 
     def line_count(filename: str) -> int:
         with open(filename, "rb") as fh:

@@ -18,8 +18,8 @@ class BundleIntegrationTest(PantsRunIntegrationTest):
 
     def test_bundle_colliding_resources(self):
         """Tests that the proper resource is bundled with each of these bundled targets when
-    each project has a different resource with the same path.
-    """
+        each project has a different resource with the same path.
+        """
         for name in ["a", "b", "c"]:
             target = (
                 "testprojects/maven_layout/resource_collision/example_{name}/"

@@ -67,8 +67,8 @@ class TestConsolidateClasspath(JvmBinaryTaskTestBase):
 
     def _setup_classpath(self, task_context):
         """As a separate prep step because to test different option settings, this needs to rerun
-    after context is re-created.
-    """
+        after context is re-created.
+        """
         self.ensure_classpath_products(task_context)
         self.add_to_runtime_classpath(
             task_context, self.binary_target, {"Foo.class": "", "foo.txt": "", "foo/file": ""}
