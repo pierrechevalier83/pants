@@ -7,9 +7,6 @@ from pants.testutil.interpreter_selection_utils import PY_27 as PY_27  # noqa
 from pants.testutil.interpreter_selection_utils import PY_36 as PY_36  # noqa
 from pants.testutil.interpreter_selection_utils import PY_37 as PY_37  # noqa
 from pants.testutil.interpreter_selection_utils import (
-    has_python_version as has_python_version,
-)  # noqa
-from pants.testutil.interpreter_selection_utils import (
     python_interpreter_path as python_interpreter_path,
 )  # noqa
 from pants.testutil.interpreter_selection_utils import (
@@ -32,4 +29,9 @@ from pants.testutil.interpreter_selection_utils import (
 )  # noqa
 from pants.testutil.interpreter_selection_utils import (
     skip_unless_python36_present as skip_unless_python36_present,
+)  # noqa
+
+
+from pants.testutil.interpreter_selection_utils import (  # isort:skip
+    has_python_version as has_python_version,
 )  # noqa

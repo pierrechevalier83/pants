@@ -1,7 +1,7 @@
 # Copyright 2015 Pants project contributors (see CONTRIBUTORS.md).
 # Licensed under the Apache License, Version 2.0 (see LICENSE).
 
-from pants.testutil.subsystem.util import (
+from pants.testutil.subsystem.util import (  # isort:skip
     global_subsystem_instance as global_subsystem_instance,
 )  # noqa
 from pants.testutil.subsystem.util import init_subsystem as init_subsystem  # noqa
