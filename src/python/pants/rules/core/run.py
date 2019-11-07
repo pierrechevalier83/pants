@@ -16,44 +16,46 @@ from pants.util.contextutil import temporary_dir
 
 
 class Run(Goal):
-  """Runs a runnable target."""
-  name = 'run'
+    """Runs a runnable target."""
+
+    name = "run"
 
 
-#TODO(gregs) - the `run` rule should really only accept a single target, but we don't have the infrastructure
+# TODO(gregs) - the `run` rule should really only accept a single target, but we don't have the infrastructure
 # yet to support a console rule that can request one and only one target (rather than BuildFileAddresses plural
-# or Specs plural). 
+# or Specs plural).
 @console_rule
-def run(console: Console, workspace: Workspace, runner: InteractiveRunner, addresses: BuildFileAddresses) -> Run:
-  bfa = addresses.dependencies[0]
-  target = bfa.to_address()
-  binary = yield Get(CreatedBinary, Address, target)
+def run(
+    console: Console, workspace: Workspace, runner: InteractiveRunner, addresses: BuildFileAddresses
+) -> Run:
+    bfa = addresses.dependencies[0]
+    target = bfa.to_address()
+    binary = yield Get(CreatedBinary, Address, target)
 
-  with temporary_dir(cleanup=True) as tmpdir:
-    dirs_to_materialize = (DirectoryToMaterialize(path=str(tmpdir), directory_digest=binary.digest),)
-    workspace.materialize_directories(dirs_to_materialize)
+    with temporary_dir(cleanup=True) as tmpdir:
+        dirs_to_materialize = (
+            DirectoryToMaterialize(path=str(tmpdir), directory_digest=binary.digest),
+        )
+        workspace.materialize_directories(dirs_to_materialize)
 
-    console.write_stdout(f"Running target: {target}\n")
-    full_path = str(Path(tmpdir, binary.binary_name))
-    run_request = InteractiveProcessRequest(
-      argv=[full_path],
-      run_in_workspace=True,
-    )
+        console.write_stdout(f"Running target: {target}\n")
+        full_path = str(Path(tmpdir, binary.binary_name))
+        run_request = InteractiveProcessRequest(argv=[full_path], run_in_workspace=True,)
 
-    try:
-      result = runner.run_local_interactive_process(run_request)
-      exit_code = result.process_exit_code
-      if result.process_exit_code == 0:
-        console.write_stdout(f"{target} ran successfully.\n")
-      else:
-        console.write_stderr(f"{target} failed with code {result.process_exit_code}!\n")
+        try:
+            result = runner.run_local_interactive_process(run_request)
+            exit_code = result.process_exit_code
+            if result.process_exit_code == 0:
+                console.write_stdout(f"{target} ran successfully.\n")
+            else:
+                console.write_stderr(f"{target} failed with code {result.process_exit_code}!\n")
 
-    except Exception as e:
-      console.write_stderr(f"Exception when attempting to run {target} : {e}\n")
-      exit_code = -1
+        except Exception as e:
+            console.write_stderr(f"Exception when attempting to run {target} : {e}\n")
+            exit_code = -1
 
-  yield Run(exit_code)
+    yield Run(exit_code)
 
 
 def rules():
-  return [run]
+    return [run]

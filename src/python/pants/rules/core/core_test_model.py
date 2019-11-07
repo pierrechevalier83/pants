@@ -8,29 +8,29 @@ from pants.util.collections import Enum
 
 
 class Status(Enum):
-  SUCCESS = "SUCCESS"
-  FAILURE = "FAILURE"
+    SUCCESS = "SUCCESS"
+    FAILURE = "FAILURE"
 
 
 @dataclass(frozen=True)
 class TestResult:
-  status: Status
-  stdout: str
-  stderr: str
+    status: Status
+    stdout: str
+    stderr: str
 
-  # Prevent this class from being detected by pytest as a test class.
-  __test__ = False
+    # Prevent this class from being detected by pytest as a test class.
+    __test__ = False
 
 
 @union
 class TestTarget:
-  """A union for registration of a testable target type."""
+    """A union for registration of a testable target type."""
 
-  # Prevent this class from being detected by pytest as a test class.
-  __test__ = False
+    # Prevent this class from being detected by pytest as a test class.
+    __test__ = False
 
-  @staticmethod
-  def non_member_error_message(subject):
-    if hasattr(subject, 'address'):
-      return f'{subject.address.reference()} is not a testable target.'
-    return None
+    @staticmethod
+    def non_member_error_message(subject):
+        if hasattr(subject, "address"):
+            return f"{subject.address.reference()} is not a testable target."
+        return None

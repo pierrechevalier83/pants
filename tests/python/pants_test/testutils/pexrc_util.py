@@ -2,5 +2,5 @@
 # Licensed under the Apache License, Version 2.0 (see LICENSE).
 
 from pants.testutil.pexrc_util import (
-  setup_pexrc_with_pex_python_path as setup_pexrc_with_pex_python_path,
+    setup_pexrc_with_pex_python_path as setup_pexrc_with_pex_python_path,
 )  # noqa

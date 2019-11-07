@@ -16,20 +16,21 @@ from pants.engine.selectors import Get
 
 @dataclass(frozen=True)
 class DownloadedPexBin(HermeticPex):
-  executable: str
-  directory_digest: Digest
+    executable: str
+    directory_digest: Digest
 
-  def create_execute_request(self,
-    python_setup: PythonSetup,
-    subprocess_encoding_environment: SubprocessEncodingEnvironment,
-    pex_build_environment: PexBuildEnvironment,
-    *,
-    pex_args: Iterable[str],
-    description: str,
-    input_files: Digest = None,
-    **kwargs: Any
-  ) -> ExecuteProcessRequest:
-    """Creates an ExecuteProcessRequest that will run the pex CLI tool hermetically.
+    def create_execute_request(
+        self,
+        python_setup: PythonSetup,
+        subprocess_encoding_environment: SubprocessEncodingEnvironment,
+        pex_build_environment: PexBuildEnvironment,
+        *,
+        pex_args: Iterable[str],
+        description: str,
+        input_files: Digest = None,
+        **kwargs: Any
+    ) -> ExecuteProcessRequest:
+        """Creates an ExecuteProcessRequest that will run the pex CLI tool hermetically.
 
     :param python_setup: The parameters for selecting python interpreters to use when invoking the
                          pex tool.
@@ -44,28 +45,28 @@ class DownloadedPexBin(HermeticPex):
     :param kwargs: Any additional :class:`ExecuteProcessRequest` kwargs to pass through.
     """
 
-    return super().create_execute_request(
-      python_setup=python_setup,
-      subprocess_encoding_environment=subprocess_encoding_environment,
-      pex_path=self.executable,
-      pex_args=["--disable-cache"] + list(pex_args),
-      description=description,
-      input_files=input_files or self.directory_digest,
-      env=pex_build_environment.invocation_environment_dict,
-      **kwargs
-    )
+        return super().create_execute_request(
+            python_setup=python_setup,
+            subprocess_encoding_environment=subprocess_encoding_environment,
+            pex_path=self.executable,
+            pex_args=["--disable-cache"] + list(pex_args),
+            description=description,
+            input_files=input_files or self.directory_digest,
+            env=pex_build_environment.invocation_environment_dict,
+            **kwargs
+        )
 
 
 @rule
 def download_pex_bin() -> DownloadedPexBin:
-  # TODO: Inject versions and digests here through some option, rather than hard-coding it.
-  url = 'https://github.com/pantsbuild/pex/releases/download/v1.6.12/pex'
-  digest = Digest('ce64cb72cd23d2123dd48126af54ccf2b718d9ecb98c2ed3045ed1802e89e7e1', 1842359)
-  snapshot = yield Get(Snapshot, UrlToFetch(url, digest))
-  yield DownloadedPexBin(executable=snapshot.files[0], directory_digest=snapshot.directory_digest)
+    # TODO: Inject versions and digests here through some option, rather than hard-coding it.
+    url = "https://github.com/pantsbuild/pex/releases/download/v1.6.12/pex"
+    digest = Digest("ce64cb72cd23d2123dd48126af54ccf2b718d9ecb98c2ed3045ed1802e89e7e1", 1842359)
+    snapshot = yield Get(Snapshot, UrlToFetch(url, digest))
+    yield DownloadedPexBin(executable=snapshot.files[0], directory_digest=snapshot.directory_digest)
 
 
 def rules():
-  return [
-    download_pex_bin,
-  ]
+    return [
+        download_pex_bin,
+    ]

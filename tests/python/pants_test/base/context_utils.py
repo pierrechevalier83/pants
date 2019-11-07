@@ -3,5 +3,5 @@
 
 from pants.testutil.base.context_utils import TestContext as TestContext  # noqa
 from pants.testutil.base.context_utils import (
-  create_context_from_options as create_context_from_options,
+    create_context_from_options as create_context_from_options,
 )  # noqa

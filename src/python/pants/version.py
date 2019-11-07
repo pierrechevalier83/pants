@@ -8,12 +8,12 @@ from packaging.version import Version
 
 
 # Set this env var to override the version pants reports. Useful for testing.
-_PANTS_VERSION_OVERRIDE = '_PANTS_VERSION_OVERRIDE'
+_PANTS_VERSION_OVERRIDE = "_PANTS_VERSION_OVERRIDE"
 
 
 VERSION: str = (
-  os.environ.get(_PANTS_VERSION_OVERRIDE) or
-  pkgutil.get_data(__name__, 'VERSION').decode().strip()  # type: ignore
+    os.environ.get(_PANTS_VERSION_OVERRIDE)
+    or pkgutil.get_data(__name__, "VERSION").decode().strip()  # type: ignore
 )
 
 

@@ -15,45 +15,51 @@ from pants.engine.selectors import Get
 
 @dataclass(frozen=True)
 class Binary(LineOriented, Goal):
-  """Create a runnable binary."""
-  name = 'binary'
+    """Create a runnable binary."""
+
+    name = "binary"
 
 
 @union
 class BinaryTarget:
-  pass
+    pass
 
 
 @union
 @dataclass(frozen=True)
 class CreatedBinary:
-  digest: Digest
-  binary_name: str
+    digest: Digest
+    binary_name: str
 
 
 @console_rule
-def create_binary(addresses: BuildFileAddresses, console: Console, workspace: Workspace, options: Binary.Options) -> Binary:
-  with Binary.line_oriented(options, console) as print_stdout:
-    print_stdout("Generating binaries in `dist/`")
-    binaries = yield [Get(CreatedBinary, Address, address.to_address()) for address in addresses]
-    dirs_to_materialize = tuple(
-      DirectoryToMaterialize(path='dist/', directory_digest=binary.digest) for binary in binaries
-    )
-    results = workspace.materialize_directories(dirs_to_materialize)
-    for result in results.dependencies:
-      for path in result.output_paths:
-        print_stdout(f"Wrote {path}")
-  yield Binary(exit_code=0)
+def create_binary(
+    addresses: BuildFileAddresses, console: Console, workspace: Workspace, options: Binary.Options
+) -> Binary:
+    with Binary.line_oriented(options, console) as print_stdout:
+        print_stdout("Generating binaries in `dist/`")
+        binaries = yield [
+            Get(CreatedBinary, Address, address.to_address()) for address in addresses
+        ]
+        dirs_to_materialize = tuple(
+            DirectoryToMaterialize(path="dist/", directory_digest=binary.digest)
+            for binary in binaries
+        )
+        results = workspace.materialize_directories(dirs_to_materialize)
+        for result in results.dependencies:
+            for path in result.output_paths:
+                print_stdout(f"Wrote {path}")
+    yield Binary(exit_code=0)
 
 
 @rule
 def coordinator_of_binaries(target: HydratedTarget) -> CreatedBinary:
-  binary = yield Get(CreatedBinary, BinaryTarget, target.adaptor)
-  yield binary
+    binary = yield Get(CreatedBinary, BinaryTarget, target.adaptor)
+    yield binary
 
 
 def rules():
-  return [
-    create_binary,
-    coordinator_of_binaries,
-  ]
+    return [
+        create_binary,
+        coordinator_of_binaries,
+    ]
