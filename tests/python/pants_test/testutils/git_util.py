@@ -7,4 +7,4 @@ from pants.testutil.git_util import initialize_repo as initialize_repo  # noqa
 from pants_test.deprecated_testinfra import deprecated_testinfra_module
 
 
-deprecated_testinfra_module('pants.testutil.git_util')
+deprecated_testinfra_module("pants.testutil.git_util")

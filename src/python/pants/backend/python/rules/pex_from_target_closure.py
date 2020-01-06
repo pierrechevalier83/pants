@@ -6,10 +6,10 @@ from typing import Optional
 
 from pants.backend.python.rules.inject_init import InjectedInitDigest
 from pants.backend.python.rules.pex import (
-  CreatePex,
-  Pex,
-  PexInterpreterConstraints,
-  PexRequirements,
+    CreatePex,
+    Pex,
+    PexInterpreterConstraints,
+    PexRequirements,
 )
 from pants.backend.python.subsystems.python_setup import PythonSetup
 from pants.engine.addressable import BuildFileAddresses
@@ -22,60 +22,66 @@ from pants.rules.core.strip_source_root import SourceRootStrippedSources
 
 @dataclass(frozen=True)
 class CreatePexFromTargetClosure:
-  """Represents a request to create a PEX from the closure of a set of targets."""
-  build_file_addresses: BuildFileAddresses
-  output_filename: str
-  entry_point: Optional[str] = None
-  additional_requirements: tuple = ()
-  include_source_files: bool = True
+    """Represents a request to create a PEX from the closure of a set of targets."""
+
+    build_file_addresses: BuildFileAddresses
+    output_filename: str
+    entry_point: Optional[str] = None
+    additional_requirements: tuple = ()
+    include_source_files: bool = True
 
 
 @rule(name="Create PEX from targets")
-async def create_pex_from_target_closure(request: CreatePexFromTargetClosure,
-                                         python_setup: PythonSetup) -> Pex:
-  transitive_hydrated_targets = await Get[TransitiveHydratedTargets](BuildFileAddresses,
-                                                                     request.build_file_addresses)
-  all_targets = transitive_hydrated_targets.closure
-  all_target_adaptors = [t.adaptor for t in all_targets]
+async def create_pex_from_target_closure(
+    request: CreatePexFromTargetClosure, python_setup: PythonSetup
+) -> Pex:
+    transitive_hydrated_targets = await Get[TransitiveHydratedTargets](
+        BuildFileAddresses, request.build_file_addresses
+    )
+    all_targets = transitive_hydrated_targets.closure
+    all_target_adaptors = [t.adaptor for t in all_targets]
 
-  interpreter_constraints = PexInterpreterConstraints.create_from_adaptors(
-    adaptors=tuple(all_targets),
-    python_setup=python_setup
-  )
-
-  merged_input_files: Optional[Digest] = None
-  if request.include_source_files:
-    source_root_stripped_sources = await MultiGet(
-      Get[SourceRootStrippedSources](HydratedTarget, target_adaptor)
-      for target_adaptor in all_targets
+    interpreter_constraints = PexInterpreterConstraints.create_from_adaptors(
+        adaptors=tuple(all_targets), python_setup=python_setup
     )
 
-    stripped_sources_digests = [stripped_sources.snapshot.directory_digest
-                                for stripped_sources in source_root_stripped_sources]
-    sources_digest = await Get[Digest](DirectoriesToMerge(directories=tuple(stripped_sources_digests)))
-    inits_digest = await Get[InjectedInitDigest](Digest, sources_digest)
-    all_input_digests = [sources_digest, inits_digest.directory_digest]
-    merged_input_files = await Get[Digest](DirectoriesToMerge,
-                                          DirectoriesToMerge(directories=tuple(all_input_digests)))
+    merged_input_files: Optional[Digest] = None
+    if request.include_source_files:
+        source_root_stripped_sources = await MultiGet(
+            Get[SourceRootStrippedSources](HydratedTarget, target_adaptor)
+            for target_adaptor in all_targets
+        )
 
-  requirements = PexRequirements.create_from_adaptors(
-    adaptors=all_target_adaptors,
-    additional_requirements=request.additional_requirements
-  )
+        stripped_sources_digests = [
+            stripped_sources.snapshot.directory_digest
+            for stripped_sources in source_root_stripped_sources
+        ]
+        sources_digest = await Get[Digest](
+            DirectoriesToMerge(directories=tuple(stripped_sources_digests))
+        )
+        inits_digest = await Get[InjectedInitDigest](Digest, sources_digest)
+        all_input_digests = [sources_digest, inits_digest.directory_digest]
+        merged_input_files = await Get[Digest](
+            DirectoriesToMerge, DirectoriesToMerge(directories=tuple(all_input_digests))
+        )
 
-  create_pex_request = CreatePex(
-    output_filename=request.output_filename,
-    requirements=requirements,
-    interpreter_constraints=interpreter_constraints,
-    entry_point=request.entry_point,
-    input_files_digest=merged_input_files,
-  )
+    requirements = PexRequirements.create_from_adaptors(
+        adaptors=all_target_adaptors, additional_requirements=request.additional_requirements
+    )
 
-  pex = await Get[Pex](CreatePex, create_pex_request)
-  return pex
+    create_pex_request = CreatePex(
+        output_filename=request.output_filename,
+        requirements=requirements,
+        interpreter_constraints=interpreter_constraints,
+        entry_point=request.entry_point,
+        input_files_digest=merged_input_files,
+    )
+
+    pex = await Get[Pex](CreatePex, create_pex_request)
+    return pex
 
 
 def rules():
-  return [
-    create_pex_from_target_closure,
-  ]
+    return [
+        create_pex_from_target_closure,
+    ]

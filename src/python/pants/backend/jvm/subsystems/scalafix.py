@@ -7,12 +7,15 @@ from pants.subsystem.subsystem import Subsystem
 
 class Scalafix(Subsystem):
 
-  options_scope = 'scalafix'
+    options_scope = "scalafix"
 
-  @classmethod
-  def register_options(cls, register):
-    super().register_options(register)
-    register(
-      '--config', type=file_option, default=None, fingerprint=True,
-      help="Path to `.scalafix.conf` or an alternative Scalafix config file."
-    )
+    @classmethod
+    def register_options(cls, register):
+        super().register_options(register)
+        register(
+            "--config",
+            type=file_option,
+            default=None,
+            fingerprint=True,
+            help="Path to `.scalafix.conf` or an alternative Scalafix config file.",
+        )

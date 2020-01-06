@@ -8,7 +8,7 @@ from pants.testutil.engine.util import assert_equal_with_printing as assert_equa
 from pants.testutil.engine.util import create_scheduler as create_scheduler  # noqa
 from pants.testutil.engine.util import init_native as init_native  # noqa
 from pants.testutil.engine.util import (
-  remove_locations_from_traceback as remove_locations_from_traceback,
+    remove_locations_from_traceback as remove_locations_from_traceback,
 )  # noqa
 from pants.testutil.engine.util import run_rule as run_rule  # noqa
 from pants_test.deprecated_testinfra import deprecated_testinfra_module

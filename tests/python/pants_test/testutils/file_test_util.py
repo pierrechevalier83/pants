@@ -8,4 +8,4 @@ from pants.testutil.file_test_util import exact_files as exact_files  # noqa
 from pants_test.deprecated_testinfra import deprecated_testinfra_module
 
 
-deprecated_testinfra_module('pants.testutil.file_test_util')
+deprecated_testinfra_module("pants.testutil.file_test_util")

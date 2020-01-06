@@ -7,4 +7,4 @@ from pants.testutil.subsystem.util import init_subsystems as init_subsystems  # 
 from pants_test.deprecated_testinfra import deprecated_testinfra_module
 
 
-deprecated_testinfra_module('pants.testutil.subsystem.util')
+deprecated_testinfra_module("pants.testutil.subsystem.util")

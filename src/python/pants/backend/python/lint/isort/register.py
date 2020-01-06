@@ -7,8 +7,8 @@ from pants.backend.python.lint.isort import rules as isort_rules
 
 
 def rules():
-  return (
-    *isort_rules.rules(),
-    *python_format_target.rules(),
-    *python_lint_target.rules(),
-  )
+    return (
+        *isort_rules.rules(),
+        *python_format_target.rules(),
+        *python_lint_target.rules(),
+    )

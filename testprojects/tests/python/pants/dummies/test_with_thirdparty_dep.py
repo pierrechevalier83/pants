@@ -5,5 +5,5 @@ from typing_extensions import Literal
 
 
 def test_f():
-  assert Literal[1] == Literal[1]
-  assert Literal[1] != Literal[2]
+    assert Literal[1] == Literal[1]
+    assert Literal[1] != Literal[2]

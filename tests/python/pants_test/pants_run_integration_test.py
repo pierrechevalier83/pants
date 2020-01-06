@@ -4,7 +4,7 @@
 from pants.testutil.pants_run_integration_test import PantsJoinHandle as PantsJoinHandle  # noqa
 from pants.testutil.pants_run_integration_test import PantsResult as PantsResult  # noqa
 from pants.testutil.pants_run_integration_test import (
-  PantsRunIntegrationTest as PantsRunIntegrationTest,
+    PantsRunIntegrationTest as PantsRunIntegrationTest,
 )  # noqa
 from pants.testutil.pants_run_integration_test import ensure_cached as ensure_cached  # noqa
 from pants.testutil.pants_run_integration_test import ensure_daemon as ensure_daemon  # noqa

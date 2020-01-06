@@ -12,20 +12,20 @@ from pants.version import VERSION
 
 class GeneratePantsIniTest(ConsoleRuleTestBase):
 
-  goal_cls = GeneratePantsIni
+    goal_cls = GeneratePantsIni
 
-  @classmethod
-  def rules(cls):
-    return (*super().rules(), *generate_pants_ini_rules())
+    @classmethod
+    def rules(cls):
+        return (*super().rules(), *generate_pants_ini_rules())
 
-  def test_fails_if_file_already_exists(self) -> None:
-    Path(self.build_root, "pants.ini").touch()
-    self.execute_rule(exit_code=1)
+    def test_fails_if_file_already_exists(self) -> None:
+        Path(self.build_root, "pants.ini").touch()
+        self.execute_rule(exit_code=1)
 
-  def test_generates_file(self) -> None:
-    self.execute_rule()
-    pants_ini = Path(self.build_root, "pants.ini")
-    assert pants_ini.exists()
-    config = configparser.ConfigParser()
-    config.read(pants_ini)
-    assert config["GLOBAL"]["pants_version"] == VERSION
+    def test_generates_file(self) -> None:
+        self.execute_rule()
+        pants_ini = Path(self.build_root, "pants.ini")
+        assert pants_ini.exists()
+        config = configparser.ConfigParser()
+        config.read(pants_ini)
+        assert config["GLOBAL"]["pants_version"] == VERSION
